@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cafe Recommender</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header>
+    <h1>Personalized Cafe Recommendation System</h1>
+  </header>
+
+  <main>
+    <section class="panel">
+      <label>Address / Place (optional)
+        <input id="address" type="text" placeholder="e.g. FC Road Pune" />
+      </label>
+      <button id="locateAddressBtn" class="secondary">Use Address</button>
+      <button id="liveLocationBtn" class="secondary">Use My Live Location</button>
+      <label>Latitude <input id="lat" type="number" step="0.000001" value="18.5204" /></label>
+      <label>Longitude <input id="lon" type="number" step="0.000001" value="73.8567" /></label>
+      <label>Radius (km) <input id="radius" type="number" step="0.1" value="5" /></label>
+      <label>Budget <input id="budget" type="number" step="1" value="500" /></label>
+      <label>Cuisines (comma separated) <input id="cuisines" type="text" value="italian,chinese,indian" /></label>
+      <label>Diet
+        <select id="diet">
+          <option>ANY</option>
+          <option>VEG</option>
+          <option>NON_VEG</option>
+          <option>VEGAN</option>
+        </select>
+      </label>
+      <label>Top K <input id="k" type="number" step="1" value="50" /></label>
+
+      <label>Distance Weight (w1) <input id="w1" type="number" step="0.1" value="0.3" /></label>
+      <label>Price Weight (w2) <input id="w2" type="number" step="0.1" value="0.3" /></label>
+      <label>Rating Weight (w3) <input id="w3" type="number" step="0.1" value="0.2" /></label>
+      <label>Cuisine Weight (w4) <input id="w4" type="number" step="0.1" value="0.2" /></label>
+
+      <button id="searchBtn">Find Cafes</button>
+      <div id="status" class="meta"></div>
+      <div id="results"></div>
+    </section>
+
+    <section>
+      <div id="map"></div>
+    </section>
+  </main>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>

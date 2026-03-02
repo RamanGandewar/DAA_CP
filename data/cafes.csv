@@ -1,0 +1,295 @@
+id,name,latitude,longitude,cuisines,avgPrice,rating,veg,nonVeg,vegan,operatingHours,address,contact
+1,Brew Haven,12.9716,77.5946,italian|indian,350,4.4,true,true,true,9AM-11PM,MG Road,+91-900000001
+2,Spice Route,12.9750,77.5990,indian|chinese,280,4.2,true,true,false,10AM-10PM,Church Street,+91-900000002
+3,Noodle Nook,12.9650,77.5850,chinese|thai,420,4.6,false,true,false,11AM-11PM,Brigade Road,+91-900000003
+4,Green Leaf Cafe,12.9780,77.5800,vegan|salads|italian,500,4.7,true,false,true,8AM-9PM,Indiranagar,+91-900000004
+5,Budget Bites,12.9600,77.6100,indian|fastfood,180,3.9,true,true,false,7AM-11PM,Ulsoor,+91-900000005
+node/283166318,Shisha Jazz Cafe,18.5391279,73.9049627,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/313785040,German Bakery,18.5396234,73.8873711,coffee_shop,300,4,true,true,false,N/A,Pune Koregaon Park,N/A
+way/359519567,F.R.I.E.N.D.S House Cafe,18.6276346,73.7840812,coffee_shop|dessert,300,4,true,true,false,Mo-Su 10:30-22:30,Pimpri-Chinchwad Pimpri Chinchwad Link Road,N/A
+way/359567490,Cafe way/359567490,18.5648653,73.7776131,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+way/359567619,Cafe way/359567619,18.5662258,73.7774848,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+way/359570381,Irani Chai,18.5649455,73.8078718,fast_food,300,4,true,true,false,N/A,N/A,N/A
+way/359684117,New Era Bakery,18.5697258,73.7810037,dessert|sandwich|regional,300,4,true,true,false,Mo-Su 08:00-21:00,N/A,N/A
+way/359719212,Curated Workcafe,18.5747723,73.7749697,coffee_shop,300,4,true,true,false,Mo-Sa 09:00-21:00,Pune Balewadi Road,+91 8010462739
+way/359727408,BUENOS KAFFE,18.5669217,73.8159664,italian|pizza|pasta|burger|sandwich|coffee_shop|chicken,300,4,true,true,false,Mo-Su 08:00-23:00,Pune Chondhe Patil Road  Near Rohan Nilay Society  Aundh Pune,7499903324
+way/359769658,Cafe Galaxy,18.5222375,73.7625891,dessert|frozen_yogurt,300,4,true,true,false,Mo-Su 08:00-22:00,Bavdhan Budruk Uttamnagar road bavdhan,+91 123 4567
+way/359911411,Evara cafe,18.5222925,73.7793428,burger|pizza|coffee_shop|chicken|sandwich|italian|tea|fries|noodle|salad|pasta|brunch|bistro,300,4,true,true,false,Mo-Su 10:00-22:00,Bavdhan  Pune Pashan-Bavdhan Road Pune,+91 786029934
+way/359921774,TTMM,18.6491684,73.7728022,burger|pizza|coffee_shop|sandwich|ice_cream|pasta|tea|juice,300,4,true,true,false,Mo-Sa 08:00-20:00,pune Chhatrapati Sambhaji Path Pune,N/A
+way/359924586,Rihla,18.5632122,73.7770112,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+way/360234234,RED MOON CAFE,18.5324579,73.8340762,coffee_shop,300,4,true,true,false,Mo-Fr 08:00-17:00,Pune Bharatiya Vidyabhavan Marg,N/A
+way/360291912,neha Cafe,18.4693208,73.8314758,coffee_shop,300,4,true,true,false,Mo-Fr 09:00-17:00,pune Sahakarnagar,N/A
+way/360321487,Sujata Mastani,18.4805597,73.8651217,coffee_shop,300,4,true,true,false,N/A,Pune Kondhwa Road,N/A
+way/360512759,Durga,18.4611386,73.8126333,coffee_shop|sandwich,300,4,true,true,false,Mo-Su 08:00-22:00,Dhayari Sinhagad Road Pune,+91 8530084294
+way/365464561,Richie,18.5052823,73.7925691,mexican|vietnamese,300,4,true,true,false,Mo-Su 08:00-22:00,pune DP Road pune,N/A
+way/479980729,Waari Cafe,18.5064081,73.8210818,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/663592103,Aroma's,18.5387882,73.9052035,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/667287796,Cafe Coffee Day,18.5395824,73.8870419,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/671455417,Marz-O-Rin,18.5165106,73.8790851,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/672232247,Coffee House,18.5187719,73.8772441,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/672675264,Starbucks,18.5392674,73.8866937,coffee_shop,300,4,true,true,false,N/A,Pune North Main Road,N/A
+node/674921350,Cafe Code Red,18.5262952,73.8871613,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+way/709192752,pablo's pizza,18.5656932,73.7762345,italian|french,300,4,true,true,false,Mo-Su 08:00-22:00,Pune Balewadi High Street,N/A
+node/763545776,Grubshup,18.5108517,73.8298928,indian,300,4,true,true,false,N/A,N/A,N/A
+way/819111733,South Canteen,18.5296816,73.85452,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/824469850,Barista Lavazza,18.5181975,73.8793295,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+way/859971594,Anies,18.4820499,73.9052903,regional|chicken|coffee_shop,300,4,true,true,false,24/7,N/A,N/A
+node/865812384,Pastry Corner,18.5088106,73.8303995,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/870193119,Iceberg,18.5315199,73.8317233,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+way/987626296,Chai Cafe,18.5159793,73.8771033,regional,300,4,true,true,false,sunrise-sunset,N/A,N/A
+way/1225125349,COEP Hostel Mess,18.5279224,73.8511668,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/1229142799,Yerawada,18.5656319,73.8865762,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/1243064186,Judicial Canteen,18.5243164,73.873222,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+way/1245776667,durga cafe,18.551545,73.7685805,coffee_shop|indian,300,4,true,true,false,Mo-Su 09:00-21:00,Pune regency orion  mohan nagar  baner pune,N/A
+way/1247689705,Cafe way/1247689705,18.5040191,73.9333793,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/1255574000,Durga Cafe,18.4850121,73.8161195,coffee_shop,300,4,true,true,false,N/A,Karve Nagar   Pune,N/A
+way/1261394960,Sairat Biryani,18.5810663,73.8157491,biryani|chicken|chinese,300,4,true,true,false,Mo-Su 08:00-22:00,Pune Kirtinagar Pune,123456
+way/1270330549,Cafe way/1270330549,18.4688943,73.7764704,coffee_shop,300,4,true,true,false,N/A,pune,N/A
+way/1371963261,VIT Canteen,18.4630252,73.8681206,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+way/1389330245,The Kuti Project,18.5672833,73.7772311,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/1430547469,Coffee Street,18.648371,73.7657394,coffee_shop,300,4,true,true,false,N/A,pimpri chinhwad,N/A
+way/1458945429,aroma cafe,18.5844405,73.8928165,burger|coffee_shop|pizza|ice_cream,300,4,true,true,false,Mo-Su 10:00-22:00,N/A,N/A
+way/1471511847,SOP 1 example2,18.5625642,73.7763801,pizza,300,4,true,true,false,Mo-Fr 09:00-17:00,Pune Balewadi High Street Baner,N/A
+node/1532852993,Cafe Coffee Day,18.5124268,73.9285386,coffee_shop,300,4,true,true,false,N/A,Pune Magarpatta Inner Circle,N/A
+node/1563305285,Cafe Cofee Day,18.5086466,73.789635,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/1768859199,Pesto Pesto,18.5381475,73.9068979,coffee_shop,300,4,true,true,false,Mo-Su 09:00-23:00,N/A,N/A
+node/2036476888,Brew Brothers,18.477798,73.9016322,coffee_shop,300,4,true,true,false,N/A,Pune Narayan Annaji Shinde Road,N/A
+node/2183488936,Barista Lavazza,18.5151955,73.8286908,coffee_shop,300,4,true,true,false,N/A,N/A,02025662080
+node/2183488938,Kollage Food Court,18.5138821,73.8285786,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/2183569906,Cafe Coffee Day,18.5657868,73.918066,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/2185567181,Cafe Coffee Day,18.5192283,73.8305068,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/2203119229,Sweet Chariot,18.527138,73.8416279,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/2527611870,Cafe Eastwood,18.4987178,73.8193274,coffee_shop,300,4,true,true,false,Mo-Su 13:00-23:00,N/A,N/A
+node/2561173070,Café Coffee Day,18.5001122,73.8143802,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/2561173081,Cafe Durga,18.5060236,73.817776,coffee_shop,300,4,true,true,false,Mo-Su 09:00-23:00,Mayur Colony  Kothrud  Pune  Maharashtra 411038,097641 42450
+node/2578138779,Cafe Coffee Day,18.5081327,73.7828202,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/2785784969,Cafe Coffee Day,18.5137007,73.8155415,coffee_shop,300,4,true,true,false,N/A,Rambaug Colony  Kothrud  Pune - 411038 MIT College Road,N/A
+node/2785802454,cafe durga,18.5155055,73.8155019,regional,300,4,true,true,false,N/A,N/A,N/A
+node/2787021729,Cafe Coffee Day,18.522171,73.841185,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/2787982835,Mr. Gelato,18.5033991,73.8194485,ice_cream,300,4,true,true,false,N/A,Pune Karve Road,N/A
+node/2787986706,Birdy's Cake Shop,18.503162,73.8200213,pastry cakes,300,4,true,true,false,N/A,Pune Karve Road,N/A
+node/3269062066,Bookbar - Artisanal cafe  bookstore and pizzahouse,18.5254171,73.8413938,coffee_shop,300,4,true,true,false,Mo-Su 10:00-23:30,Pune Fergusson College Road Pune,N/A
+node/3311223799,Cafe Peter,18.5105251,73.7818758,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/3488367794,Le Plaisir,18.5181398,73.8380932,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/3533206593,Cafe Coffee Day,18.5228996,73.8483963,coffee_shop,300,4,true,true,false,Mo-Su 09:00-23:00,N/A,+919326877251
+node/3647415344,Cafe Coffee Day,18.5079686,73.8315264,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/3710571734,Jumboking Vada Pav,18.5160792,73.842796,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/3746861106,Cafe Coffee Day,18.5250285,73.8416866,coffee_shop,300,4,true,true,false,Mo-Su 09:00-23:00,Pune Gopal Krushna Gokhale Path,+919272200142
+node/3837531767,Floyds 23,18.5190715,73.8452439,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/3964005611,Yogi Tree Cafe,18.5412531,73.8876529,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/3983902182,Bhau's Cafe,18.5440664,73.7816736,coffee_shop,300,4,true,true,false,N/A,Pune Pashan-Sus Road,N/A
+node/3986715072,SD Cafe,18.5440073,73.7817491,coffee_shop,300,4,true,true,false,N/A,Pune Pashan-Sus Road,N/A
+node/3987038638,Pagdandi cafe,18.5523223,73.7931643,coffee_shop|sandwich|korean|burger|chicken,300,4,true,true,false,Tu-Su 10:00-8:00,Pune Baner-Pashan Link Road Pashan,8788990609
+node/4061013196,The Breakfast Cafe,18.5233913,73.7804892,cafe,300,4,true,true,false,N/A,N/A,N/A
+node/4084794551,Kailash Cold Drink House,18.5114711,73.8781232,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/4452486687,Himali Canteen,18.503351,73.8323972,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/4452495870,Coffee and Bread Art Cafe,18.5040027,73.8308185,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/4520447491,Cafe node/4520447491,18.5246063,73.8415847,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/4520464891,Cafe node/4520464891,18.5243666,73.8436958,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/4520491891,Cafe node/4520491891,18.5221741,73.8443861,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/4610141290,Cafe node/4610141290,18.5276119,73.8732877,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/4748299854,Café Coffee Day,18.50277,73.9010709,coffee_shop,300,4,true,true,false,N/A,Pune Vitthal Rao Shivarkar Marg,N/A
+node/4879927647,chocolate caffe,18.550336,73.8833164,all_in_caffe,300,4,true,true,false,Mo-Su 10:00-22:00,Pune Laxminagar Yerwada,8665474974
+node/5302827823,Cafe node/5302827823,18.474172,73.8911535,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/5695613020,Vee cafe,18.4595641,73.7856,sandwich,300,4,true,true,false,N/A,N/A,N/A
+node/5695637394,Cafe Chocolade,18.4599021,73.7859788,sandwich|coffee_shop|burger,300,4,true,true,false,N/A,N/A,N/A
+node/5713386202,Sadguru Snacks & Catering,18.4938505,73.825703,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/5773606803,Polka Dots,18.5624008,73.806953,coffee_shop,300,4,true,true,false,PH Mo-Su 11:00-23:00,Pune Mahadji Shinde Marg,+91 7447 766 365;+91 7447 770 303
+node/5815976639,De Baker's Lounge,18.502221,73.8094132,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/5819803195,German Bakery,18.5199223,73.8306161,coffee_shop,300,4,true,true,false,N/A,Law College Road,N/A
+node/5832220016,Coffee Republic,18.514478,73.8288841,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/5832220017,Crazy Cheesy Cafe,18.5117222,73.8293085,pizza|sandwich|coffee_shop|italian,300,4,true,true,false,Mo-Su 09:00-21:00,Pune Shantisheela Society Lane  Law College Road,N/A
+node/5832220035,Cafe Coffee Day,18.5081099,73.7884605,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/5832548499,Rohit Coffee Corner,18.5095069,73.8468166,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/5846549317,Chota Bite by Cafe Goodluck,18.5523169,73.7938289,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/5870770162,Brewbakes Café|Bistro Paud Raod,18.5083054,73.8223027,pizza|burger|sandwich|coffee_shop|ice_cream|chicken,300,4,true,true,false,Mo-Su 11:00-23:00,Pune Paud Road,+919011430170
+node/6042492266,AIMS Cafeteria,18.5629732,73.810633,regional,300,4,true,true,false,N/A,N/A,N/A
+node/6113753532,Starbucks,18.5702285,73.7744853,coffee_shop,300,4,true,true,false,Mo-Su 07:00-22:00,Pune Balewadi High Street,N/A
+node/6128598689,Cafe Coffee Day,18.603882,73.7532632,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/6130921997,Cafe Old Skool,18.5532768,73.8075129,coffee_shop,300,4,true,true,false,N/A,Pune Shankarao Gaikwad Path Pune,N/A
+node/6130921999,Nosh Cafe and Kichen,18.5533066,73.8073813,coffee_shop,300,4,true,true,false,N/A,Pune Shankarao Gaikwad Path Pune,N/A
+node/6130922009,Cafe Coffee Day,18.5546075,73.8047402,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/6184010099,TGF Cafe,18.5392176,73.8974601,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/6186406656,Starbucks,18.546563,73.9009497,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/6199355630,Cafe Coffee Day,18.5558558,73.8094085,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/6201762556,Starbucks,18.5224787,73.8411525,coffee_shop,300,4,true,true,false,Mo-Su 07:00-23:00,Pune Gopal Krushna Gokhale Path Pune,N/A
+node/6201856577,Café Coffee Day,18.5341722,73.8765536,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/6250078437,Kathaa,18.5208204,73.8405007,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/6258899893,Guptaji Tasty Bites,18.5154534,73.8157991,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/6258913000,Community cafe,18.5109027,73.8155399,coffee_shop,300,4,true,true,false,Mo-Su 08:00-23:00,N/A,N/A
+node/6258988969,Cafe Delight,18.5151326,73.8154298,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/6501795503,Kunal Tea and Snacks,18.5930786,73.7571597,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/6514938736,Tea Center,18.5852691,73.8193095,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/6531995651,Chafa Cafe And Studio,18.533317,73.8970577,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/6849362802,Cafe node/6849362802,18.540993,73.8874645,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/6984014250,National Cafe,18.4603841,73.8239506,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/7062711336,Cafe Coffee Day,18.6358269,73.7960547,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/7112841941,Sunrise Garden Cafe,18.4575693,73.9126839,persian,300,4,true,true,false,N/A,N/A,N/A
+node/7177165876,Fit & Fat Bistro,18.5653066,73.8012929,sandwich|coffee|coffee_shop,300,4,true,true,false,N/A,Pune Sai Heritage,N/A
+node/7207627092,Starbucks,18.5566993,73.8088692,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/8282902933,Red Coffee Shop,18.5818453,73.8727968,coffee_shop,300,4,true,true,false,Mo-Sa 08:00-18:00,Pune Kalas,N/A
+node/8711632382,The Veg Culture,18.4718862,73.8204546,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/9090380090,best cafe,18.5191226,73.8759631,coffee_shop,300,4,true,true,false,Mo-Su 09:00-21:00,N/A,N/A
+node/9106176612,Neha Music Studios,18.4987408,73.8382785,coffee_shop,300,4,true,true,false,Mo-Sa 08:00-18:00,Pune Lions Club Road  Dattawadi,9049464234
+node/9128835091,Habibi Cafe,18.5898977,73.8637178,coffee_shop,300,4,true,true,false,Mo-Su 09:00-21:00,N/A,N/A
+node/9128852308,omkar cafe,18.4713805,73.887929,pizza,300,4,true,true,false,Mo-Su 09:00-21:00,Pune Kondhwa Road,N/A
+node/9128878535,Mochi Cafe,18.5229615,73.8638644,coffee_shop,300,4,true,true,false,Mo-Sa 08:00-18:00,N/A,N/A
+node/9128906269,Cafe coffee shop,18.5084498,73.795336,coffee_shop,300,4,true,true,false,Mo-Su 09:00-21:00,N/A,N/A
+node/9128917148,cafe  coffee  day,18.5216088,73.8792163,coffee_shop,300,4,true,true,false,Mo-Su 10:00-22:00,N/A,N/A
+node/9142494220,Cafe Grand,18.4751184,73.8854081,coffee_shop,300,4,true,true,false,Mo-Sa 08:00-23:00,Pune Cafe Grand  Shivneri Nagar   kondhwa,N/A
+node/9168944791,Joshi Wadewaale,18.6039313,73.9099052,indian,300,4,true,true,false,Mo-Su 10:00-21:00,Pune Prwal Road,N/A
+node/9174851579,Cafe Sky,18.5253605,73.8403187,coffee_shop,300,4,true,true,false,Mo-Su 10:00-22:00,Fergusson college campus Rd  cannol Road 8  Pune  Maharashtra 411004,086002 02030
+node/9229704619,Starbucks,18.5020112,73.8219989,coffee_shop,300,4,true,true,false,Mo-Su 08:00-23:00,Sangam Solitaire  Ground Floor  Late GA Kulkarni Path  Kothrud  Pune  Maharashtra 411038,082912 79830
+node/9229782583,The Brown Cafe,18.5009384,73.8048096,coffee_shop,300,4,true,true,false,Mo-Su 11:00-22:00,Shop No 1  Hari Ganga Apts  S  no 49  Gandhi Bhavan Rd  Kothrud  Pune  Maharashtra 411029,N/A
+node/9247492749,Neha's Cafe,18.4897121,73.8499352,coffee_shop,300,4,true,true,false,Mo-Su 10:00-23:45,Parvati Sahakar Nagar  Vrindavan Society  Sivadarshan Poorgrasta Vasahat  Parvati Paytha  Pune  Maharashtra 411009,090287 38585
+node/9263465723,Marshall's Book Cafe,18.5635624,73.8123093,coffee_shop|sandwich|juice,300,4,true,true,false,Mo-Su 11:30-22:00,Aundh Opposite Pandit Bheemsen Joshi Auditorium  near PMRDA Office  Bremen Chowk  Pune  Maharashtra 411067,096376 51304
+node/9278151721,Irani Cafe,18.5140553,73.8375771,coffee_shop,300,4,true,true,false,Mo-Su 07:00-22:00,Cornerstone Premises  Deccan Gymkhana  Prabhat Rd  beside Shri Mahila Griha Udyog Lijjat Papad Factory  Papad  Pune  Maharashtra 411004,07420016286
+node/9314632673,pizza hut,18.5139824,73.901171,italian|sandwich|ice_cream|chinese,300,4,true,true,false,Mo-Su 11:00-23:00,N/A,1109876991
+node/9314683517,Peter cafe,18.4769289,73.9107678,ice_cream|pizza|italian|coffee_shop|indian,300,4,true,true,false,Mo-Su 09:00-21:00,pune NIBM Road,1456432564
+node/9342590021,The Cartoon Cafe,18.555899,73.9205169,international,300,4,true,true,false,Mo-Su 08:00-22:00,pune ramchandra nagar,N/A
+node/9348284345,Tim Hortons,18.5703724,73.7743519,coffee_shop,300,4,true,true,false,Mo-Su 08:00-23:00,Pune Balewadi High Street,N/A
+node/9402107553,Starbucks,18.5342829,73.8298542,coffee_shop,300,4,true,true,false,Mo-Su 09:00-20:00,N/A,N/A
+node/9410145905,Barista,18.5539234,73.9039502,coffee_shop,300,4,true,true,false,Mo-Fr 09:00-18:00,N/A,N/A
+node/9485510091,Kannu Ki Chai,18.4793292,73.9014673,coffee_shop,300,4,true,true,false,Mo-Su 07:00-23:00,N/A,N/A
+node/9502917899,FRIENDS,18.4993248,73.8477321,coffee_shop,300,4,true,true,false,Mo-Sa 08:00-18:00,pune Laxminagar Road,7721839961
+node/9523273130,Starbucks,18.5144007,73.828863,coffee_shop,300,4,true,true,false,Mo-Su 06:00-23:00,Pune Vishnushastri Chiplunkar Path,N/A
+node/9576768842,Radhe Radhe snacks,18.5222328,73.764454,coffee_shop,300,4,true,true,false,N/A,Bavdhan Budruk Uttamnagar road,N/A
+node/9578166717,Chai Sutta Premi,18.5215614,73.7654676,coffee_shop,300,4,true,true,false,N/A,Bavdhan Budruk Uttamnagar road,N/A
+node/9580154852,Sarkar special,18.5203194,73.76666,coffee_shop,300,4,true,true,false,N/A,Bavdhan Budruk Uttamnagar road,N/A
+node/9863982568,Chai Point,18.5595917,73.7902281,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/9937295163,????? ?????????,18.5946407,73.7638278,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/9961484838,???? ?????? ????? ?????????,18.5986822,73.7698404,coffee_shop,300,4,true,true,false,N/A,N/A,70711457777
+node/9967066414,Vohuman Cafe,18.5324382,73.8768496,coffee_shop,300,4,true,true,false,Mo-Su 06:00-18:30,Pune Rajarshi Shahu Maharaj Path,+919373323263
+node/9990997125,Cafe buddy’s espresso,18.5918784,73.768793,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/10010582417,Cafe Peter,18.5809231,73.7842257,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/10013647188,???? ?????? ???,18.5886019,73.7821713,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/10044086761,Cafe Durga,18.552337,73.7940055,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/10044086762,Rolls Mania,18.5522827,73.793998,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/10044086791,Cafe Durga,18.5558253,73.8087411,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/10054088273,Third wave coffee,18.5391027,73.9000346,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/10082191331,Starbucks,18.5523494,73.9480824,coffee_shop,300,4,true,true,false,Mo-Fr 08:00-23:00,Fountain Road,N/A
+node/10117684095,Brew Culture,18.5365931,73.8990404,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/10117689099,Forennté Patisserie,18.5364425,73.8993524,cake|pastry|coffee,300,4,true,true,false,N/A,N/A,N/A
+node/10117710443,Naughty Angel Cafe,18.5364616,73.8995909,italian,300,4,true,true,false,N/A,N/A,N/A
+node/10139641469,Mauli tea center,18.5960302,73.7736568,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/10158935918,Grey Soul,18.5374881,73.8988397,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/10162210617,Coffee Lounge,18.5949395,73.7660216,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/10172982151,MICROBIOLOGY CANTEEN,18.5481783,73.8317816,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/10177484344,Cafe Peter,18.5939135,73.7927089,coffee_shop,300,4,true,true,false,Mo-Su 09:00-23:00,N/A,N/A
+node/10235421239,Bombay culture,18.5984144,73.766591,coffee_shop,300,4,true,true,false,09:00-23:45,N/A,N/A
+node/10236598050,????,18.5983844,73.7679863,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/10241751327,It's Street Coffee,18.5110698,73.815449,coffee_shop,300,4,true,true,false,N/A,Pune Rambaug Colony Road,N/A
+node/10245868486,???? ??????,18.5965173,73.7726692,coffee_shop,300,4,true,true,false,09:00-22:00,N/A,N/A
+node/10248838452,Fat Labrador Cafe,18.520606,73.7761434,pizza|burger|italian|coffee_shop,300,4,true,true,false,N/A,Bavdhan  Pune DSK Ranwara road Pune,N/A
+node/10250076202,Cafe Starboy,18.5533119,73.8071797,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/10250076204,Two Good (food | art | studio),18.5540744,73.8048628,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/10255150045,Read and brew,18.5958885,73.7690588,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/10282260008,Mystic cafe,18.596549,73.7726751,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/10285556158,Urja Studio,18.6010007,73.7621575,coffee_shop,300,4,true,true,false,N/A,N/A,+91 97305 57776
+node/10285662752,Crazy Cheezy Cafe,18.575393,73.768043,coffee_shop,300,4,true,true,false,Mo-Su 09:00-21:00,N/A,N/A
+node/10310521656,??? ??????????,18.6007078,73.7636984,coffee_shop,300,4,true,true,false,Mo-Su 09:00-21:00,N/A,N/A
+node/10313160450,Neha cafe,18.489244,73.8484533,pizza|burger|chinese|mexican,300,4,true,true,false,Mo-Su 09:00-21:00,Pune Golwalkar Guruji Path,9547516565
+node/10579277153,Big bean cafe,18.5984301,73.7638913,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/10579277154,The Irish coffee,18.5982697,73.7638062,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/10648169752,Third wave coffee,18.5562117,73.8089739,coffee_shop,300,4,true,true,false,N/A,ITI Road,+91 95298 83500
+node/10686342276,Caffee Delicioso,18.5597322,73.7811959,coffee_shop|ice_cream|chocolate,300,4,true,true,false,24/7,Pune Pancard Club Road  Baner,+917507657070
+node/10704253285,Stories cafe,18.532871,73.8955327,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/10712226560,Cafe node/10712226560,18.5636485,73.7661263,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/10725596914,Captain Coffee.,18.5207406,73.8557679,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/10742654055,??? ??????? ????,18.5962825,73.7640001,south indian|south indian,300,4,true,true,false,N/A,N/A,N/A
+node/10761228049,Cafe Durga,18.5878684,73.7798722,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/10796223282,Kiosk Kaffee,18.5605667,73.8050006,coffee_shop,300,4,true,true,false,N/A,Pune Ramchandra Gayakwad Path Pune,N/A
+node/10806884774,MadyMade Pizza,18.5776151,73.8156096,pizza|burger|fries,300,4,true,true,false,Mo-Su 11:30-23:00,pune Pimple Gurav-Navi Sangvi Road,07414900543
+node/10807015713,Freshpress Cafe,18.6422431,73.7550882,pizza|coffee_shop|burger|french|ice_cream|juice|sandwich,300,4,true,true,false,24/7,Ravet  Pune Ravet - Walhekarwadi Road Pune,6523187557
+node/10807157214,Cafe Destination,18.6482345,73.7658575,regional|coffee_shop,300,4,true,true,false,N/A,pimpri chinhwad,N/A
+node/10807171241,Delhi Chat,18.5816936,73.8162783,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/10913563337,Irani cafe,18.5945954,73.7594696,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/10927940657,Leafy green cafe,18.5945537,73.7688268,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/10956621606,Cafe node/10956621606,18.5108811,73.8536392,indian,300,4,true,true,false,N/A,Bajirao Road,N/A
+node/10977349389,Daily Bites,18.5929263,73.7999191,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/11007174695,Chai High,18.4650359,73.8339481,tea,300,4,true,true,false,Mo-Su 08:30-23:00,Pune,+919834372320
+node/11061383054,Cafe Durga,18.567104,73.8077225,coffee_shop,300,4,true,true,false,N/A,N/A,+91 91560 55553
+node/11065644757,Backseat Brews,18.5678173,73.9099372,coffee_shop|pizza|burger|italian|sandwich|chicken|french|pasta|indian|ice_cream|dessert|chocolate,300,4,true,true,false,Mo-Su 09:00-23:00,Pune Dei Gratia  Viman nagar Pune,+918888437374
+node/11104697380,test cafe,18.525725,73.8535881,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/11111744793,Aromas Cafe & Bistro,18.5547221,73.8000536,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/11126719893,Vohuman Café,18.5325235,73.876734,coffee_shop,300,4,true,true,false,Mo-Su 06:00-19:30,Chatrapati Shahu Maharaja Road  bear Ruby Hall,+919373323263
+node/11129411721,the cartoon cafe,18.5558914,73.9205188,coffee_shop,300,4,true,true,false,Mo-Su 06:00-22:00,N/A,N/A
+node/11159366024,Bombay Creamery,18.5571215,73.7936443,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/11274100323,Cafe House of Bamboo - HOB,18.5017834,73.8356043,cafe,300,4,true,true,false,N/A,N/A,N/A
+node/11274112988,Westyard Cafe,18.5076728,73.8351372,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/11323266169,Cafe node/11323266169,18.5205671,73.8438757,coffee_shop,300,4,true,true,false,Mo-Su 08:00-00:00,Bapusaheb Gupte Path,N/A
+node/11323273120,Big burp cafe,18.6020748,73.7702875,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/11330878772,Goodluck Cafe,18.4699752,73.8232298,coffee_shop,300,4,true,true,false,N/A,Pune Goel Ganga road Pune,N/A
+node/11348664977,Cheesy Crazy Cafe,18.6017242,73.7702322,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/11348664978,Sweet Bengal,18.6015827,73.7702131,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/11385548956,Café Tea One,18.4665215,73.8929342,coffee_shop|tea|burger|sandwich|noodle,300,4,true,true,false,Mo-Su 09:00-00:00,pune pune,+918855878719
+node/11422192220,Robusta,18.5948841,73.7657386,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/11443824204,Chaichaska,18.5949143,73.7646408,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/11513849678,Kulhad,18.591418,73.7732162,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/11519305281,Sinamon - Decadent Cinnamon Rolls,18.579052,73.7759725,coffee_shop|dessert,300,4,true,true,false,Mo-Fr 04:00-21:00,PUNE Bajirao Shripati Marg Balewadi,08668364900
+node/11521308649,cafe coffee hutt,18.5929024,73.8037257,pizza|coffee_shop|burger|italian|sandwich|chicken,300,4,true,true,false,Mo-Su 10:00-22:00,Pune kate vasti PUNE,N/A
+node/11546228263,Madras Cafe,18.5653672,73.8005102,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/11553112865,????? ???,18.6143273,73.7776982,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/11553112866,Krushna Amruttulya,18.6143451,73.7772433,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/11575588867,Pocket Cafe,18.5937754,73.8037912,pizza|coffee_shop|burger|sandwich,300,4,true,true,false,Mo-Su 09:00-21:00,Pimpri Chinchwad Pimple Gurav PUNE,020 256369
+node/11576645324,K.K's Cafe,18.5553273,73.7641183,pizza|burger|sandwich|chicken|coffee_shop|mexican|ice_cream|pasta|breakfast|fries|brunch,300,4,true,true,false,Mo-Su 10:00-23:00,Pune Western Hills Rd Baner,N/A
+node/11581224950,Crown Bakery,18.5124738,73.8089403,cake|dessert|donut,300,4,true,true,false,Mo-Su 09:00-21:00,Pune Rambaug Colony Road Pune,N/A
+node/11581229791,Cafe DuM,18.5232498,73.7807421,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/11581229793,Frozen Bottle,18.5231342,73.7802989,milkshake|ice_cream,300,4,true,true,false,N/A,N/A,N/A
+node/11680933086,One8 Commune,18.5324019,73.8708397,italian|burger|regional|international,300,4,true,true,false,N/A,N/A,N/A
+node/11681074026,The French Window Patisserie,18.5376129,73.8979395,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/11700041807,16 No Ki Chai,18.6058476,73.7728181,burger|sandwich|rolls|donut,300,4,true,true,false,N/A,Pune Shri Chatrapati Shivaji Maharaj Road Pune,N/A
+node/11715800433,ABC Cafe,18.5835741,73.8035457,italian|pizza|sandwich,300,4,true,true,false,Mo-Su 11:00-21:00,pune kirti nagar pune,N/A
+node/11726905574,Grandmama's Cafe,18.5329684,73.8978625,coffee_shop,300,4,true,true,false,N/A,N/A,07420060448
+node/11762648065,Cafe node/11762648065,18.6144289,73.7750034,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/11809401192,30 ML Espresso,18.6493118,73.7699186,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/11913222306,Hotel Ratna,18.5440081,73.8385545,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/12101659688,Revive Social Rooftop Cafe & Lounge,18.5604275,73.8080515,pizza|coffee_shop|burger|italian|sandwich|pasta,300,4,true,true,false,Mo-Su 09:00-23:00,Aundh  Pune Ramchandra Gayakwad Path Pune,+918668564552
+node/12127600502,The Box Bistro,18.5059058,73.8281404,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/12176140939,Durga Cafe,18.4967827,73.8022806,coffee_shop,300,4,true,true,false,Mo-Su 08:00-23:00,N/A,N/A
+node/12206652865,Police Station Tea Stall,18.5461752,73.8264862,tea,300,4,true,true,false,N/A,Pune chaturshrungi police station Pune,N/A
+node/12301626152,Cafe Durga,18.6124577,73.7679909,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/12372950601,Kannu Ki Chai,18.5531592,73.9484568,coffee_shop,300,4,true,true,false,N/A,EON IT free Zone,N/A
+node/12378582777,the chefs way cafe,18.5626834,73.8317996,chicken|burger|pizza|italian,300,4,true,true,false,Mo-Fr 09:00-18:00,pune ganga legend Pune,7385589357
+node/12383884204,Brew Culture,18.5668819,73.9106949,coffee_shop,300,4,true,true,false,Mo-Su 09:00-21:00,Pune Viman Nagar Road,N/A
+node/12383891002,alag aasmaan,18.5697053,73.910701,coffee_shop,300,4,true,true,false,Mo-Su 09:00-21:00,Pune Pratapkumar Path,N/A
+node/12383891003,choclate caffe,18.5503514,73.8833164,pizza|coffee_shop|burger|sandwich|mexican|sushi|ice_cream|bubble_tea|donut,300,4,true,true,false,Mo-Su 10:00-22:00,Pune haveli maharashtara,9754565476
+node/12422145784,Brewing Bistro,18.5522368,73.8039477,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/12473454970,Coffee Nation,18.5229626,73.8411319,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/12473454971,Soundtrack Cafe,18.5823228,73.7836778,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/12483985301,Cafe Peiskos,18.5485217,73.7910459,coffee_shop,300,4,true,true,false,Mo-Su 11:00-22:30,Baner-Pashan Link Road,+91 78759 29567
+node/12484059101,Pan India Eatery,18.5522362,73.7929231,pizza|coffee_shop|chinese,300,4,true,true,false,Mo-Su 12:00-23:00,Pune Baner-Pashan Link Road Pashan,+91 74474 50011
+node/12484073402,Cafe Durga,18.5444539,73.7820527,coffee_shop,300,4,true,true,false,Mo-Su 09:00-23:30,N/A,+91 99211 66166
+node/12484078801,Chai Katta,18.5444112,73.7822187,coffee_shop,300,4,true,true,false,Mo-Su 08:00-23:00,N/A,N/A
+node/12484078802,Chai Katta,18.5209133,73.7789568,coffee_shop,300,4,true,true,false,Mo-Su 09:00-23:00,N/A,N/A
+node/12484083401,Cafe Dot Com,18.548737,73.7680906,pizza|burger,300,4,true,true,false,Mo-Su 09:00-21:00,pune Sus Road pune,6457264382
+node/12484089402,Goodluck Cafe,18.516814,73.7815622,coffee_shop,300,4,true,true,false,Mo-Su 08:00-23:00,N/A,N/A
+node/12484094602,Irani Cafe,18.5079498,73.7830283,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/12590123952,Opera House,18.6021831,73.7702978,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/12594552291,T1,18.5718355,73.7764514,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/12609976601,Cafe Rova,18.5536815,73.939838,coffee_shop,300,4,true,true,false,N/A,Divine Suite,+919637908083
+node/12647555595,V K Cafe,18.598381,73.7678539,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/12669955615,Street coffee,18.4595111,73.7854512,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/12770261255,Satva Coffe,18.5643864,73.7791054,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/12794484463,Cafe A26,18.5682355,73.9060958,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/12801991326,Blue Tokai Coffee Roasters,18.5241167,73.8437345,coffee_shop|burger,300,4,true,true,false,N/A,N/A,N/A
+node/12828854369,???? ???????,18.6195183,73.8045843,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/12843844311,Brewing Partners,18.5182435,73.8357178,coffee_shop|burger,300,4,true,true,false,N/A,N/A,N/A
+node/12863141189,The Belgian Waffle Company,18.5687438,73.775275,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/12863148747,The Magic Bottle,18.5694498,73.7813326,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/12942413821,Cafe Durga,18.5978199,73.7608055,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/13028616259,Diamond Queen,18.5182802,73.8800352,irani|coffee_shop,300,4,true,true,false,N/A,Pune Pune District,N/A
+node/13057952488,Abhinandan Kadak Special Chaha Ani Coffee,18.6273875,73.7826607,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/13064968272,Third Wave Coffee,18.5608571,73.8067852,coffee_shop,300,4,true,true,false,N/A,Pune Aundh Pune,N/A
+node/13128764752,Brew Hub,18.4556346,73.9199161,coffee_shop,300,4,true,true,false,Mo-Su 17:00-23:00,Pune Undri Road Pune,N/A
+node/13131470128,Chaha Mi,18.5559535,73.8181282,tea,300,4,true,true,false,N/A,N/A,N/A
+node/13140904993,Cafe Coffee Day,18.5135215,73.8793156,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/13305747443,Jijai Coffee House,18.5078832,73.7723605,coffee_shop|sandwich,300,4,true,true,false,24/7,Pune Paud Road,9850982119
+node/13373281383,Southway Coffee,18.6029422,73.7703351,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/13380898046,Chai Sutta Bar,18.6482582,73.8435299,indian|breakfast|coffee_shop,300,4,true,true,false,N/A,Spine Road,N/A
+node/13381102485,street coffee,18.6370528,73.846813,pizza|italian|asian,300,4,true,true,false,N/A,pune Vaishnao Mata Marg haveli,N/A
+node/13478636318,Good Luck Cafe,18.516853,73.7815936,pizza|coffee_shop|burger|indian|breakfast|tea|juice|brunch|fries|sandwich|chicken,300,4,true,true,false,Mo-Su 07:00-22:00,Bavdhan  Pune Swami  NDA Pashan Rd Pune,091754 46609
+node/13506370565,fat labradour cafe,18.5203832,73.7756738,coffee_shop|pizza|italian,300,4,true,true,false,Mo-Su 10:00am-11:00pm,Bavdhan  Pune DSK Ranwara road Pune,N/A
+node/13506380193,fat labrador cafe,18.5205538,73.7760285,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
+node/13506380194,fat labrador,18.5205843,73.7760821,burger|bavdhan,300,4,true,true,false,N/A,Bavdhan  Pune DSK Ranwara road Pune,N/A
+node/13506419224,Cafe node/13506419224,18.5205399,73.7760844,coffee_shop,300,4,true,true,false,N/A,N/A,N/A
