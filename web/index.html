@@ -3,29 +3,48 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cafe Recommender</title>
+  <title>Cafe Vibe Finder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
   <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
-  <header>
-    <h1>Personalized Cafe Recommendation System</h1>
+  <header class="hero">
+    <div>
+      <p class="eyebrow">Cafe Intelligence</p>
+      <h1>ESPRESSO YOURSELF</h1>
+      <p class="sub">Find cafes by vibe, workability, sunlight and live seat status.</p>
+    </div>
+    <div class="hero-actions">
+      <button id="liveLocationBtn" class="btn alt">Use My Live Location</button>
+      <input id="address" type="text" placeholder="Search place (e.g. FC Road Pune)" />
+      <button id="locateAddressBtn" class="btn">Use Address</button>
+    </div>
   </header>
 
   <main>
-    <section class="panel">
-      <label>Address / Place (optional)
-        <input id="address" type="text" placeholder="e.g. FC Road Pune" />
-      </label>
-      <button id="locateAddressBtn" class="secondary">Use Address</button>
-      <button id="liveLocationBtn" class="secondary">Use My Live Location</button>
+    <aside class="controls">
+      <h2>Search Controls</h2>
       <label>Latitude <input id="lat" type="number" step="0.000001" value="18.5204" /></label>
       <label>Longitude <input id="lon" type="number" step="0.000001" value="73.8567" /></label>
       <label>Radius (km) <input id="radius" type="number" step="0.1" value="5" /></label>
-      <label>Budget <input id="budget" type="number" step="1" value="500" /></label>
+      <label>Budget (per person) <input id="budget" type="number" step="1" value="600" /></label>
+      <label>Top K <input id="k" type="number" step="1" value="40" /></label>
       <label>Cuisines (comma separated) <input id="cuisines" type="text" value="italian,chinese,indian" /></label>
+      <label>Vibe Tags (e.g. darkacademia,plantseverywhere) <input id="vibes" type="text" value="" /></label>
+      <label>Acoustic Profile
+        <select id="acoustic">
+          <option value="">Any</option>
+          <option value="Library Quiet">Library Quiet</option>
+          <option value="Lo-fi Beats">Lo-fi Beats</option>
+          <option value="Active Chatter">Active Chatter</option>
+        </select>
+      </label>
+      <label>Menu Search (dish/drink) <input id="menuQuery" type="text" placeholder="almond croissant" /></label>
       <label>Diet
         <select id="diet">
           <option>ANY</option>
@@ -34,20 +53,27 @@
           <option>VEGAN</option>
         </select>
       </label>
-      <label>Top K <input id="k" type="number" step="1" value="50" /></label>
+      <label class="check"><input id="indieOnly" type="checkbox" /> Hidden Gems Only (No Chains)</label>
 
-      <label>Distance Weight (w1) <input id="w1" type="number" step="0.1" value="0.3" /></label>
-      <label>Price Weight (w2) <input id="w2" type="number" step="0.1" value="0.3" /></label>
-      <label>Rating Weight (w3) <input id="w3" type="number" step="0.1" value="0.2" /></label>
-      <label>Cuisine Weight (w4) <input id="w4" type="number" step="0.1" value="0.2" /></label>
+      <div class="weights">
+        <h3>Weights</h3>
+        <label>Distance (w1) <input id="w1" type="number" step="0.1" value="0.3" /></label>
+        <label>Price (w2) <input id="w2" type="number" step="0.1" value="0.2" /></label>
+        <label>Rating (w3) <input id="w3" type="number" step="0.1" value="0.2" /></label>
+        <label>Cuisine Match (w4) <input id="w4" type="number" step="0.1" value="0.3" /></label>
+      </div>
 
-      <button id="searchBtn">Find Cafes</button>
-      <div id="status" class="meta"></div>
-      <div id="results"></div>
+      <button id="searchBtn" class="btn">Find Cafes</button>
+      <div id="status" class="status"></div>
+    </aside>
+
+    <section class="map-wrap">
+      <div id="map"></div>
     </section>
 
-    <section>
-      <div id="map"></div>
+    <section class="results-wrap">
+      <h2>Ranked Recommendations</h2>
+      <div id="results"></div>
     </section>
   </main>
 

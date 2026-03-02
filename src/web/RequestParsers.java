@@ -53,6 +53,23 @@ public final class RequestParsers {
         return cuisines;
     }
 
+    public static Set<String> parseTags(String raw) {
+        Set<String> tags = new HashSet<>();
+        if (raw == null || raw.isBlank()) {
+            return tags;
+        }
+        for (String c : raw.split(",")) {
+            String value = c.trim().toLowerCase();
+            if (!value.isEmpty()) {
+                if (!value.startsWith("#")) {
+                    value = "#" + value;
+                }
+                tags.add(value);
+            }
+        }
+        return tags;
+    }
+
     public static DietaryPreference parseDiet(String raw) {
         if (raw == null || raw.isBlank()) {
             return DietaryPreference.ANY;
@@ -71,6 +88,14 @@ public final class RequestParsers {
                 Double.parseDouble(w3),
                 Double.parseDouble(w4)
         );
+    }
+
+    public static boolean parseBoolean(Map<String, String> q, String key, boolean defaultVal) {
+        String raw = q.get(key);
+        if (raw == null || raw.isBlank()) {
+            return defaultVal;
+        }
+        return "true".equalsIgnoreCase(raw) || "1".equals(raw) || "yes".equalsIgnoreCase(raw);
     }
 
     private static String decode(String s) {

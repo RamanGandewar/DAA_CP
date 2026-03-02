@@ -11,6 +11,9 @@ import model.DietaryPreference;
 import model.Recommendation;
 import model.SearchQuery;
 import score.Weights;
+import service.InsightsService;
+import service.LiveStatus;
+import service.LiveStatusService;
 import service.RecommendationService;
 import spatial.KDTree;
 
@@ -28,10 +31,17 @@ import java.util.concurrent.Executors;
 public class CafeHttpServer {
     private final int port;
     private final RecommendationService recommendationService;
+    private final InsightsService insightsService;
+    private final LiveStatusService liveStatusService;
 
-    public CafeHttpServer(int port, RecommendationService recommendationService) {
+    public CafeHttpServer(int port,
+                          RecommendationService recommendationService,
+                          InsightsService insightsService,
+                          LiveStatusService liveStatusService) {
         this.port = port;
         this.recommendationService = recommendationService;
+        this.insightsService = insightsService;
+        this.liveStatusService = liveStatusService;
     }
 
     public static CafeHttpServer buildDefault(int port, String csvPath) throws IOException {
@@ -41,14 +51,18 @@ public class CafeHttpServer {
         GlobalStats stats = loader.computeGlobalStats(cafes);
 
         KDTree kdTree = new KDTree(cafes);
-        RecommendationService service = new RecommendationService(cafes, kdTree, stats);
-        return new CafeHttpServer(port, service);
+        InsightsService insightsService = new InsightsService(cafes);
+        LiveStatusService liveStatusService = new LiveStatusService();
+        RecommendationService service = new RecommendationService(cafes, kdTree, stats, insightsService);
+        return new CafeHttpServer(port, service, insightsService, liveStatusService);
     }
 
     public void start() throws IOException {
         HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
         server.createContext("/api/health", new HealthHandler());
-        server.createContext("/api/recommend", new RecommendHandler(recommendationService));
+        server.createContext("/api/recommend", new RecommendHandler(recommendationService, insightsService, liveStatusService));
+        server.createContext("/api/live/seat", new SeatStatusHandler(liveStatusService));
+        server.createContext("/api/live/table-share", new TableShareHandler(liveStatusService));
         server.createContext("/", new StaticFileHandler());
         server.setExecutor(Executors.newFixedThreadPool(8));
         server.start();
@@ -70,9 +84,13 @@ public class CafeHttpServer {
 
     private static class RecommendHandler implements HttpHandler {
         private final RecommendationService service;
+        private final InsightsService insightsService;
+        private final LiveStatusService liveStatusService;
 
-        RecommendHandler(RecommendationService service) {
+        RecommendHandler(RecommendationService service, InsightsService insightsService, LiveStatusService liveStatusService) {
             this.service = service;
+            this.insightsService = insightsService;
+            this.liveStatusService = liveStatusService;
         }
 
         @Override
@@ -88,15 +106,20 @@ public class CafeHttpServer {
                 double lon = Double.parseDouble(required(q, "lon"));
                 double radius = Double.parseDouble(q.getOrDefault("radius", "5"));
                 double budget = Double.parseDouble(q.getOrDefault("budget", "500"));
-                int k = Integer.parseInt(q.getOrDefault("k", "10"));
+                int k = Integer.parseInt(q.getOrDefault("k", "20"));
 
                 Set<String> cuisines = RequestParsers.parseCuisines(q.getOrDefault("cuisines", ""));
+                Set<String> vibeTags = RequestParsers.parseTags(q.getOrDefault("vibes", ""));
                 DietaryPreference diet = RequestParsers.parseDiet(q.getOrDefault("diet", "ANY"));
                 Weights weights = RequestParsers.parseWeights(q);
+                boolean indieOnly = RequestParsers.parseBoolean(q, "indieOnly", false);
+                String menuQuery = q.getOrDefault("menuQuery", "");
+                String acoustic = q.getOrDefault("acoustic", "");
 
-                SearchQuery query = new SearchQuery(lat, lon, radius, budget, cuisines, diet, weights, k);
+                SearchQuery query = new SearchQuery(lat, lon, radius, budget, cuisines, diet, weights, k,
+                        indieOnly, menuQuery, vibeTags, acoustic);
                 List<Recommendation> results = service.recommend(query);
-                writeJson(ex, 200, JsonUtil.recommendationsJson(results));
+                writeJson(ex, 200, JsonUtil.recommendationsJson(results, insightsService, liveStatusService));
             } catch (Exception err) {
                 writeJson(ex, 400, JsonUtil.errorJson(err.getMessage()));
             }
@@ -108,6 +131,75 @@ public class CafeHttpServer {
                 throw new IllegalArgumentException("Missing required parameter: " + key);
             }
             return v;
+        }
+    }
+
+    private static class SeatStatusHandler implements HttpHandler {
+        private final LiveStatusService liveStatusService;
+
+        SeatStatusHandler(LiveStatusService liveStatusService) {
+            this.liveStatusService = liveStatusService;
+        }
+
+        @Override
+        public void handle(HttpExchange ex) throws IOException {
+            if ("OPTIONS".equalsIgnoreCase(ex.getRequestMethod())) {
+                writePreflight(ex);
+                return;
+            }
+
+            Map<String, String> q = RequestParsers.parseQuery(ex.getRequestURI().getRawQuery());
+            String cafeId = q.getOrDefault("cafeId", "");
+            if (cafeId.isBlank()) {
+                writeJson(ex, 400, JsonUtil.errorJson("Missing cafeId"));
+                return;
+            }
+
+            try {
+                if ("POST".equalsIgnoreCase(ex.getRequestMethod())) {
+                    String status = q.getOrDefault("status", "");
+                    liveStatusService.voteSeatStatus(cafeId, status);
+                } else if (!"GET".equalsIgnoreCase(ex.getRequestMethod())) {
+                    writeJson(ex, 405, JsonUtil.errorJson("Use GET/POST"));
+                    return;
+                }
+
+                LiveStatus status = liveStatusService.getStatus(cafeId);
+                writeJson(ex, 200, JsonUtil.liveStatusJson(cafeId, status));
+            } catch (Exception err) {
+                writeJson(ex, 400, JsonUtil.errorJson(err.getMessage()));
+            }
+        }
+    }
+
+    private static class TableShareHandler implements HttpHandler {
+        private final LiveStatusService liveStatusService;
+
+        TableShareHandler(LiveStatusService liveStatusService) {
+            this.liveStatusService = liveStatusService;
+        }
+
+        @Override
+        public void handle(HttpExchange ex) throws IOException {
+            if ("OPTIONS".equalsIgnoreCase(ex.getRequestMethod())) {
+                writePreflight(ex);
+                return;
+            }
+            if (!"POST".equalsIgnoreCase(ex.getRequestMethod())) {
+                writeJson(ex, 405, JsonUtil.errorJson("Use POST"));
+                return;
+            }
+
+            Map<String, String> q = RequestParsers.parseQuery(ex.getRequestURI().getRawQuery());
+            String cafeId = q.getOrDefault("cafeId", "");
+            if (cafeId.isBlank()) {
+                writeJson(ex, 400, JsonUtil.errorJson("Missing cafeId"));
+                return;
+            }
+            boolean available = RequestParsers.parseBoolean(q, "available", false);
+            liveStatusService.setTableShare(cafeId, available);
+            LiveStatus status = liveStatusService.getStatus(cafeId);
+            writeJson(ex, 200, JsonUtil.liveStatusJson(cafeId, status));
         }
     }
 
@@ -152,10 +244,19 @@ public class CafeHttpServer {
         }
     }
 
+    private static void writePreflight(HttpExchange ex) throws IOException {
+        ex.getResponseHeaders().set("Access-Control-Allow-Origin", "*");
+        ex.getResponseHeaders().set("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+        ex.getResponseHeaders().set("Access-Control-Allow-Headers", "Content-Type");
+        ex.sendResponseHeaders(204, -1);
+    }
+
     private static void writeJson(HttpExchange ex, int status, String json) throws IOException {
         byte[] body = json.getBytes(StandardCharsets.UTF_8);
         ex.getResponseHeaders().set("Content-Type", "application/json; charset=UTF-8");
         ex.getResponseHeaders().set("Access-Control-Allow-Origin", "*");
+        ex.getResponseHeaders().set("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+        ex.getResponseHeaders().set("Access-Control-Allow-Headers", "Content-Type");
         ex.sendResponseHeaders(status, body.length);
         try (OutputStream os = ex.getResponseBody()) {
             os.write(body);

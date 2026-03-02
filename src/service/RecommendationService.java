@@ -17,14 +17,14 @@ public class RecommendationService {
     private final ConstraintFilter constraintFilter;
     private final ScoreCalculator scoreCalculator;
     private final TopKSelector topKSelector;
-    private final List<Cafe> allCafes;
+    private final InsightsService insightsService;
 
-    public RecommendationService(List<Cafe> allCafes, KDTree kdTree, GlobalStats stats) {
-        this.allCafes = allCafes;
+    public RecommendationService(List<Cafe> allCafes, KDTree kdTree, GlobalStats stats, InsightsService insightsService) {
         this.kdTree = kdTree;
         this.constraintFilter = new ConstraintFilter();
         this.scoreCalculator = new ScoreCalculator(stats);
         this.topKSelector = new TopKSelector();
+        this.insightsService = insightsService;
     }
 
     public List<Recommendation> recommend(SearchQuery query) {
@@ -40,6 +40,7 @@ public class RecommendationService {
 
         List<Cafe> budgetFiltered = constraintFilter.byBudget(extractCafes(withinRadius), query.getBudget());
         List<Cafe> valid = constraintFilter.byDiet(budgetFiltered, query.getDietaryPreference());
+        valid = applyExtendedFilters(valid, query);
 
         List<Recommendation> scored = score(valid, query);
         if (scored.isEmpty()) {
@@ -83,6 +84,26 @@ public class RecommendationService {
         fallback.sort((a, b) -> Double.compare(a.getCafe().getAvgPrice(), b.getCafe().getAvgPrice()));
         int k = Math.min(5, fallback.size());
         return fallback.subList(0, k);
+    }
+
+    private List<Cafe> applyExtendedFilters(List<Cafe> cafes, SearchQuery query) {
+        List<Cafe> out = new ArrayList<>();
+        for (Cafe cafe : cafes) {
+            if (query.isIndependentOnly() && !insightsService.forCafe(cafe).isIndependent()) {
+                continue;
+            }
+            if (!insightsService.matchesMenu(cafe, query.getMenuQuery())) {
+                continue;
+            }
+            if (!insightsService.matchesVibe(cafe, query.getVibeTags())) {
+                continue;
+            }
+            if (!insightsService.matchesAcoustic(cafe, query.getAcousticProfile())) {
+                continue;
+            }
+            out.add(cafe);
+        }
+        return out;
     }
 
     private List<Cafe> extractCafes(List<CafeDistance> in) {
