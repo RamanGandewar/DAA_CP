@@ -44,9 +44,9 @@ public class CafeHttpServer {
         this.liveStatusService = liveStatusService;
     }
 
-    public static CafeHttpServer buildDefault(int port, String csvPath) throws IOException {
+    public static CafeHttpServer buildDefault(int port, String dataPath) throws IOException {
         DataLoader loader = new DataLoader();
-        List<Cafe> cafes = loader.loadFromCsv(csvPath);
+        List<Cafe> cafes = loader.loadFromFile(dataPath);
         DataValidator.validate(cafes);
         GlobalStats stats = loader.computeGlobalStats(cafes);
 

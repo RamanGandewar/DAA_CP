@@ -1,0 +1,47 @@
+row_index,name,location,query,reason
+2,Lane the Hangout Cafe,0.5 km from JM Road,"Lane the Hangout Cafe, 0.5 km from JM Road, Pune, India",no result from API
+3,Coffee Nation,0.5 km from JM Road,"Coffee Nation, 0.5 km from JM Road, Pune, India",no result from API
+4,Cafe Mhuzo Goa,0.5 km from JM Road,"Cafe Mhuzo Goa, 0.5 km from JM Road, Pune, India",no result from API
+5,Cafe Kathaa,0.5 km from JM Road,"Cafe Kathaa, 0.5 km from JM Road, Pune, India",no result from API
+6,Treat Studio Cafe,1.0-2.0 km from JM Road,"Treat Studio Cafe, 1.0-2.0 km from JM Road, Pune, India",no result from API
+7,Cafe Peter - Apte Road,1.0-2.0 km from JM Road,"Cafe Peter - Apte Road, 1.0-2.0 km from JM Road, Pune, India",no result from API
+8,Woods Cafe,1.0-2.0 km from JM Road,"Woods Cafe, 1.0-2.0 km from JM Road, Pune, India",no result from API
+9,Blue Tokai Coffee Roasters,1.0-2.0 km from JM Road,"Blue Tokai Coffee Roasters, 1.0-2.0 km from JM Road, Pune, India",no result from API
+10,Starbucks,1.0-2.0 km from JM Road,"Starbucks, 1.0-2.0 km from JM Road, Pune, India",no result from API
+11,Cafe Joshua,0.5 km from JM Road,"Cafe Joshua, 0.5 km from JM Road, Pune, India",no result from API
+20,Chaayos Cafe,1.0 km from Balewadi High Street,"Chaayos Cafe, 1.0 km from Balewadi High Street, Pune, India",no result from API
+22,Mumbasa Cafe,1.0-1.5 km from Balewadi High Street,"Mumbasa Cafe, 1.0-1.5 km from Balewadi High Street, Pune, India",no result from API
+23,Cafe Peter,2.0 km from Balewadi High Street,"Cafe Peter, 2.0 km from Balewadi High Street, Pune, India",no result from API
+24,Cafe Coffee Day,2.0-3.0 km from Balewadi High Street,"Cafe Coffee Day, 2.0-3.0 km from Balewadi High Street, Pune, India",no result from API
+25,Waari Book Cafe,0.5 km from Kothrud,"Waari Book Cafe, 0.5 km from Kothrud, Pune, India",no result from API
+26,Le Petit Amour,0.7 km from Kothrud,"Le Petit Amour, 0.7 km from Kothrud, Pune, India",no result from API
+27,Chai Katta,0.8 km from Kothrud,"Chai Katta, 0.8 km from Kothrud, Pune, India",no result from API
+28,Madeline India,0.7 km from Kothrud,"Madeline India, 0.7 km from Kothrud, Pune, India",no result from API
+29,Cafe Durga,0.4 km from Kothrud,"Cafe Durga, 0.4 km from Kothrud, Pune, India",no result from API
+30,Chai Vaai Cafe,0.1 km from Kothrud,"Chai Vaai Cafe, 0.1 km from Kothrud, Pune, India",no result from API
+31,Le Plaisir,2.0-3.0 km from Kothrud,"Le Plaisir, 2.0-3.0 km from Kothrud, Pune, India",no result from API
+32,Butter Brews Bistro,2.0-3.0 km from Kothrud,"Butter Brews Bistro, 2.0-3.0 km from Kothrud, Pune, India",no result from API
+33,Rainbow Fizz Cafe,0.5 km from Kothrud,"Rainbow Fizz Cafe, 0.5 km from Kothrud, Pune, India",no result from API
+34,Ganache Patisserie & Cafe,0.3 km from Kothrud,"Ganache Patisserie & Cafe, 0.3 km from Kothrud, Pune, India",no result from API
+35,Third Wave Coffee,0.9 km from Kothrud,"Third Wave Coffee, 0.9 km from Kothrud, Pune, India",no result from API
+36,Book Bar,0.6 km from Kothrud,"Book Bar, 0.6 km from Kothrud, Pune, India",no result from API
+37,Starbucks,0.3 km from Kothrud,"Starbucks, 0.3 km from Kothrud, Pune, India",no result from API
+39,Kannu Ki Chai,Vadgaon Sheri,"Kannu Ki Chai, Vadgaon Sheri, Pune, India",no result from API
+40,Cafe Arabia,Vadgaon Sheri,"Cafe Arabia, Vadgaon Sheri, Pune, India",no result from API
+41,Brewing Heaven,Vadgaon Sheri,"Brewing Heaven, Vadgaon Sheri, Pune, India",no result from API
+42,Le Flamington,2.5 km from Vadgaon Sheri,"Le Flamington, 2.5 km from Vadgaon Sheri, Pune, India",no result from API
+43,The Beans Talk Cafe,2.0 km from Vadgaon Sheri,"The Beans Talk Cafe, 2.0 km from Vadgaon Sheri, Pune, India",no result from API
+44,Cafe Mx 2,1.5 km from Vadgaon Sheri,"Cafe Mx 2, 1.5 km from Vadgaon Sheri, Pune, India",no result from API
+45,Cafe Peters,2.0 km from Vadgaon Sheri,"Cafe Peters, 2.0 km from Vadgaon Sheri, Pune, India",no result from API
+46,Starbucks,2.2 km from Vadgaon Sheri,"Starbucks, 2.2 km from Vadgaon Sheri, Pune, India",no result from API
+56,Cafe Durga,0.5 km from Baner Road,"Cafe Durga, 0.5 km from Baner Road, Pune, India",no result from API
+57,Barista,1.5 km from Baner Road,"Barista, 1.5 km from Baner Road, Pune, India",no result from API
+58,Midori Coffee And Eatery,1.5 km from Baner Road,"Midori Coffee And Eatery, 1.5 km from Baner Road, Pune, India",no result from API
+73,Cafe Durga,0.7 km from Akurdi Railway Station,"Cafe Durga, 0.7 km from Akurdi Railway Station, Pune, India",no result from API
+74,The Waffle Co.,1.0 km from Akurdi Railway Station,"The Waffle Co., 1.0 km from Akurdi Railway Station, Pune, India",no result from API
+75,Cafe Golden Sip,0.8 km from Akurdi Railway Station,"Cafe Golden Sip, 0.8 km from Akurdi Railway Station, Pune, India",no result from API
+76,Cafe Choco Craze,1.0 km from Akurdi Railway Station,"Cafe Choco Craze, 1.0 km from Akurdi Railway Station, Pune, India",no result from API
+173,Big Scoop CafÃ©,Pune(East Street),"Big Scoop CafÃ©, Pune(East Street), Pune, India",no result from API
+174,Tim Luck Luck,Pune(East Street),"Tim Luck Luck, Pune(East Street), Pune, India",no result from API
+175,"Effingut Bistro,",Pune(East Street),"Effingut Bistro,, Pune(East Street), Pune, India",no result from API
+176,Kingâ€™s Persian Bistro,Pune(East Street),"Kingâ€™s Persian Bistro, Pune(East Street), Pune, India",no result from API

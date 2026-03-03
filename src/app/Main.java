@@ -1,6 +1,8 @@
 package app;
 
 import web.CafeHttpServer;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class Main {
     public static void main(String[] args) {
@@ -10,7 +12,11 @@ public class Main {
         }
 
         try {
-            CafeHttpServer server = CafeHttpServer.buildDefault(port, "data/cafes.csv");
+            String geocodedPath = "data/micuppa cafe dataset.geocoded.xlsx";
+            String sourcePath = Files.exists(Path.of(geocodedPath))
+                    ? geocodedPath
+                    : "data/micuppa cafe dataset.xlsx";
+            CafeHttpServer server = CafeHttpServer.buildDefault(port, sourcePath);
             server.start();
         } catch (Exception e) {
             System.err.println("Failed to start application: " + e.getMessage());

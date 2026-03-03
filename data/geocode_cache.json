@@ -1,0 +1,1689 @@
+{
+  "modern cafe | jm road": {
+    "lat": 18.5191235,
+    "lon": 73.8450956,
+    "display_name": "Jangli Maharaj Path, Deccan Gymkhana, Pune, Pune City, Pune, Maharashtra, 411004, India",
+    "confidence": "LOW",
+    "query": "Jm Road, Pune, India"
+  },
+  "the chai bar & cafe | jm road": {
+    "lat": 18.5191235,
+    "lon": 73.8450956,
+    "display_name": "Jangli Maharaj Path, Deccan Gymkhana, Pune, Pune City, Pune, Maharashtra, 411004, India",
+    "confidence": "LOW",
+    "query": "Jm Road, Pune, India"
+  },
+  "lane the hangout cafe | 0.5 km from jm road": {
+    "lat": null,
+    "lon": null,
+    "display_name": "",
+    "reason": "no result from API",
+    "query": "Lane the Hangout Cafe, 0.5 km from JM Road, Pune, India"
+  },
+  "coffee nation | 0.5 km from jm road": {
+    "lat": null,
+    "lon": null,
+    "display_name": "",
+    "reason": "no result from API",
+    "query": "Coffee Nation, 0.5 km from JM Road, Pune, India"
+  },
+  "cafe mhuzo goa | 0.5 km from jm road": {
+    "lat": null,
+    "lon": null,
+    "display_name": "",
+    "reason": "no result from API",
+    "query": "Cafe Mhuzo Goa, 0.5 km from JM Road, Pune, India"
+  },
+  "cafe kathaa | 0.5 km from jm road": {
+    "lat": null,
+    "lon": null,
+    "display_name": "",
+    "reason": "no result from API",
+    "query": "Cafe Kathaa, 0.5 km from JM Road, Pune, India"
+  },
+  "treat studio cafe | 1.0-2.0 km from jm road": {
+    "lat": null,
+    "lon": null,
+    "display_name": "",
+    "reason": "no result from API",
+    "query": "Treat Studio Cafe, 1.0-2.0 km from JM Road, Pune, India"
+  },
+  "cafe peter - apte road | 1.0-2.0 km from jm road": {
+    "lat": null,
+    "lon": null,
+    "display_name": "",
+    "reason": "no result from API",
+    "query": "Cafe Peter - Apte Road, 1.0-2.0 km from JM Road, Pune, India"
+  },
+  "woods cafe | 1.0-2.0 km from jm road": {
+    "lat": null,
+    "lon": null,
+    "display_name": "",
+    "reason": "no result from API",
+    "query": "Woods Cafe, 1.0-2.0 km from JM Road, Pune, India"
+  },
+  "blue tokai coffee roasters | 1.0-2.0 km from jm road": {
+    "lat": null,
+    "lon": null,
+    "display_name": "",
+    "reason": "no result from API",
+    "query": "Blue Tokai Coffee Roasters, 1.0-2.0 km from JM Road, Pune, India"
+  },
+  "starbucks | 1.0-2.0 km from jm road": {
+    "lat": null,
+    "lon": null,
+    "display_name": "",
+    "reason": "no result from API",
+    "query": "Starbucks, 1.0-2.0 km from JM Road, Pune, India"
+  },
+  "cafe joshua | 0.5 km from jm road": {
+    "lat": null,
+    "lon": null,
+    "display_name": "",
+    "reason": "no result from API",
+    "query": "Cafe Joshua, 0.5 km from JM Road, Pune, India"
+  },
+  "third wave coffee | balewadi high street": {
+    "lat": 18.5707189,
+    "lon": 73.7743082,
+    "display_name": "Balewadi High Street, Baner, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "LOW",
+    "query": "Balewadi High Street, Pune, India"
+  },
+  "poetry by love and cheesecake | balewadi high street": {
+    "lat": 18.5707189,
+    "lon": 73.7743082,
+    "display_name": "Balewadi High Street, Baner, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "LOW",
+    "query": "Balewadi High Street, Pune, India"
+  },
+  "lord petrick premium coffee and burger | balewadi high street": {
+    "lat": 18.5707189,
+    "lon": 73.7743082,
+    "display_name": "Balewadi High Street, Baner, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "LOW",
+    "query": "Balewadi High Street, Pune, India"
+  },
+  "garamtawa bistro and herbal cafe | balewadi high street": {
+    "lat": 18.5707189,
+    "lon": 73.7743082,
+    "display_name": "Balewadi High Street, Baner, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "LOW",
+    "query": "Balewadi High Street, Pune, India"
+  },
+  "starbucks | balewadi high street": {
+    "lat": 18.5702285,
+    "lon": 73.7744853,
+    "display_name": "Starbucks, Balewadi High Street, Baner, Pune, Pune City, Pune, Maharashtra, 411045, India",
+    "confidence": "LOW",
+    "query": "Starbucks, Balewadi High Street, Pune, India"
+  },
+  "tim hortons | balewadi high street": {
+    "lat": 18.5703724,
+    "lon": 73.7743519,
+    "display_name": "Tim Hortons, Balewadi High Street, Baner, Pune, Pune City, Pune, Maharashtra, 411045, India",
+    "confidence": "LOW",
+    "query": "Tim Hortons, Balewadi High Street, Pune, India"
+  },
+  "retro cafe balewadi | balewadi high street": {
+    "lat": 18.5707189,
+    "lon": 73.7743082,
+    "display_name": "Balewadi High Street, Baner, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "LOW",
+    "query": "Balewadi High Street, Pune, India"
+  },
+  "tea post | balewadi high street": {
+    "lat": 18.5707189,
+    "lon": 73.7743082,
+    "display_name": "Balewadi High Street, Baner, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "LOW",
+    "query": "Balewadi High Street, Pune, India"
+  },
+  "chaayos cafe | 1.0 km from balewadi high street": {
+    "lat": null,
+    "lon": null,
+    "display_name": "",
+    "reason": "no result from API",
+    "query": "Chaayos Cafe, 1.0 km from Balewadi High Street, Pune, India"
+  },
+  "cafe durga | balewadi high street": {
+    "lat": 18.5707189,
+    "lon": 73.7743082,
+    "display_name": "Balewadi High Street, Baner, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "LOW",
+    "query": "Balewadi High Street, Pune, India"
+  },
+  "mumbasa cafe | 1.0-1.5 km from balewadi high street": {
+    "lat": null,
+    "lon": null,
+    "display_name": "",
+    "reason": "no result from API",
+    "query": "Mumbasa Cafe, 1.0-1.5 km from Balewadi High Street, Pune, India"
+  },
+  "cafe peter | 2.0 km from balewadi high street": {
+    "lat": null,
+    "lon": null,
+    "display_name": "",
+    "reason": "no result from API",
+    "query": "Cafe Peter, 2.0 km from Balewadi High Street, Pune, India"
+  },
+  "cafe coffee day | 2.0-3.0 km from balewadi high street": {
+    "lat": null,
+    "lon": null,
+    "display_name": "",
+    "reason": "no result from API",
+    "query": "Cafe Coffee Day, 2.0-3.0 km from Balewadi High Street, Pune, India"
+  },
+  "waari book cafe | 0.5 km from kothrud": {
+    "lat": null,
+    "lon": null,
+    "display_name": "",
+    "reason": "no result from API",
+    "query": "Waari Book Cafe, 0.5 km from Kothrud, Pune, India"
+  },
+  "le petit amour | 0.7 km from kothrud": {
+    "lat": null,
+    "lon": null,
+    "display_name": "",
+    "reason": "no result from API",
+    "query": "Le Petit Amour, 0.7 km from Kothrud, Pune, India"
+  },
+  "chai katta | 0.8 km from kothrud": {
+    "lat": null,
+    "lon": null,
+    "display_name": "",
+    "reason": "no result from API",
+    "query": "Chai Katta, 0.8 km from Kothrud, Pune, India"
+  },
+  "madeline india | 0.7 km from kothrud": {
+    "lat": null,
+    "lon": null,
+    "display_name": "",
+    "reason": "no result from API",
+    "query": "Madeline India, 0.7 km from Kothrud, Pune, India"
+  },
+  "cafe durga | 0.4 km from kothrud": {
+    "lat": null,
+    "lon": null,
+    "display_name": "",
+    "reason": "no result from API",
+    "query": "Cafe Durga, 0.4 km from Kothrud, Pune, India"
+  },
+  "chai vaai cafe | 0.1 km from kothrud": {
+    "lat": null,
+    "lon": null,
+    "display_name": "",
+    "reason": "no result from API",
+    "query": "Chai Vaai Cafe, 0.1 km from Kothrud, Pune, India"
+  },
+  "le plaisir | 2.0-3.0 km from kothrud": {
+    "lat": null,
+    "lon": null,
+    "display_name": "",
+    "reason": "no result from API",
+    "query": "Le Plaisir, 2.0-3.0 km from Kothrud, Pune, India"
+  },
+  "butter brews bistro | 2.0-3.0 km from kothrud": {
+    "lat": null,
+    "lon": null,
+    "display_name": "",
+    "reason": "no result from API",
+    "query": "Butter Brews Bistro, 2.0-3.0 km from Kothrud, Pune, India"
+  },
+  "rainbow fizz cafe | 0.5 km from kothrud": {
+    "lat": null,
+    "lon": null,
+    "display_name": "",
+    "reason": "no result from API",
+    "query": "Rainbow Fizz Cafe, 0.5 km from Kothrud, Pune, India"
+  },
+  "ganache patisserie & cafe | 0.3 km from kothrud": {
+    "lat": null,
+    "lon": null,
+    "display_name": "",
+    "reason": "no result from API",
+    "query": "Ganache Patisserie & Cafe, 0.3 km from Kothrud, Pune, India"
+  },
+  "third wave coffee | 0.9 km from kothrud": {
+    "lat": null,
+    "lon": null,
+    "display_name": "",
+    "reason": "no result from API",
+    "query": "Third Wave Coffee, 0.9 km from Kothrud, Pune, India"
+  },
+  "book bar | 0.6 km from kothrud": {
+    "lat": null,
+    "lon": null,
+    "display_name": "",
+    "reason": "no result from API",
+    "query": "Book Bar, 0.6 km from Kothrud, Pune, India"
+  },
+  "starbucks | 0.3 km from kothrud": {
+    "lat": null,
+    "lon": null,
+    "display_name": "",
+    "reason": "no result from API",
+    "query": "Starbucks, 0.3 km from Kothrud, Pune, India"
+  },
+  "yolkshire wadgaon sheri | wadgaon sheri": {
+    "lat": 18.5436274,
+    "lon": 73.9240845,
+    "display_name": "Kalyani Nagar - Wadgaon Sheri Road, Ward 12, Pune City, Pune, Maharashtra, 411014, India",
+    "confidence": "LOW",
+    "query": "Wadgaon Sheri, Pune, India"
+  },
+  "kannu ki chai | vadgaon sheri": {
+    "lat": null,
+    "lon": null,
+    "display_name": "",
+    "reason": "no result from API",
+    "query": "Kannu Ki Chai, Vadgaon Sheri, Pune, India"
+  },
+  "cafe arabia | vadgaon sheri": {
+    "lat": null,
+    "lon": null,
+    "display_name": "",
+    "reason": "no result from API",
+    "query": "Cafe Arabia, Vadgaon Sheri, Pune, India"
+  },
+  "brewing heaven | vadgaon sheri": {
+    "lat": null,
+    "lon": null,
+    "display_name": "",
+    "reason": "no result from API",
+    "query": "Brewing Heaven, Vadgaon Sheri, Pune, India"
+  },
+  "le flamington | 2.5 km from vadgaon sheri": {
+    "lat": null,
+    "lon": null,
+    "display_name": "",
+    "reason": "no result from API",
+    "query": "Le Flamington, 2.5 km from Vadgaon Sheri, Pune, India"
+  },
+  "the beans talk cafe | 2.0 km from vadgaon sheri": {
+    "lat": null,
+    "lon": null,
+    "display_name": "",
+    "reason": "no result from API",
+    "query": "The Beans Talk Cafe, 2.0 km from Vadgaon Sheri, Pune, India"
+  },
+  "cafe mx 2 | 1.5 km from vadgaon sheri": {
+    "lat": null,
+    "lon": null,
+    "display_name": "",
+    "reason": "no result from API",
+    "query": "Cafe Mx 2, 1.5 km from Vadgaon Sheri, Pune, India"
+  },
+  "cafe peters | 2.0 km from vadgaon sheri": {
+    "lat": null,
+    "lon": null,
+    "display_name": "",
+    "reason": "no result from API",
+    "query": "Cafe Peters, 2.0 km from Vadgaon Sheri, Pune, India"
+  },
+  "starbucks | 2.2 km from vadgaon sheri": {
+    "lat": null,
+    "lon": null,
+    "display_name": "",
+    "reason": "no result from API",
+    "query": "Starbucks, 2.2 km from Vadgaon Sheri, Pune, India"
+  },
+  "joey\u00e2\u20ac\u2122s bistro & bar | baner": {
+    "lat": 18.5642431,
+    "lon": 73.7768573,
+    "display_name": "Baner, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "LOW",
+    "query": "Baner, Pune, India"
+  },
+  "the tenth floor | baner": {
+    "lat": 18.5642431,
+    "lon": 73.7768573,
+    "display_name": "Baner, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "LOW",
+    "query": "Baner, Pune, India"
+  },
+  "fat cat\u00e2\u20ac\u2122s caf\u00e3\u00a9 | baner": {
+    "lat": 18.5642431,
+    "lon": 73.7768573,
+    "display_name": "Baner, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "LOW",
+    "query": "Baner, Pune, India"
+  },
+  "pagdandi book cafe | baner": {
+    "lat": 18.5642431,
+    "lon": 73.7768573,
+    "display_name": "Baner, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "LOW",
+    "query": "Baner, Pune, India"
+  },
+  "brewing bistro | baner": {
+    "lat": 18.5522368,
+    "lon": 73.8039477,
+    "display_name": "Brewing Bistro, Gopal Hari Deshmukh Marg, Aundh, Pune, Pune City, Pune, Maharashtra, 411027, India",
+    "confidence": "LOW",
+    "query": "Brewing Bistro, Baner, Pune, India"
+  },
+  "origin bistro | baner": {
+    "lat": 18.5521287,
+    "lon": 73.7938182,
+    "display_name": "Origin Bistro, Baner-Pashan Link Road, Aundh, Pune, Pune City, Pune, Maharashtra, 411027, India",
+    "confidence": "LOW",
+    "query": "Origin Bistro, Baner, Pune, India"
+  },
+  "cafe from the tree | baner": {
+    "lat": 18.5642431,
+    "lon": 73.7768573,
+    "display_name": "Baner, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "LOW",
+    "query": "Baner, Pune, India"
+  },
+  "7th heaven | baner": {
+    "lat": 18.5642431,
+    "lon": 73.7768573,
+    "display_name": "Baner, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "LOW",
+    "query": "Baner, Pune, India"
+  },
+  "the urban foundry | baner": {
+    "lat": 18.5692579,
+    "lon": 73.7745191,
+    "display_name": "The Urban Foundry, Balewadi High Street, Baner, Pune, Pune City, Pune, Maharashtra, 411045, India",
+    "confidence": "LOW",
+    "query": "The Urban Foundry, Baner, Pune, India"
+  },
+  "cafe durga | 0.5 km from baner road": {
+    "lat": null,
+    "lon": null,
+    "display_name": "",
+    "reason": "no result from API",
+    "query": "Cafe Durga, 0.5 km from Baner Road, Pune, India"
+  },
+  "barista | 1.5 km from baner road": {
+    "lat": null,
+    "lon": null,
+    "display_name": "",
+    "reason": "no result from API",
+    "query": "Barista, 1.5 km from Baner Road, Pune, India"
+  },
+  "midori coffee and eatery | 1.5 km from baner road": {
+    "lat": null,
+    "lon": null,
+    "display_name": "",
+    "reason": "no result from API",
+    "query": "Midori Coffee And Eatery, 1.5 km from Baner Road, Pune, India"
+  },
+  "cibbo caff\u00e3\u00a8 | shivaji nagar": {
+    "lat": 18.532172,
+    "lon": 73.8496602,
+    "display_name": "Shivaji Nagar, Shivajinagar Railway Station Road, Shivajinagar, Pune City, Pune, Maharashtra, 411016, India",
+    "confidence": "LOW",
+    "query": "Shivaji Nagar, Pune, India"
+  },
+  "madeline | shivaji nagar": {
+    "lat": 18.532172,
+    "lon": 73.8496602,
+    "display_name": "Shivaji Nagar, Shivajinagar Railway Station Road, Shivajinagar, Pune City, Pune, Maharashtra, 411016, India",
+    "confidence": "LOW",
+    "query": "Shivaji Nagar, Pune, India"
+  },
+  "chirp caf\u00e3\u00a9 | shivaji nagar": {
+    "lat": 18.532172,
+    "lon": 73.8496602,
+    "display_name": "Shivaji Nagar, Shivajinagar Railway Station Road, Shivajinagar, Pune City, Pune, Maharashtra, 411016, India",
+    "confidence": "LOW",
+    "query": "Shivaji Nagar, Pune, India"
+  },
+  "world of veg | shivaji nagar": {
+    "lat": 18.532172,
+    "lon": 73.8496602,
+    "display_name": "Shivaji Nagar, Shivajinagar Railway Station Road, Shivajinagar, Pune City, Pune, Maharashtra, 411016, India",
+    "confidence": "LOW",
+    "query": "Shivaji Nagar, Pune, India"
+  },
+  "eat & repeat cafe | shivaji nagar": {
+    "lat": 18.532172,
+    "lon": 73.8496602,
+    "display_name": "Shivaji Nagar, Shivajinagar Railway Station Road, Shivajinagar, Pune City, Pune, Maharashtra, 411016, India",
+    "confidence": "LOW",
+    "query": "Shivaji Nagar, Pune, India"
+  },
+  "casablanca cafe | shivaji nagar": {
+    "lat": 18.532172,
+    "lon": 73.8496602,
+    "display_name": "Shivaji Nagar, Shivajinagar Railway Station Road, Shivajinagar, Pune City, Pune, Maharashtra, 411016, India",
+    "confidence": "LOW",
+    "query": "Shivaji Nagar, Pune, India"
+  },
+  "godaam specialty coffee co. | shivaji nagar": {
+    "lat": 18.532172,
+    "lon": 73.8496602,
+    "display_name": "Shivaji Nagar, Shivajinagar Railway Station Road, Shivajinagar, Pune City, Pune, Maharashtra, 411016, India",
+    "confidence": "LOW",
+    "query": "Shivaji Nagar, Pune, India"
+  },
+  "the pune baking company | shivaji nagar": {
+    "lat": 18.532172,
+    "lon": 73.8496602,
+    "display_name": "Shivaji Nagar, Shivajinagar Railway Station Road, Shivajinagar, Pune City, Pune, Maharashtra, 411016, India",
+    "confidence": "LOW",
+    "query": "Shivaji Nagar, Pune, India"
+  },
+  "cafe coffee day | nigdi": {
+    "lat": 18.6598134,
+    "lon": 73.7772821,
+    "display_name": "Nigdi, Nigdi Bus Stop Lane, Nigdi, Pimpri-Chinchwad, Haveli, Pune, Maharashtra, 411044, India",
+    "confidence": "MEDIUM",
+    "query": "Nigdi, Pune, India"
+  },
+  "drip coffee | nigdi": {
+    "lat": 18.6598134,
+    "lon": 73.7772821,
+    "display_name": "Nigdi, Nigdi Bus Stop Lane, Nigdi, Pimpri-Chinchwad, Haveli, Pune, Maharashtra, 411044, India",
+    "confidence": "MEDIUM",
+    "query": "Nigdi, Pune, India"
+  },
+  "caf\u00e3\u00a9 buddy\u00e2\u20ac\u2122s espr\u00e3\u00a9sso | nigdi": {
+    "lat": 18.6598134,
+    "lon": 73.7772821,
+    "display_name": "Nigdi, Nigdi Bus Stop Lane, Nigdi, Pimpri-Chinchwad, Haveli, Pune, Maharashtra, 411044, India",
+    "confidence": "MEDIUM",
+    "query": "Nigdi, Pune, India"
+  },
+  "pokket cafe | nigdi": {
+    "lat": 18.6598134,
+    "lon": 73.7772821,
+    "display_name": "Nigdi, Nigdi Bus Stop Lane, Nigdi, Pimpri-Chinchwad, Haveli, Pune, Maharashtra, 411044, India",
+    "confidence": "MEDIUM",
+    "query": "Nigdi, Pune, India"
+  },
+  "cafe cad-b corner | nigdi": {
+    "lat": 18.6598134,
+    "lon": 73.7772821,
+    "display_name": "Nigdi, Nigdi Bus Stop Lane, Nigdi, Pimpri-Chinchwad, Haveli, Pune, Maharashtra, 411044, India",
+    "confidence": "MEDIUM",
+    "query": "Nigdi, Pune, India"
+  },
+  "cafe creme | nigdi": {
+    "lat": 18.6598134,
+    "lon": 73.7772821,
+    "display_name": "Nigdi, Nigdi Bus Stop Lane, Nigdi, Pimpri-Chinchwad, Haveli, Pune, Maharashtra, 411044, India",
+    "confidence": "MEDIUM",
+    "query": "Nigdi, Pune, India"
+  },
+  "cafe durga | 0.7 km from akurdi railway station": {
+    "lat": null,
+    "lon": null,
+    "display_name": "",
+    "reason": "no result from API",
+    "query": "Cafe Durga, 0.7 km from Akurdi Railway Station, Pune, India"
+  },
+  "the waffle co. | 1.0 km from akurdi railway station": {
+    "lat": null,
+    "lon": null,
+    "display_name": "",
+    "reason": "no result from API",
+    "query": "The Waffle Co., 1.0 km from Akurdi Railway Station, Pune, India"
+  },
+  "cafe golden sip | 0.8 km from akurdi railway station": {
+    "lat": null,
+    "lon": null,
+    "display_name": "",
+    "reason": "no result from API",
+    "query": "Cafe Golden Sip, 0.8 km from Akurdi Railway Station, Pune, India"
+  },
+  "cafe choco craze | 1.0 km from akurdi railway station": {
+    "lat": null,
+    "lon": null,
+    "display_name": "",
+    "reason": "no result from API",
+    "query": "Cafe Choco Craze, 1.0 km from Akurdi Railway Station, Pune, India"
+  },
+  "caf\u00e3\u00a9 peter | magarpatta": {
+    "lat": 18.5111545,
+    "lon": 73.9273823,
+    "display_name": "Magarpatta City School Ground, Pune City, Pune, Maharashtra, India",
+    "confidence": "LOW",
+    "query": "Magarpatta, Pune, India"
+  },
+  "mccaf\u00e3\u00a9 | magarpatta": {
+    "lat": 18.5111545,
+    "lon": 73.9273823,
+    "display_name": "Magarpatta City School Ground, Pune City, Pune, Maharashtra, India",
+    "confidence": "LOW",
+    "query": "Magarpatta, Pune, India"
+  },
+  "big scoop cafe | magarpatta": {
+    "lat": 18.5111545,
+    "lon": 73.9273823,
+    "display_name": "Magarpatta City School Ground, Pune City, Pune, Maharashtra, India",
+    "confidence": "LOW",
+    "query": "Magarpatta, Pune, India"
+  },
+  "coffee tree | magarpatta": {
+    "lat": 18.5111545,
+    "lon": 73.9273823,
+    "display_name": "Magarpatta City School Ground, Pune City, Pune, Maharashtra, India",
+    "confidence": "LOW",
+    "query": "Magarpatta, Pune, India"
+  },
+  "the belgian waffle co. | magarpatta": {
+    "lat": 18.5111545,
+    "lon": 73.9273823,
+    "display_name": "Magarpatta City School Ground, Pune City, Pune, Maharashtra, India",
+    "confidence": "LOW",
+    "query": "Magarpatta, Pune, India"
+  },
+  "cafe arabia | magarpatta": {
+    "lat": 18.5111545,
+    "lon": 73.9273823,
+    "display_name": "Magarpatta City School Ground, Pune City, Pune, Maharashtra, India",
+    "confidence": "LOW",
+    "query": "Magarpatta, Pune, India"
+  },
+  "starbucks | magarpatta": {
+    "lat": 18.5111545,
+    "lon": 73.9273823,
+    "display_name": "Magarpatta City School Ground, Pune City, Pune, Maharashtra, India",
+    "confidence": "LOW",
+    "query": "Magarpatta, Pune, India"
+  },
+  "the waffle house | magarpatta": {
+    "lat": 18.5111545,
+    "lon": 73.9273823,
+    "display_name": "Magarpatta City School Ground, Pune City, Pune, Maharashtra, India",
+    "confidence": "LOW",
+    "query": "Magarpatta, Pune, India"
+  },
+  "cafe goodluck | magarpatta": {
+    "lat": 18.5111545,
+    "lon": 73.9273823,
+    "display_name": "Magarpatta City School Ground, Pune City, Pune, Maharashtra, India",
+    "confidence": "LOW",
+    "query": "Magarpatta, Pune, India"
+  },
+  "cafe peter | aundh": {
+    "lat": 18.5618834,
+    "lon": 73.8101957,
+    "display_name": "Aundh, Pune, Pune City, Pune, Maharashtra, 411027, India",
+    "confidence": "MEDIUM",
+    "query": "Aundh, Pune, India"
+  },
+  "third wave coffee | aundh": {
+    "lat": 18.5562117,
+    "lon": 73.8089739,
+    "display_name": "Third wave coffee, Ozone Mall, Anand Park, ITI Road, Marutrao Gaikwad nagar, Aundh, Pune, Pune City, Pune, Maharashtra, 411027, India",
+    "confidence": "LOW",
+    "query": "Third Wave Coffee, Aundh, Pune, India"
+  },
+  "starbucks | aundh": {
+    "lat": 18.5566993,
+    "lon": 73.8088692,
+    "display_name": "Starbucks, ITI Road, Marutrao Gaikwad nagar, Aundh, Pune, Pune City, Pune, Maharashtra, 411027, India",
+    "confidence": "LOW",
+    "query": "Starbucks, Aundh, Pune, India"
+  },
+  "cafe coffee day | aundh": {
+    "lat": 18.5546075,
+    "lon": 73.8047402,
+    "display_name": "Cafe Coffee Day, Shankarao Gaikwad Path, Aundh, Pune, Pune City, Pune, Maharashtra, 411027, India",
+    "confidence": "LOW",
+    "query": "Cafe Coffee Day, Aundh, Pune, India"
+  },
+  "pimlico | aundh": {
+    "lat": 18.5618834,
+    "lon": 73.8101957,
+    "display_name": "Aundh, Pune, Pune City, Pune, Maharashtra, 411027, India",
+    "confidence": "MEDIUM",
+    "query": "Aundh, Pune, India"
+  },
+  "barista | aundh": {
+    "lat": 18.5618834,
+    "lon": 73.8101957,
+    "display_name": "Aundh, Pune, Pune City, Pune, Maharashtra, 411027, India",
+    "confidence": "MEDIUM",
+    "query": "Aundh, Pune, India"
+  },
+  "baker's basket | aundh": {
+    "lat": 18.5618834,
+    "lon": 73.8101957,
+    "display_name": "Aundh, Pune, Pune City, Pune, Maharashtra, 411027, India",
+    "confidence": "MEDIUM",
+    "query": "Aundh, Pune, India"
+  },
+  "the flour works | aundh": {
+    "lat": 18.5618834,
+    "lon": 73.8101957,
+    "display_name": "Aundh, Pune, Pune City, Pune, Maharashtra, 411027, India",
+    "confidence": "MEDIUM",
+    "query": "Aundh, Pune, India"
+  },
+  "cafe arabia | aundh": {
+    "lat": 18.5618834,
+    "lon": 73.8101957,
+    "display_name": "Aundh, Pune, Pune City, Pune, Maharashtra, 411027, India",
+    "confidence": "MEDIUM",
+    "query": "Aundh, Pune, India"
+  },
+  "tea trails | aundh": {
+    "lat": 18.5618834,
+    "lon": 73.8101957,
+    "display_name": "Aundh, Pune, Pune City, Pune, Maharashtra, 411027, India",
+    "confidence": "MEDIUM",
+    "query": "Aundh, Pune, India"
+  },
+  "starbucks | kalyani nagar": {
+    "lat": 18.546563,
+    "lon": 73.9009497,
+    "display_name": "Starbucks, Central Avenue, Kalyani Nagar, Pune City, Pune, Maharashtra, 411011, India",
+    "confidence": "LOW",
+    "query": "Starbucks, Kalyani Nagar, Pune, India"
+  },
+  "the flour works | kalyani nagar": {
+    "lat": 18.5490038,
+    "lon": 73.9004452,
+    "display_name": "The Flour Works, North Avenue, Kalyani Nagar, Pune City, Pune, Maharashtra, 411006, India",
+    "confidence": "LOW",
+    "query": "The Flour Works, Kalyani Nagar, Pune, India"
+  },
+  "cafe peter | kalyani nagar": {
+    "lat": 18.5481382,
+    "lon": 73.9025513,
+    "display_name": "Kalyani Nagar, Pune City, Pune, Maharashtra, 411011, India",
+    "confidence": "MEDIUM",
+    "query": "Kalyani Nagar, Pune, India"
+  },
+  "irani cafe | kalyani nagar": {
+    "lat": 18.5481382,
+    "lon": 73.9025513,
+    "display_name": "Kalyani Nagar, Pune City, Pune, Maharashtra, 411011, India",
+    "confidence": "MEDIUM",
+    "query": "Kalyani Nagar, Pune, India"
+  },
+  "third wave coffee | kalyani nagar": {
+    "lat": 18.5481382,
+    "lon": 73.9025513,
+    "display_name": "Kalyani Nagar, Pune City, Pune, Maharashtra, 411011, India",
+    "confidence": "MEDIUM",
+    "query": "Kalyani Nagar, Pune, India"
+  },
+  "pimlico | kalyani nagar": {
+    "lat": 18.5481382,
+    "lon": 73.9025513,
+    "display_name": "Kalyani Nagar, Pune City, Pune, Maharashtra, 411011, India",
+    "confidence": "MEDIUM",
+    "query": "Kalyani Nagar, Pune, India"
+  },
+  "the coffee jar | kalyani nagar": {
+    "lat": 18.5481382,
+    "lon": 73.9025513,
+    "display_name": "Kalyani Nagar, Pune City, Pune, Maharashtra, 411011, India",
+    "confidence": "MEDIUM",
+    "query": "Kalyani Nagar, Pune, India"
+  },
+  "tea villa cafe | kalyani nagar": {
+    "lat": 18.5481382,
+    "lon": 73.9025513,
+    "display_name": "Kalyani Nagar, Pune City, Pune, Maharashtra, 411011, India",
+    "confidence": "MEDIUM",
+    "query": "Kalyani Nagar, Pune, India"
+  },
+  "butter brews | kalyani nagar": {
+    "lat": 18.5481382,
+    "lon": 73.9025513,
+    "display_name": "Kalyani Nagar, Pune City, Pune, Maharashtra, 411011, India",
+    "confidence": "MEDIUM",
+    "query": "Kalyani Nagar, Pune, India"
+  },
+  "cafe 1730 | kalyani nagar": {
+    "lat": 18.5488623,
+    "lon": 73.9022208,
+    "display_name": "Cafe Pondi, Lane 13, Road 13, Kalyani Nagar, Pune City, Pune, Maharashtra, 411014, India",
+    "confidence": "LOW",
+    "query": "Cafe 1730, Kalyani Nagar, Pune, India"
+  },
+  "cafe peter | pimple saudagar": {
+    "lat": 18.5939135,
+    "lon": 73.7927089,
+    "display_name": "Cafe Peter, Roseland Residency Road, Pimple Saudagar, Pimpri-Chinchwad, Haveli, Pune, Maharashtra, 431027, India",
+    "confidence": "LOW",
+    "query": "Cafe Peter, Pimple Saudagar, Pune, India"
+  },
+  "third wave coffee | pimple saudagar": {
+    "lat": 18.5981553,
+    "lon": 73.7977661,
+    "display_name": "Pimple Saudagar, Pimpri-Chinchwad, Haveli, Pune, Maharashtra, 431027, India",
+    "confidence": "LOW",
+    "query": "Pimple Saudagar, Pune, India"
+  },
+  "cafe coffee day | pimple saudagar": {
+    "lat": 18.5981553,
+    "lon": 73.7977661,
+    "display_name": "Pimple Saudagar, Pimpri-Chinchwad, Haveli, Pune, Maharashtra, 431027, India",
+    "confidence": "LOW",
+    "query": "Pimple Saudagar, Pune, India"
+  },
+  "cafe arabia | pimple saudagar": {
+    "lat": 18.5981553,
+    "lon": 73.7977661,
+    "display_name": "Pimple Saudagar, Pimpri-Chinchwad, Haveli, Pune, Maharashtra, 431027, India",
+    "confidence": "LOW",
+    "query": "Pimple Saudagar, Pune, India"
+  },
+  "baker's basket | pimple saudagar": {
+    "lat": 18.5981553,
+    "lon": 73.7977661,
+    "display_name": "Pimple Saudagar, Pimpri-Chinchwad, Haveli, Pune, Maharashtra, 431027, India",
+    "confidence": "LOW",
+    "query": "Pimple Saudagar, Pune, India"
+  },
+  "starbucks | pimple saudagar": {
+    "lat": 18.5981553,
+    "lon": 73.7977661,
+    "display_name": "Pimple Saudagar, Pimpri-Chinchwad, Haveli, Pune, Maharashtra, 431027, India",
+    "confidence": "LOW",
+    "query": "Pimple Saudagar, Pune, India"
+  },
+  "tea trails | pimple saudagar": {
+    "lat": 18.5981553,
+    "lon": 73.7977661,
+    "display_name": "Pimple Saudagar, Pimpri-Chinchwad, Haveli, Pune, Maharashtra, 431027, India",
+    "confidence": "LOW",
+    "query": "Pimple Saudagar, Pune, India"
+  },
+  "cafe delhi heights | pimple saudagar": {
+    "lat": 18.5981553,
+    "lon": 73.7977661,
+    "display_name": "Pimple Saudagar, Pimpri-Chinchwad, Haveli, Pune, Maharashtra, 431027, India",
+    "confidence": "LOW",
+    "query": "Pimple Saudagar, Pune, India"
+  },
+  "barista | pimple saudagar": {
+    "lat": 18.5981553,
+    "lon": 73.7977661,
+    "display_name": "Pimple Saudagar, Pimpri-Chinchwad, Haveli, Pune, Maharashtra, 431027, India",
+    "confidence": "LOW",
+    "query": "Pimple Saudagar, Pune, India"
+  },
+  "tea villa cafe | pimple saudagar": {
+    "lat": 18.5981553,
+    "lon": 73.7977661,
+    "display_name": "Pimple Saudagar, Pimpri-Chinchwad, Haveli, Pune, Maharashtra, 431027, India",
+    "confidence": "LOW",
+    "query": "Pimple Saudagar, Pune, India"
+  },
+  "starbucks | hadapsar": {
+    "lat": 18.5007741,
+    "lon": 73.9379146,
+    "display_name": "Hadapsar, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "LOW",
+    "query": "Hadapsar, Pune, India"
+  },
+  "irani cafe | hadapsar": {
+    "lat": 18.5007741,
+    "lon": 73.9379146,
+    "display_name": "Hadapsar, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "LOW",
+    "query": "Hadapsar, Pune, India"
+  },
+  "cafe coffee day | hadapsar": {
+    "lat": 18.5007741,
+    "lon": 73.9379146,
+    "display_name": "Hadapsar, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "LOW",
+    "query": "Hadapsar, Pune, India"
+  },
+  "third wave coffee | hadapsar": {
+    "lat": 18.5007741,
+    "lon": 73.9379146,
+    "display_name": "Hadapsar, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "LOW",
+    "query": "Hadapsar, Pune, India"
+  },
+  "cafe 1730 | hadapsar": {
+    "lat": 18.5007741,
+    "lon": 73.9379146,
+    "display_name": "Hadapsar, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "LOW",
+    "query": "Hadapsar, Pune, India"
+  },
+  "cafe peter | hadapsar": {
+    "lat": 18.5007741,
+    "lon": 73.9379146,
+    "display_name": "Hadapsar, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "LOW",
+    "query": "Hadapsar, Pune, India"
+  },
+  "the flour works | hadapsar": {
+    "lat": 18.5007741,
+    "lon": 73.9379146,
+    "display_name": "Hadapsar, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "LOW",
+    "query": "Hadapsar, Pune, India"
+  },
+  "barista | hadapsar": {
+    "lat": 18.5007741,
+    "lon": 73.9379146,
+    "display_name": "Hadapsar, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "LOW",
+    "query": "Hadapsar, Pune, India"
+  },
+  "tea villa cafe | hadapsar": {
+    "lat": 18.5007741,
+    "lon": 73.9379146,
+    "display_name": "Hadapsar, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "LOW",
+    "query": "Hadapsar, Pune, India"
+  },
+  "butter brews | hadapsar": {
+    "lat": 18.5007741,
+    "lon": 73.9379146,
+    "display_name": "Hadapsar, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "LOW",
+    "query": "Hadapsar, Pune, India"
+  },
+  "chafa cafe and studio | koregaon park": {
+    "lat": 18.533317,
+    "lon": 73.8970577,
+    "display_name": "Chafa Cafe And Studio, Lane 5, Koregaon Park, Ghorpuri, Pune City, Pune, Maharashtra, 411037, India",
+    "confidence": "LOW",
+    "query": "Chafa Cafe And Studio, Koregaon Park, Pune, India"
+  },
+  "the voyage | koregaon park": {
+    "lat": 18.5366225,
+    "lon": 73.8932738,
+    "display_name": "Koregaon Park, Ghorpuri, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "LOW",
+    "query": "Koregaon Park, Pune, India"
+  },
+  "blue tokai coffee roasters | koregaon park": {
+    "lat": 18.5366225,
+    "lon": 73.8932738,
+    "display_name": "Koregaon Park, Ghorpuri, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "LOW",
+    "query": "Koregaon Park, Pune, India"
+  },
+  "swig bar & eatery | koregaon park": {
+    "lat": 18.5397671,
+    "lon": 73.8938546,
+    "display_name": "Swig-Bar and Eatery, North Main Road, Koregaon Park, Ghorpuri, Pune City, Pune, Maharashtra, 411037, India",
+    "confidence": "LOW",
+    "query": "Swig Bar & Eatery, Koregaon Park, Pune, India"
+  },
+  "toscano | koregaon park": {
+    "lat": 18.5329864,
+    "lon": 73.8968166,
+    "display_name": "Toscano Pune Koregaon Park, South Main Road, Koregaon Park, Ghorpuri, Pune City, Pune, Maharashtra, 411037, India",
+    "confidence": "LOW",
+    "query": "Toscano, Koregaon Park, Pune, India"
+  },
+  "third wave coffee roasters | koregaon park": {
+    "lat": 18.5366225,
+    "lon": 73.8932738,
+    "display_name": "Koregaon Park, Ghorpuri, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "LOW",
+    "query": "Koregaon Park, Pune, India"
+  },
+  "grandmama\u00e2\u20ac\u2122s caf\u00e3\u00a9 | koregaon park": {
+    "lat": 18.5366225,
+    "lon": 73.8932738,
+    "display_name": "Koregaon Park, Ghorpuri, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "LOW",
+    "query": "Koregaon Park, Pune, India"
+  },
+  "bai mu dan | koregaon park": {
+    "lat": 18.5366225,
+    "lon": 73.8932738,
+    "display_name": "Koregaon Park, Ghorpuri, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "LOW",
+    "query": "Koregaon Park, Pune, India"
+  },
+  "grey soul coffee roasters | koregaon park": {
+    "lat": 18.5366225,
+    "lon": 73.8932738,
+    "display_name": "Koregaon Park, Ghorpuri, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "LOW",
+    "query": "Koregaon Park, Pune, India"
+  },
+  "amalfi | koregaon park": {
+    "lat": 18.5366225,
+    "lon": 73.8932738,
+    "display_name": "Koregaon Park, Ghorpuri, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "LOW",
+    "query": "Koregaon Park, Pune, India"
+  },
+  "the sassy spoon | koregaon park": {
+    "lat": 18.5339401,
+    "lon": 73.8987288,
+    "display_name": "The Sassy Spoon Pune, Lane No 7, Koregaon Park, Ghorpuri, Pune City, Pune, Maharashtra, 411037, India",
+    "confidence": "LOW",
+    "query": "The Sassy Spoon, Koregaon Park, Pune, India"
+  },
+  "lune caf\u00e3\u00a9 & patisserie | koregaon park": {
+    "lat": 18.5366225,
+    "lon": 73.8932738,
+    "display_name": "Koregaon Park, Ghorpuri, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "LOW",
+    "query": "Koregaon Park, Pune, India"
+  },
+  "the camden lane | koregaon park": {
+    "lat": 18.5366225,
+    "lon": 73.8932738,
+    "display_name": "Koregaon Park, Ghorpuri, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "LOW",
+    "query": "Koregaon Park, Pune, India"
+  },
+  "6 story | koregaon park": {
+    "lat": 18.5366225,
+    "lon": 73.8932738,
+    "display_name": "Koregaon Park, Ghorpuri, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "LOW",
+    "query": "Koregaon Park, Pune, India"
+  },
+  "one o eight lifestyle caf\u00e3\u00a9 | koregaon park": {
+    "lat": 18.5366225,
+    "lon": 73.8932738,
+    "display_name": "Koregaon Park, Ghorpuri, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "LOW",
+    "query": "Koregaon Park, Pune, India"
+  },
+  "zen caf\u00e3\u00a9 | koregaon park": {
+    "lat": 18.5366225,
+    "lon": 73.8932738,
+    "display_name": "Koregaon Park, Ghorpuri, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "LOW",
+    "query": "Koregaon Park, Pune, India"
+  },
+  "tettoricca rooftop & lounge | hinjawadi": {
+    "lat": 18.5927532,
+    "lon": 73.7382151,
+    "display_name": "Hinjawadi, Mulshi, Pune, Maharashtra, 411057, India",
+    "confidence": "MEDIUM",
+    "query": "Hinjawadi, Pune, India"
+  },
+  "momo caf\u00e3\u00a9 | hinjawadi": {
+    "lat": 18.5927532,
+    "lon": 73.7382151,
+    "display_name": "Hinjawadi, Mulshi, Pune, Maharashtra, 411057, India",
+    "confidence": "MEDIUM",
+    "query": "Hinjawadi, Pune, India"
+  },
+  "the social street | hinjawadi": {
+    "lat": 18.5901791,
+    "lon": 73.7457166,
+    "display_name": "The Social Street, Hinjawadi, Mulshi, Pune, Maharashtra, 411057, India",
+    "confidence": "LOW",
+    "query": "The Social Street, Hinjawadi, Pune, India"
+  },
+  "i amsterdam | hinjawadi": {
+    "lat": 18.5947522,
+    "lon": 73.7290354,
+    "display_name": "I Amsterdam -All Day Bar & Grill, Bhumkar Das Gurge Road, Hinjawadi, Mulshi, Pune, Maharashtra, 411057, India",
+    "confidence": "LOW",
+    "query": "I Amsterdam, Hinjawadi, Pune, India"
+  },
+  "caf\u00e3\u00a9 blu | hinjawadi": {
+    "lat": 18.5927532,
+    "lon": 73.7382151,
+    "display_name": "Hinjawadi, Mulshi, Pune, Maharashtra, 411057, India",
+    "confidence": "MEDIUM",
+    "query": "Hinjawadi, Pune, India"
+  },
+  "caf\u00e3\u00a9 buddy\u00e2\u20ac\u2122s espresso | hinjawadi": {
+    "lat": 18.5927532,
+    "lon": 73.7382151,
+    "display_name": "Hinjawadi, Mulshi, Pune, Maharashtra, 411057, India",
+    "confidence": "MEDIUM",
+    "query": "Hinjawadi, Pune, India"
+  },
+  "crazy cheesy cafe | hinjawadi": {
+    "lat": 18.5927532,
+    "lon": 73.7382151,
+    "display_name": "Hinjawadi, Mulshi, Pune, Maharashtra, 411057, India",
+    "confidence": "MEDIUM",
+    "query": "Hinjawadi, Pune, India"
+  },
+  "mayo caf\u00e3\u00a9 | hinjawadi": {
+    "lat": 18.5927532,
+    "lon": 73.7382151,
+    "display_name": "Hinjawadi, Mulshi, Pune, Maharashtra, 411057, India",
+    "confidence": "MEDIUM",
+    "query": "Hinjawadi, Pune, India"
+  },
+  "caf\u00e3\u00a9 peter | hinjawadi": {
+    "lat": 18.5927532,
+    "lon": 73.7382151,
+    "display_name": "Hinjawadi, Mulshi, Pune, Maharashtra, 411057, India",
+    "confidence": "MEDIUM",
+    "query": "Hinjawadi, Pune, India"
+  },
+  "zypher\u00e2\u20ac\u2122s caf\u00e3\u00a9 | hinjawadi": {
+    "lat": 18.5927532,
+    "lon": 73.7382151,
+    "display_name": "Hinjawadi, Mulshi, Pune, Maharashtra, 411057, India",
+    "confidence": "MEDIUM",
+    "query": "Hinjawadi, Pune, India"
+  },
+  "crafted by hilton garden inn | hinjawadi": {
+    "lat": 18.5927532,
+    "lon": 73.7382151,
+    "display_name": "Hinjawadi, Mulshi, Pune, Maharashtra, 411057, India",
+    "confidence": "MEDIUM",
+    "query": "Hinjawadi, Pune, India"
+  },
+  "big scoop cafe | bavdhan": {
+    "lat": 18.5209541,
+    "lon": 73.7780873,
+    "display_name": "Bavdhan, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "MEDIUM",
+    "query": "Bavdhan, Pune, India"
+  },
+  "the fat labrador caf\u00e3\u00a9 special | bavdhan": {
+    "lat": 18.5209541,
+    "lon": 73.7780873,
+    "display_name": "Bavdhan, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "MEDIUM",
+    "query": "Bavdhan, Pune, India"
+  },
+  "cafe house of brown | bavdhan": {
+    "lat": 18.5209541,
+    "lon": 73.7780873,
+    "display_name": "Bavdhan, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "MEDIUM",
+    "query": "Bavdhan, Pune, India"
+  },
+  "demitasse coffee | bavdhan": {
+    "lat": 18.5209541,
+    "lon": 73.7780873,
+    "display_name": "Bavdhan, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "MEDIUM",
+    "query": "Bavdhan, Pune, India"
+  },
+  "coffeebear bistro | bavdhan": {
+    "lat": 18.5209541,
+    "lon": 73.7780873,
+    "display_name": "Bavdhan, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "MEDIUM",
+    "query": "Bavdhan, Pune, India"
+  },
+  "the classroom cafe | bavdhan": {
+    "lat": 18.5209541,
+    "lon": 73.7780873,
+    "display_name": "Bavdhan, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "MEDIUM",
+    "query": "Bavdhan, Pune, India"
+  },
+  "chafa cafe and studio | bavdhan": {
+    "lat": 18.5209541,
+    "lon": 73.7780873,
+    "display_name": "Bavdhan, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "MEDIUM",
+    "query": "Bavdhan, Pune, India"
+  },
+  "evara | bavdhan": {
+    "lat": 18.5222925,
+    "lon": 73.7793428,
+    "display_name": "Evara cafe, shop no.2, Pashan-Bavdhan Road, Ramnagar Colony, Bavdhan, Pune, Pune City, Pune, Maharashtra, 411021, India",
+    "confidence": "LOW",
+    "query": "Evara, Bavdhan, Pune, India"
+  },
+  "tipsy turtle poolside lounge cafe | bavdhan": {
+    "lat": 18.5209541,
+    "lon": 73.7780873,
+    "display_name": "Bavdhan, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "MEDIUM",
+    "query": "Bavdhan, Pune, India"
+  },
+  "cafe pete | bavdhan": {
+    "lat": 18.5209541,
+    "lon": 73.7780873,
+    "display_name": "Bavdhan, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "MEDIUM",
+    "query": "Bavdhan, Pune, India"
+  },
+  "goodluck cafe | bavdhan": {
+    "lat": 18.516814,
+    "lon": 73.7815622,
+    "display_name": "Goodluck Cafe, Pashan-Bavdhan Road, Ramnagar Colony, Bavdhan, Pune City, Pune, Maharashtra, 411021, India",
+    "confidence": "LOW",
+    "query": "Goodluck Cafe, Bavdhan, Pune, India"
+  },
+  "cafe d\u00e3\u00a9j\u00e3 vu sb | bavdhan": {
+    "lat": 18.5209541,
+    "lon": 73.7780873,
+    "display_name": "Bavdhan, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "MEDIUM",
+    "query": "Bavdhan, Pune, India"
+  },
+  "the pluvian | bavdhan": {
+    "lat": 18.5209541,
+    "lon": 73.7780873,
+    "display_name": "Bavdhan, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "MEDIUM",
+    "query": "Bavdhan, Pune, India"
+  },
+  "irani cafe | bavdhan": {
+    "lat": 18.5079498,
+    "lon": 73.7830283,
+    "display_name": "Irani Cafe, Pashan-Bavdhan Road, Bavdhan, Pune City, Pune, Maharashtra, 411021, India",
+    "confidence": "LOW",
+    "query": "Irani cafe, Bavdhan, Pune, India"
+  },
+  "marz-o-rin | mg road": {
+    "lat": 18.5165106,
+    "lon": 73.8790851,
+    "display_name": "Marz-O-Rin, Mahatma Gandhi Marg, Pune Cantonment, Pune City, Pune, Maharashtra, 411002, India",
+    "confidence": "LOW",
+    "query": "Marz-O-Rin, Mg Road, Pune, India"
+  },
+  "irani cafe | mg road": {
+    "lat": 18.50643,
+    "lon": 73.8785414,
+    "display_name": "Mahatma Gandhi Marg, Pune Cantonment, Pune City, Pune, Maharashtra, 411002, India",
+    "confidence": "LOW",
+    "query": "Mg Road, Pune, India"
+  },
+  "cafe yezdan | mg road": {
+    "lat": 18.50643,
+    "lon": 73.8785414,
+    "display_name": "Mahatma Gandhi Marg, Pune Cantonment, Pune City, Pune, Maharashtra, 411002, India",
+    "confidence": "LOW",
+    "query": "Mg Road, Pune, India"
+  },
+  "theobroma | mg road": {
+    "lat": 18.50643,
+    "lon": 73.8785414,
+    "display_name": "Mahatma Gandhi Marg, Pune Cantonment, Pune City, Pune, Maharashtra, 411002, India",
+    "confidence": "LOW",
+    "query": "Mg Road, Pune, India"
+  },
+  "1000 oaks | mg road": {
+    "lat": 18.50643,
+    "lon": 73.8785414,
+    "display_name": "Mahatma Gandhi Marg, Pune Cantonment, Pune City, Pune, Maharashtra, 411002, India",
+    "confidence": "LOW",
+    "query": "Mg Road, Pune, India"
+  },
+  "tim luck luck | mg road": {
+    "lat": 18.50643,
+    "lon": 73.8785414,
+    "display_name": "Mahatma Gandhi Marg, Pune Cantonment, Pune City, Pune, Maharashtra, 411002, India",
+    "confidence": "LOW",
+    "query": "Mg Road, Pune, India"
+  },
+  "big scoop caf\u00e3\u00a9 | pune(east street)": {
+    "lat": null,
+    "lon": null,
+    "display_name": "",
+    "reason": "no result from API",
+    "query": "Big Scoop Caf\u00c3\u00a9, Pune(East Street), Pune, India"
+  },
+  "tim luck luck | pune(east street)": {
+    "lat": null,
+    "lon": null,
+    "display_name": "",
+    "reason": "no result from API",
+    "query": "Tim Luck Luck, Pune(East Street), Pune, India"
+  },
+  "effingut bistro, | pune(east street)": {
+    "lat": null,
+    "lon": null,
+    "display_name": "",
+    "reason": "no result from API",
+    "query": "Effingut Bistro,, Pune(East Street), Pune, India"
+  },
+  "king\u00e2\u20ac\u2122s persian bistro | pune(east street)": {
+    "lat": null,
+    "lon": null,
+    "display_name": "",
+    "reason": "no result from API",
+    "query": "King\u00e2\u20ac\u2122s Persian Bistro, Pune(East Street), Pune, India"
+  },
+  "dawholesum | fc road": {
+    "lat": 18.5150117,
+    "lon": 73.8422183,
+    "display_name": "Gopal Krushna Gokhale Path, Deccan Gymkhana, Pune City, Pune, Maharashtra, 411004, India",
+    "confidence": "LOW",
+    "query": "Fc Road, Pune, India"
+  },
+  "funny cat | fc road": {
+    "lat": 18.5150117,
+    "lon": 73.8422183,
+    "display_name": "Gopal Krushna Gokhale Path, Deccan Gymkhana, Pune City, Pune, Maharashtra, 411004, India",
+    "confidence": "LOW",
+    "query": "Fc Road, Pune, India"
+  },
+  "beer garden | fc road": {
+    "lat": 18.5150117,
+    "lon": 73.8422183,
+    "display_name": "Gopal Krushna Gokhale Path, Deccan Gymkhana, Pune City, Pune, Maharashtra, 411004, India",
+    "confidence": "LOW",
+    "query": "Fc Road, Pune, India"
+  },
+  "caf\u00e3\u00a9 katha | fc road": {
+    "lat": 18.5150117,
+    "lon": 73.8422183,
+    "display_name": "Gopal Krushna Gokhale Path, Deccan Gymkhana, Pune City, Pune, Maharashtra, 411004, India",
+    "confidence": "LOW",
+    "query": "Fc Road, Pune, India"
+  },
+  "si nonnas | fc road": {
+    "lat": 18.5150117,
+    "lon": 73.8422183,
+    "display_name": "Gopal Krushna Gokhale Path, Deccan Gymkhana, Pune City, Pune, Maharashtra, 411004, India",
+    "confidence": "LOW",
+    "query": "Fc Road, Pune, India"
+  },
+  "starbucks | fc road": {
+    "lat": 18.5150117,
+    "lon": 73.8422183,
+    "display_name": "Gopal Krushna Gokhale Path, Deccan Gymkhana, Pune City, Pune, Maharashtra, 411004, India",
+    "confidence": "LOW",
+    "query": "Fc Road, Pune, India"
+  },
+  "fc social | fc road": {
+    "lat": 18.5150117,
+    "lon": 73.8422183,
+    "display_name": "Gopal Krushna Gokhale Path, Deccan Gymkhana, Pune City, Pune, Maharashtra, 411004, India",
+    "confidence": "LOW",
+    "query": "Fc Road, Pune, India"
+  },
+  "fc plajzaa | fc road": {
+    "lat": 18.5150117,
+    "lon": 73.8422183,
+    "display_name": "Gopal Krushna Gokhale Path, Deccan Gymkhana, Pune City, Pune, Maharashtra, 411004, India",
+    "confidence": "LOW",
+    "query": "Fc Road, Pune, India"
+  },
+  "ventana | viman nagar": {
+    "lat": 18.5703877,
+    "lon": 73.9133336,
+    "display_name": "Viman Nagar, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "LOW",
+    "query": "Viman Nagar, Pune, India"
+  },
+  "english house | viman nagar": {
+    "lat": 18.5703877,
+    "lon": 73.9133336,
+    "display_name": "Viman Nagar, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "LOW",
+    "query": "Viman Nagar, Pune, India"
+  },
+  "atmosphere 6 | viman nagar": {
+    "lat": 18.5703877,
+    "lon": 73.9133336,
+    "display_name": "Viman Nagar, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "LOW",
+    "query": "Viman Nagar, Pune, India"
+  },
+  "the beans talk | viman nagar": {
+    "lat": 18.5703877,
+    "lon": 73.9133336,
+    "display_name": "Viman Nagar, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "LOW",
+    "query": "Viman Nagar, Pune, India"
+  },
+  "caffe allora | viman nagar": {
+    "lat": 18.5703877,
+    "lon": 73.9133336,
+    "display_name": "Viman Nagar, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "LOW",
+    "query": "Viman Nagar, Pune, India"
+  },
+  "you me | viman nagar": {
+    "lat": 18.5703877,
+    "lon": 73.9133336,
+    "display_name": "Viman Nagar, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "LOW",
+    "query": "Viman Nagar, Pune, India"
+  },
+  "24k kraft | viman nagar": {
+    "lat": 18.5703877,
+    "lon": 73.9133336,
+    "display_name": "Viman Nagar, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "LOW",
+    "query": "Viman Nagar, Pune, India"
+  },
+  "rude lounge | viman nagar": {
+    "lat": 18.5618317,
+    "lon": 73.9180056,
+    "display_name": "Rude Lounge, Viman Nagar Road, Ward 12, Pune City, Pune, Maharashtra, 411014, India",
+    "confidence": "LOW",
+    "query": "Rude Lounge, Viman Nagar, Pune, India"
+  },
+  "zeta hyatt | viman nagar": {
+    "lat": 18.5703877,
+    "lon": 73.9133336,
+    "display_name": "Viman Nagar, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "LOW",
+    "query": "Viman Nagar, Pune, India"
+  },
+  "where else diner | viman nagar": {
+    "lat": 18.5703877,
+    "lon": 73.9133336,
+    "display_name": "Viman Nagar, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "LOW",
+    "query": "Viman Nagar, Pune, India"
+  },
+  "dohiti | viman nagar": {
+    "lat": 18.5703877,
+    "lon": 73.9133336,
+    "display_name": "Viman Nagar, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "LOW",
+    "query": "Viman Nagar, Pune, India"
+  },
+  "boomers gaming caf\u00e3\u00a9 | viman nagar": {
+    "lat": 18.5703877,
+    "lon": 73.9133336,
+    "display_name": "Viman Nagar, Pune, Pune City, Pune, Maharashtra, 411001, India",
+    "confidence": "LOW",
+    "query": "Viman Nagar, Pune, India"
+  },
+  "brew culture | viman nagar": {
+    "lat": 18.5668819,
+    "lon": 73.9106949,
+    "display_name": "Brew Culture, Viman Nagar Road, Viman Nagar, Pune City, Pune, Maharashtra, 411014, India",
+    "confidence": "LOW",
+    "query": "Brew Culture, Viman Nagar, Pune, India"
+  },
+  "nieesh | wakad": {
+    "lat": 18.6022495,
+    "lon": 73.7644454,
+    "display_name": "Wakad, Mulshi, Pune, Maharashtra, 411027, India",
+    "confidence": "LOW",
+    "query": "Wakad, Pune, India"
+  },
+  "teera | wakad": {
+    "lat": 18.6022495,
+    "lon": 73.7644454,
+    "display_name": "Wakad, Mulshi, Pune, Maharashtra, 411027, India",
+    "confidence": "LOW",
+    "query": "Wakad, Pune, India"
+  },
+  "akasa and kitchen | wakad": {
+    "lat": 18.6022495,
+    "lon": 73.7644454,
+    "display_name": "Wakad, Mulshi, Pune, Maharashtra, 411027, India",
+    "confidence": "LOW",
+    "query": "Wakad, Pune, India"
+  },
+  "ishara | wakad": {
+    "lat": 18.6022495,
+    "lon": 73.7644454,
+    "display_name": "Wakad, Mulshi, Pune, Maharashtra, 411027, India",
+    "confidence": "LOW",
+    "query": "Wakad, Pune, India"
+  },
+  "caffe allora | wakad": {
+    "lat": 18.6022495,
+    "lon": 73.7644454,
+    "display_name": "Wakad, Mulshi, Pune, Maharashtra, 411027, India",
+    "confidence": "LOW",
+    "query": "Wakad, Pune, India"
+  },
+  "le parc | wakad": {
+    "lat": 18.6022495,
+    "lon": 73.7644454,
+    "display_name": "Wakad, Mulshi, Pune, Maharashtra, 411027, India",
+    "confidence": "LOW",
+    "query": "Wakad, Pune, India"
+  },
+  "filament bar | wakad": {
+    "lat": 18.6022495,
+    "lon": 73.7644454,
+    "display_name": "Wakad, Mulshi, Pune, Maharashtra, 411027, India",
+    "confidence": "LOW",
+    "query": "Wakad, Pune, India"
+  },
+  "turque hotel | wakad": {
+    "lat": 18.6022495,
+    "lon": 73.7644454,
+    "display_name": "Wakad, Mulshi, Pune, Maharashtra, 411027, India",
+    "confidence": "LOW",
+    "query": "Wakad, Pune, India"
+  },
+  "saundarya | wakad": {
+    "lat": 18.6022495,
+    "lon": 73.7644454,
+    "display_name": "Wakad, Mulshi, Pune, Maharashtra, 411027, India",
+    "confidence": "LOW",
+    "query": "Wakad, Pune, India"
+  },
+  "copper chimeny | wakad": {
+    "lat": 18.6022495,
+    "lon": 73.7644454,
+    "display_name": "Wakad, Mulshi, Pune, Maharashtra, 411027, India",
+    "confidence": "LOW",
+    "query": "Wakad, Pune, India"
+  },
+  "shara | wakad": {
+    "lat": 18.6022495,
+    "lon": 73.7644454,
+    "display_name": "Wakad, Mulshi, Pune, Maharashtra, 411027, India",
+    "confidence": "LOW",
+    "query": "Wakad, Pune, India"
+  },
+  "mainland china | wakad": {
+    "lat": 18.6022495,
+    "lon": 73.7644454,
+    "display_name": "Wakad, Mulshi, Pune, Maharashtra, 411027, India",
+    "confidence": "LOW",
+    "query": "Wakad, Pune, India"
+  },
+  "california burrito | wakad": {
+    "lat": 18.6022495,
+    "lon": 73.7644454,
+    "display_name": "Wakad, Mulshi, Pune, Maharashtra, 411027, India",
+    "confidence": "LOW",
+    "query": "Wakad, Pune, India"
+  },
+  "pizza express | wakad": {
+    "lat": 18.6022495,
+    "lon": 73.7644454,
+    "display_name": "Wakad, Mulshi, Pune, Maharashtra, 411027, India",
+    "confidence": "LOW",
+    "query": "Wakad, Pune, India"
+  },
+  "toscano | wakad": {
+    "lat": 18.6022495,
+    "lon": 73.7644454,
+    "display_name": "Wakad, Mulshi, Pune, Maharashtra, 411027, India",
+    "confidence": "LOW",
+    "query": "Wakad, Pune, India"
+  },
+  "bird valley | wakad": {
+    "lat": 18.5939789,
+    "lon": 73.7640437,
+    "display_name": "Bird Valley, S.No.241/1, Datta Mandir Road, \u0930\u093e\u0927\u093e\u0915\u0943\u0937\u094d\u0923 \u0915\u094b\u0932\u094b\u0928\u0940, Wakad gaav, Mulshi, Pune, Maharashtra, 411027, India",
+    "confidence": "LOW",
+    "query": "Bird Valley, Wakad, Pune, India"
+  },
+  "aroma bistro | wakad": {
+    "lat": 18.6022495,
+    "lon": 73.7644454,
+    "display_name": "Wakad, Mulshi, Pune, Maharashtra, 411027, India",
+    "confidence": "LOW",
+    "query": "Wakad, Pune, India"
+  },
+  "irish house | wakad": {
+    "lat": 18.6022495,
+    "lon": 73.7644454,
+    "display_name": "Wakad, Mulshi, Pune, Maharashtra, 411027, India",
+    "confidence": "LOW",
+    "query": "Wakad, Pune, India"
+  },
+  "matamaal | wakad": {
+    "lat": 18.6022495,
+    "lon": 73.7644454,
+    "display_name": "Wakad, Mulshi, Pune, Maharashtra, 411027, India",
+    "confidence": "LOW",
+    "query": "Wakad, Pune, India"
+  },
+  "asia seven | wakad": {
+    "lat": 18.6022495,
+    "lon": 73.7644454,
+    "display_name": "Wakad, Mulshi, Pune, Maharashtra, 411027, India",
+    "confidence": "LOW",
+    "query": "Wakad, Pune, India"
+  },
+  "global punjab | wakad": {
+    "lat": 18.5955841,
+    "lon": 73.7689848,
+    "display_name": "\u0917\u094d\u0932\u094b\u092c\u0932 \u092a\u0902\u091c\u093e\u092c, shop no.1-3, Rambhau Kalate path, Kaspate Vasti, Wakad, Mulshi, Pune, Maharashtra, 411057, India",
+    "confidence": "LOW",
+    "query": "Global Punjab, Wakad, Pune, India"
+  },
+  "fiesta | wakad": {
+    "lat": 18.6022495,
+    "lon": 73.7644454,
+    "display_name": "Wakad, Mulshi, Pune, Maharashtra, 411027, India",
+    "confidence": "LOW",
+    "query": "Wakad, Pune, India"
+  },
+  "sakura | wakad": {
+    "lat": 18.6022495,
+    "lon": 73.7644454,
+    "display_name": "Wakad, Mulshi, Pune, Maharashtra, 411027, India",
+    "confidence": "LOW",
+    "query": "Wakad, Pune, India"
+  },
+  "the burgs | wakad": {
+    "lat": 18.6022495,
+    "lon": 73.7644454,
+    "display_name": "Wakad, Mulshi, Pune, Maharashtra, 411027, India",
+    "confidence": "LOW",
+    "query": "Wakad, Pune, India"
+  },
+  "fyole caf\u00e3\u00a9 | wakad": {
+    "lat": 18.6022495,
+    "lon": 73.7644454,
+    "display_name": "Wakad, Mulshi, Pune, Maharashtra, 411027, India",
+    "confidence": "LOW",
+    "query": "Wakad, Pune, India"
+  },
+  "caf\u00e3\u00a9 buddy espresso | wakad": {
+    "lat": 18.6022495,
+    "lon": 73.7644454,
+    "display_name": "Wakad, Mulshi, Pune, Maharashtra, 411027, India",
+    "confidence": "LOW",
+    "query": "Wakad, Pune, India"
+  },
+  "murphies | nibm": {
+    "lat": 18.4631076,
+    "lon": 73.9116173,
+    "display_name": "NIBM Road, Krushna Nagar, Pune City, Pune, Maharashtra, 411060, India",
+    "confidence": "LOW",
+    "query": "Nibm, Pune, India"
+  },
+  "beer and beans | nibm": {
+    "lat": 18.4631076,
+    "lon": 73.9116173,
+    "display_name": "NIBM Road, Krushna Nagar, Pune City, Pune, Maharashtra, 411060, India",
+    "confidence": "LOW",
+    "query": "Nibm, Pune, India"
+  },
+  "pimlico | nibm": {
+    "lat": 18.4631076,
+    "lon": 73.9116173,
+    "display_name": "NIBM Road, Krushna Nagar, Pune City, Pune, Maharashtra, 411060, India",
+    "confidence": "LOW",
+    "query": "Nibm, Pune, India"
+  },
+  "the sea secret | nibm": {
+    "lat": 18.4631076,
+    "lon": 73.9116173,
+    "display_name": "NIBM Road, Krushna Nagar, Pune City, Pune, Maharashtra, 411060, India",
+    "confidence": "LOW",
+    "query": "Nibm, Pune, India"
+  },
+  "highland | nibm": {
+    "lat": 18.4631076,
+    "lon": 73.9116173,
+    "display_name": "NIBM Road, Krushna Nagar, Pune City, Pune, Maharashtra, 411060, India",
+    "confidence": "LOW",
+    "query": "Nibm, Pune, India"
+  },
+  "velora | nibm": {
+    "lat": 18.4631076,
+    "lon": 73.9116173,
+    "display_name": "NIBM Road, Krushna Nagar, Pune City, Pune, Maharashtra, 411060, India",
+    "confidence": "LOW",
+    "query": "Nibm, Pune, India"
+  },
+  "hippe at heart | nibm": {
+    "lat": 18.4631076,
+    "lon": 73.9116173,
+    "display_name": "NIBM Road, Krushna Nagar, Pune City, Pune, Maharashtra, 411060, India",
+    "confidence": "LOW",
+    "query": "Nibm, Pune, India"
+  },
+  "the chickster | nibm": {
+    "lat": 18.4631076,
+    "lon": 73.9116173,
+    "display_name": "NIBM Road, Krushna Nagar, Pune City, Pune, Maharashtra, 411060, India",
+    "confidence": "LOW",
+    "query": "Nibm, Pune, India"
+  },
+  "de kettle caf\u00e3\u00a9 | nibm": {
+    "lat": 18.4631076,
+    "lon": 73.9116173,
+    "display_name": "NIBM Road, Krushna Nagar, Pune City, Pune, Maharashtra, 411060, India",
+    "confidence": "LOW",
+    "query": "Nibm, Pune, India"
+  },
+  "salsa | nibm": {
+    "lat": 18.4631076,
+    "lon": 73.9116173,
+    "display_name": "NIBM Road, Krushna Nagar, Pune City, Pune, Maharashtra, 411060, India",
+    "confidence": "LOW",
+    "query": "Nibm, Pune, India"
+  },
+  "burger craft | nibm": {
+    "lat": 18.4631076,
+    "lon": 73.9116173,
+    "display_name": "NIBM Road, Krushna Nagar, Pune City, Pune, Maharashtra, 411060, India",
+    "confidence": "LOW",
+    "query": "Nibm, Pune, India"
+  },
+  "jb007 | nibm": {
+    "lat": 18.4631076,
+    "lon": 73.9116173,
+    "display_name": "NIBM Road, Krushna Nagar, Pune City, Pune, Maharashtra, 411060, India",
+    "confidence": "LOW",
+    "query": "Nibm, Pune, India"
+  },
+  "aryan family delight | nibm": {
+    "lat": 18.4631076,
+    "lon": 73.9116173,
+    "display_name": "NIBM Road, Krushna Nagar, Pune City, Pune, Maharashtra, 411060, India",
+    "confidence": "LOW",
+    "query": "Nibm, Pune, India"
+  },
+  "papillon kitchen | nibm": {
+    "lat": 18.4631076,
+    "lon": 73.9116173,
+    "display_name": "NIBM Road, Krushna Nagar, Pune City, Pune, Maharashtra, 411060, India",
+    "confidence": "LOW",
+    "query": "Nibm, Pune, India"
+  },
+  "jovos 2.0 | nibm": {
+    "lat": 18.4631076,
+    "lon": 73.9116173,
+    "display_name": "NIBM Road, Krushna Nagar, Pune City, Pune, Maharashtra, 411060, India",
+    "confidence": "LOW",
+    "query": "Nibm, Pune, India"
+  },
+  "china grill | nibm": {
+    "lat": 18.4631076,
+    "lon": 73.9116173,
+    "display_name": "NIBM Road, Krushna Nagar, Pune City, Pune, Maharashtra, 411060, India",
+    "confidence": "LOW",
+    "query": "Nibm, Pune, India"
+  },
+  "the brewhouse | nibm": {
+    "lat": 18.4631076,
+    "lon": 73.9116173,
+    "display_name": "NIBM Road, Krushna Nagar, Pune City, Pune, Maharashtra, 411060, India",
+    "confidence": "LOW",
+    "query": "Nibm, Pune, India"
+  }
+}
