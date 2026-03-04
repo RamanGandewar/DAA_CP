@@ -98,6 +98,17 @@ public final class RequestParsers {
         return "true".equalsIgnoreCase(raw) || "1".equals(raw) || "yes".equalsIgnoreCase(raw);
     }
 
+    public static String parseSource(String raw) {
+        if (raw == null || raw.isBlank()) {
+            return "csv";
+        }
+        String normalized = raw.trim().toLowerCase();
+        if (!"csv".equals(normalized) && !"xlsx".equals(normalized)) {
+            throw new IllegalArgumentException("Invalid source. Use csv or xlsx.");
+        }
+        return normalized;
+    }
+
     private static String decode(String s) {
         return URLDecoder.decode(s, StandardCharsets.UTF_8);
     }

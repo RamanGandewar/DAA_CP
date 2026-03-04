@@ -43,6 +43,7 @@ The application serves ranked recommendations through REST APIs and a browser UI
 - Live location and address-based search (Nominatim from browser)
 
 ### Data Pipeline
+- CSV prototype dataset: `data/cafes.csv`
 - Primary dataset: `data/micuppa cafe dataset.xlsx`
 - Optional geocoded dataset: `data/micuppa cafe dataset.geocoded.xlsx`
 - Cache and failure logs for geocoding
@@ -83,8 +84,8 @@ Proto2
 ## 4. Core Modules and Responsibilities
 
 ### `src/app`
-- `Main.java`: selects data source and boots server.
-- Uses geocoded XLSX automatically if present.
+- `Main.java`: boots server and preloads both CSV and XLSX recommendation pipelines.
+- Active pipeline is selected from UI per request.
 
 ### `src/data`
 - `DataLoader.java`:
@@ -295,6 +296,7 @@ Compile and run app:
 ```
 
 App starts on first free port in `8080..8099` range (as per script checks).
+Choose `Data Source` in UI to switch between `CSV Prototype` and `XLSX Prototype`.
 
 ---
 
@@ -320,7 +322,7 @@ Script behavior:
 - Caching to avoid repeated API calls
 - Failure report for manual correction loop
 
-After geocoding, application automatically prefers geocoded Excel at startup.
+For `XLSX Prototype`, application prefers geocoded Excel automatically if available.
 
 ---
 
@@ -377,9 +379,8 @@ Recommended additional tests:
 
 ## 16. Quick Start Summary
 
-1. Keep source dataset in `data/micuppa cafe dataset.xlsx`
+1. Keep datasets in `data/cafes.csv` and `data/micuppa cafe dataset.xlsx`
 2. Run geocoder once for exact coordinates
 3. Start app with `.\run.ps1`
-4. Open displayed local URL and search cafes
+4. Open displayed local URL, pick `Data Source` in UI, then search cafes
 5. Use `data/geocode_failures.csv` to improve unresolved entries and rerun geocoder
-

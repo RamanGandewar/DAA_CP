@@ -29,6 +29,14 @@
   <main>
     <aside class="controls">
       <h2>Search Controls</h2>
+      <div class="dataset-pick">
+        <label>Dataset Method
+          <select id="source">
+            <option value="csv">CSV Prototype</option>
+            <option value="xlsx">XLSX Prototype</option>
+          </select>
+        </label>
+      </div>
       <label>Latitude <input id="lat" type="number" step="0.000001" value="18.5204" /></label>
       <label>Longitude <input id="lon" type="number" step="0.000001" value="73.8567" /></label>
       <label>Radius (km) <input id="radius" type="number" step="0.1" value="5" /></label>

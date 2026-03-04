@@ -43,4 +43,5 @@ if ($selectedPort -eq $null) {
 }
 
 Write-Host "Starting server on http://localhost:$selectedPort"
+Write-Host "Dataset mode is selected from the UI (CSV or XLSX)."
 java -cp out Main $selectedPort

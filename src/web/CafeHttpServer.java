@@ -29,19 +29,45 @@ import java.util.Set;
 import java.util.concurrent.Executors;
 
 public class CafeHttpServer {
+    private static final String SOURCE_CSV = "csv";
+    private static final String SOURCE_XLSX = "xlsx";
+
     private final int port;
-    private final RecommendationService recommendationService;
-    private final InsightsService insightsService;
+    private final String csvPath;
+    private final String xlsxPath;
+    private final Map<String, RecommendationService> recommendationServices;
+    private final Map<String, InsightsService> insightsServices;
     private final LiveStatusService liveStatusService;
 
     public CafeHttpServer(int port,
-                          RecommendationService recommendationService,
-                          InsightsService insightsService,
+                          String csvPath,
+                          String xlsxPath,
+                          Map<String, RecommendationService> recommendationServices,
+                          Map<String, InsightsService> insightsServices,
                           LiveStatusService liveStatusService) {
         this.port = port;
-        this.recommendationService = recommendationService;
-        this.insightsService = insightsService;
+        this.csvPath = csvPath;
+        this.xlsxPath = xlsxPath;
+        this.recommendationServices = recommendationServices;
+        this.insightsServices = insightsServices;
         this.liveStatusService = liveStatusService;
+    }
+
+    public static CafeHttpServer buildDefault(int port) throws IOException {
+        String csvPath = "data/cafes.csv";
+        String geocodedPath = "data/micuppa cafe dataset.geocoded.xlsx";
+        String xlsxPath = Files.exists(Path.of(geocodedPath))
+                ? geocodedPath
+                : "data/micuppa cafe dataset.xlsx";
+
+        Map<String, RecommendationService> recommendationServices = new java.util.HashMap<>();
+        Map<String, InsightsService> insightsServices = new java.util.HashMap<>();
+
+        registerSource(recommendationServices, insightsServices, SOURCE_CSV, csvPath);
+        registerSource(recommendationServices, insightsServices, SOURCE_XLSX, xlsxPath);
+
+        LiveStatusService liveStatusService = new LiveStatusService();
+        return new CafeHttpServer(port, csvPath, xlsxPath, recommendationServices, insightsServices, liveStatusService);
     }
 
     public static CafeHttpServer buildDefault(int port, String dataPath) throws IOException {
@@ -54,13 +80,15 @@ public class CafeHttpServer {
         InsightsService insightsService = new InsightsService(cafes);
         LiveStatusService liveStatusService = new LiveStatusService();
         RecommendationService service = new RecommendationService(cafes, kdTree, stats, insightsService);
-        return new CafeHttpServer(port, service, insightsService, liveStatusService);
+        Map<String, RecommendationService> recommendationServices = Map.of(SOURCE_XLSX, service, SOURCE_CSV, service);
+        Map<String, InsightsService> insightsServices = Map.of(SOURCE_XLSX, insightsService, SOURCE_CSV, insightsService);
+        return new CafeHttpServer(port, dataPath, dataPath, recommendationServices, insightsServices, liveStatusService);
     }
 
     public void start() throws IOException {
         HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
         server.createContext("/api/health", new HealthHandler());
-        server.createContext("/api/recommend", new RecommendHandler(recommendationService, insightsService, liveStatusService));
+        server.createContext("/api/recommend", new RecommendHandler(recommendationServices, insightsServices, liveStatusService));
         server.createContext("/api/live/seat", new SeatStatusHandler(liveStatusService));
         server.createContext("/api/live/table-share", new TableShareHandler(liveStatusService));
         server.createContext("/", new StaticFileHandler());
@@ -69,6 +97,9 @@ public class CafeHttpServer {
 
         System.out.println("Cafe Recommendation App running at http://localhost:" + port);
         System.out.println("Health endpoint: http://localhost:" + port + "/api/health");
+        System.out.println("Dataset selected: csv (default). Change in UI to xlsx when needed.");
+        System.out.println("CSV dataset path: " + csvPath);
+        System.out.println("XLSX dataset path: " + xlsxPath);
     }
 
     private static class HealthHandler implements HttpHandler {
@@ -78,18 +109,20 @@ public class CafeHttpServer {
                 writeJson(ex, 405, JsonUtil.errorJson("Method not allowed"));
                 return;
             }
-            writeJson(ex, 200, "{\"status\":\"ok\"}");
+            writeJson(ex, 200, "{\"status\":\"ok\",\"defaultSource\":\"csv\",\"availableSources\":[\"csv\",\"xlsx\"]}");
         }
     }
 
     private static class RecommendHandler implements HttpHandler {
-        private final RecommendationService service;
-        private final InsightsService insightsService;
+        private final Map<String, RecommendationService> services;
+        private final Map<String, InsightsService> insightsServices;
         private final LiveStatusService liveStatusService;
 
-        RecommendHandler(RecommendationService service, InsightsService insightsService, LiveStatusService liveStatusService) {
-            this.service = service;
-            this.insightsService = insightsService;
+        RecommendHandler(Map<String, RecommendationService> services,
+                         Map<String, InsightsService> insightsServices,
+                         LiveStatusService liveStatusService) {
+            this.services = services;
+            this.insightsServices = insightsServices;
             this.liveStatusService = liveStatusService;
         }
 
@@ -115,11 +148,16 @@ public class CafeHttpServer {
                 boolean indieOnly = RequestParsers.parseBoolean(q, "indieOnly", false);
                 String menuQuery = q.getOrDefault("menuQuery", "");
                 String acoustic = q.getOrDefault("acoustic", "");
+                String source = RequestParsers.parseSource(q.getOrDefault("source", SOURCE_CSV));
+                RecommendationService service = services.get(source);
+                InsightsService insightsService = insightsServices.get(source);
+                ex.getResponseHeaders().set("X-Data-Source", source);
 
                 SearchQuery query = new SearchQuery(lat, lon, radius, budget, cuisines, diet, weights, k,
                         indieOnly, menuQuery, vibeTags, acoustic);
                 List<Recommendation> results = service.recommend(query);
-                writeJson(ex, 200, JsonUtil.recommendationsJson(results, insightsService, liveStatusService));
+                writeJson(ex, 200, JsonUtil.recommendationsJson(results, insightsService, liveStatusService, source));
+                System.out.println("Dataset selected: " + source + " (/api/recommend)");
             } catch (Exception err) {
                 writeJson(ex, 400, JsonUtil.errorJson(err.getMessage()));
             }
@@ -132,6 +170,21 @@ public class CafeHttpServer {
             }
             return v;
         }
+    }
+
+    private static void registerSource(Map<String, RecommendationService> recommendationServices,
+                                       Map<String, InsightsService> insightsServices,
+                                       String key,
+                                       String dataPath) throws IOException {
+        DataLoader loader = new DataLoader();
+        List<Cafe> cafes = loader.loadFromFile(dataPath);
+        DataValidator.validate(cafes);
+        GlobalStats stats = loader.computeGlobalStats(cafes);
+        KDTree kdTree = new KDTree(cafes);
+        InsightsService insightsService = new InsightsService(cafes);
+        RecommendationService recommendationService = new RecommendationService(cafes, kdTree, stats, insightsService);
+        recommendationServices.put(key, recommendationService);
+        insightsServices.put(key, insightsService);
     }
 
     private static class SeatStatusHandler implements HttpHandler {
@@ -224,6 +277,7 @@ public class CafeHttpServer {
 
             byte[] data = Files.readAllBytes(file);
             ex.getResponseHeaders().set("Content-Type", contentType(file.toString()));
+            ex.getResponseHeaders().set("Cache-Control", "no-store");
             ex.sendResponseHeaders(200, data.length);
             try (OutputStream os = ex.getResponseBody()) {
                 os.write(data);

@@ -57,6 +57,7 @@ async function toggleTableShare(cafeId, available) {
 function renderResults(data) {
   const resultsDiv = document.getElementById('results');
   resultsDiv.innerHTML = '';
+  const sourceLabel = (data.source || q('source') || 'csv').toUpperCase();
 
   if (!data.results || data.results.length === 0) {
     resultsDiv.innerHTML = '<div class="card">No cafes found for this query.</div>';
@@ -80,7 +81,10 @@ function renderResults(data) {
           <div class="meta">${r.distanceKm.toFixed(2)} km | Rs ${r.avgPrice.toFixed(0)} | ${r.rating.toFixed(1)}/5</div>
           <div class="meta">${r.address}</div>
         </div>
-        <div class="meta">Match ${r.displayMatch.toFixed(0)}%</div>
+        <div>
+          <div class="source-badge">Source: ${sourceLabel}</div>
+          <div class="meta">Match ${r.displayMatch.toFixed(0)}%</div>
+        </div>
       </div>
 
       <div class="tag-row">${tags}</div>
@@ -191,6 +195,7 @@ async function runSearch() {
     lon: q('lon'),
     radius: q('radius'),
     budget: q('budget'),
+    source: q('source'),
     cuisines: q('cuisines'),
     vibes: q('vibes'),
     acoustic: q('acoustic'),
@@ -211,7 +216,8 @@ async function runSearch() {
       throw new Error(data.error || 'Request failed');
     }
     renderResults(data);
-    setStatus(`Returned ${data.count} cafes. Clusters indicate overlapping markers.`);
+    const usedSource = (data.source || q('source')).toUpperCase();
+    setStatus(`Returned ${data.count} cafes from ${usedSource} pipeline. Clusters indicate overlapping markers.`);
   } catch (err) {
     setStatus(`Error: ${err.message}`);
   }

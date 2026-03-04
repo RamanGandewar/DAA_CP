@@ -17,11 +17,12 @@ public final class JsonUtil {
 
     public static String recommendationsJson(List<Recommendation> recs,
                                              InsightsService insightsService,
-                                             LiveStatusService liveStatusService) {
+                                             LiveStatusService liveStatusService,
+                                             String source) {
         String items = recs.stream()
                 .map(r -> recommendationJson(r, insightsService.forCafe(r.getCafe()), liveStatusService.getStatus(r.getCafe().getId())))
                 .collect(Collectors.joining(","));
-        return "{\"count\":" + recs.size() + ",\"results\":[" + items + "]}";
+        return "{\"count\":" + recs.size() + ",\"source\":\"" + esc(source) + "\",\"results\":[" + items + "]}";
     }
 
     public static String liveStatusJson(String cafeId, LiveStatus status) {
