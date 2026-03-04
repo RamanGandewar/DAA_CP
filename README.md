@@ -53,30 +53,31 @@ The application serves ranked recommendations through REST APIs and a browser UI
 ## 3. Repository Structure
 
 ```text
-Proto2
-├── data
-├── out
-│   ├── app
-│   ├── data
-│   ├── filter
-│   ├── model
-│   ├── rank
-│   ├── score
-│   ├── service
-│   ├── spatial
-│   └── web
-├── scripts
-├── src
-│   ├── app
-│   ├── data
-│   ├── filter
-│   ├── model
-│   ├── rank
-│   ├── score
-│   ├── service
-│   ├── spatial
-│   └── web
-└── web
+C:.
++---data
++---out
+�   +---app
+�   +---data
+�   +---filter
+�   +---model
+�   +---rank
+�   +---score
+�   +---service
+�   +---spatial
+�   +---web
++---scripts
+�   +---__pycache__
++---src
+�   +---app
+�   +---data
+�   +---filter
+�   +---model
+�   +---rank
+�   +---score
+�   +---service
+�   +---spatial
+�   +---web
++---web
 ```
 
 ---
@@ -384,3 +385,4 @@ Recommended additional tests:
 3. Start app with `.\run.ps1`
 4. Open displayed local URL, pick `Data Source` in UI, then search cafes
 5. Use `data/geocode_failures.csv` to improve unresolved entries and rerun geocoder
+
