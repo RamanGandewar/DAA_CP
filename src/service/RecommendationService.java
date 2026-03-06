@@ -5,9 +5,13 @@ import java.util.List;
 import data.GlobalStats;
 import filter.ConstraintFilter;
 import model.Cafe;
+import model.CafeInsights;
 import model.Recommendation;
 import model.SearchQuery;
 import rank.TopKSelector;
+import score.OnboardingScoreBreakdown;
+import score.OnboardingScorer;
+import score.OnboardingWeights;
 import score.ScoreCalculator;
 import spatial.GeoUtils;
 import spatial.KDTree;
@@ -16,6 +20,7 @@ public class RecommendationService {
     private final KDTree kdTree;
     private final ConstraintFilter constraintFilter;
     private final ScoreCalculator scoreCalculator;
+    private final OnboardingScorer onboardingScorer;
     private final TopKSelector topKSelector;
     private final InsightsService insightsService;
 
@@ -23,6 +28,7 @@ public class RecommendationService {
         this.kdTree = kdTree;
         this.constraintFilter = new ConstraintFilter();
         this.scoreCalculator = new ScoreCalculator(stats);
+        this.onboardingScorer = new OnboardingScorer(OnboardingWeights.defaults());
         this.topKSelector = new TopKSelector();
         this.insightsService = insightsService;
     }
@@ -54,9 +60,23 @@ public class RecommendationService {
         List<Recommendation> out = new ArrayList<>();
         for (Cafe cafe : cafes) {
             double distance = GeoUtils.haversineKm(query.getUserLatitude(), query.getUserLongitude(), cafe.getLatitude(), cafe.getLongitude());
-            double score = scoreCalculator.computeScore(cafe, distance, query.getRadiusKm(), query.getPreferredCuisines(), query.getWeights());
+            CafeInsights insights = insightsService.forCafe(cafe);
+            double score;
+            String explanation;
+            model.ProfileTag profileTag = null;
+
+            if (query.hasOnboardingContext()) {
+                OnboardingScoreBreakdown breakdown = onboardingScorer.score(cafe, insights, query, distance);
+                score = breakdown.getFinalPenaltyScore();
+                profileTag = breakdown.getProfileTag();
+                explanation = buildOnboardingExplanation(query, distance, breakdown);
+            } else {
+                score = scoreCalculator.computeScore(cafe, distance, query.getRadiusKm(), query.getPreferredCuisines(), query.getWeights());
+                explanation = "Recommended due to strong distance, budget, and category score.";
+            }
+
             double matchRatio = scoreCalculator.cuisineMatchRatio(query.getPreferredCuisines(), cafe);
-            out.add(new Recommendation(cafe, score, distance, matchRatio));
+            out.add(new Recommendation(cafe, score, distance, matchRatio, explanation, profileTag));
         }
         return out;
     }
@@ -72,9 +92,21 @@ public class RecommendationService {
                 continue;
             }
 
-            double score = scoreCalculator.computeScore(cafe, distance, expandedRadius, query.getPreferredCuisines(), query.getWeights());
+            double score;
+            String explanation;
+            model.ProfileTag profileTag = null;
+            if (query.hasOnboardingContext()) {
+                CafeInsights insights = insightsService.forCafe(cafe);
+                OnboardingScoreBreakdown breakdown = onboardingScorer.score(cafe, insights, query, distance);
+                score = breakdown.getFinalPenaltyScore();
+                profileTag = breakdown.getProfileTag();
+                explanation = buildOnboardingExplanation(query, distance, breakdown);
+            } else {
+                score = scoreCalculator.computeScore(cafe, distance, expandedRadius, query.getPreferredCuisines(), query.getWeights());
+                explanation = "Fallback match based on distance and affordability in expanded radius.";
+            }
             double matchRatio = scoreCalculator.cuisineMatchRatio(query.getPreferredCuisines(), cafe);
-            fallback.add(new Recommendation(cafe, score, distance, matchRatio));
+            fallback.add(new Recommendation(cafe, score, distance, matchRatio, explanation, profileTag));
         }
 
         if (fallback.isEmpty()) {
@@ -84,6 +116,17 @@ public class RecommendationService {
         fallback.sort((a, b) -> Double.compare(a.getCafe().getAvgPrice(), b.getCafe().getAvgPrice()));
         int k = Math.min(5, fallback.size());
         return fallback.subList(0, k);
+    }
+
+    private String buildOnboardingExplanation(SearchQuery query, double distanceKm, OnboardingScoreBreakdown breakdown) {
+        String purpose = query.getVisitContext().getPurposeOfVisit().isBlank() ? "current plan" : query.getVisitContext().getPurposeOfVisit();
+        String profile = breakdown.getProfileTag().getLabel();
+        return String.format(
+                "Recommended because it matches your %s, fits your %s intent, and is within %.1f km.",
+                profile,
+                purpose,
+                distanceKm
+        );
     }
 
     private List<Cafe> applyExtendedFilters(List<Cafe> cafes, SearchQuery query) {

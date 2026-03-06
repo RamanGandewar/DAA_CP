@@ -18,6 +18,8 @@ public class SearchQuery {
     private final String menuQuery;
     private final Set<String> vibeTags;
     private final String acousticProfile;
+    private final UserProfile userProfile;
+    private final VisitContext visitContext;
 
     public SearchQuery(double userLatitude,
                        double userLongitude,
@@ -27,7 +29,7 @@ public class SearchQuery {
                        DietaryPreference dietaryPreference,
                        Weights weights,
                        int topK) {
-        this(userLatitude, userLongitude, radiusKm, budget, preferredCuisines, dietaryPreference, weights, topK, false, "", Set.of(), "");
+        this(userLatitude, userLongitude, radiusKm, budget, preferredCuisines, dietaryPreference, weights, topK, false, "", Set.of(), "", UserProfile.empty(), VisitContext.empty());
     }
 
     public SearchQuery(double userLatitude,
@@ -42,6 +44,23 @@ public class SearchQuery {
                        String menuQuery,
                        Set<String> vibeTags,
                        String acousticProfile) {
+        this(userLatitude, userLongitude, radiusKm, budget, preferredCuisines, dietaryPreference, weights, topK, independentOnly, menuQuery, vibeTags, acousticProfile, UserProfile.empty(), VisitContext.empty());
+    }
+
+    public SearchQuery(double userLatitude,
+                       double userLongitude,
+                       double radiusKm,
+                       double budget,
+                       Set<String> preferredCuisines,
+                       DietaryPreference dietaryPreference,
+                       Weights weights,
+                       int topK,
+                       boolean independentOnly,
+                       String menuQuery,
+                       Set<String> vibeTags,
+                       String acousticProfile,
+                       UserProfile userProfile,
+                       VisitContext visitContext) {
         this.userLatitude = userLatitude;
         this.userLongitude = userLongitude;
         this.radiusKm = radiusKm;
@@ -54,6 +73,8 @@ public class SearchQuery {
         this.menuQuery = menuQuery == null ? "" : menuQuery.trim().toLowerCase();
         this.vibeTags = new HashSet<>(vibeTags);
         this.acousticProfile = acousticProfile == null ? "" : acousticProfile.trim().toLowerCase();
+        this.userProfile = userProfile == null ? UserProfile.empty() : userProfile;
+        this.visitContext = visitContext == null ? VisitContext.empty() : visitContext;
     }
 
     public double getUserLatitude() { return userLatitude; }
@@ -68,4 +89,10 @@ public class SearchQuery {
     public String getMenuQuery() { return menuQuery; }
     public Set<String> getVibeTags() { return Collections.unmodifiableSet(vibeTags); }
     public String getAcousticProfile() { return acousticProfile; }
+    public UserProfile getUserProfile() { return userProfile; }
+    public VisitContext getVisitContext() { return visitContext; }
+
+    public boolean hasOnboardingContext() {
+        return userProfile.isProvided() || visitContext.isProvided();
+    }
 }

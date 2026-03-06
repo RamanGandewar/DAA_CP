@@ -58,6 +58,8 @@ public final class JsonUtil {
                 "\"cuisineMatch\":" + fmt(r.getCuisineMatchRatio() * 100.0) + "," +
                 "\"score\":" + fmt(r.getScore()) + "," +
                 "\"displayMatch\":" + fmt(matchPercent) + "," +
+                "\"profileTag\":\"" + esc(r.getProfileTag() == null ? "" : r.getProfileTag().getLabel()) + "\"," +
+                "\"explanation\":\"" + esc(r.getExplanation()) + "\"," +
                 "\"address\":\"" + esc(c.getAddress()) + "\"," +
                 "\"contact\":\"" + esc(c.getContact()) + "\"," +
                 "\"operatingHours\":\"" + esc(c.getOperatingHours()) + "\"," +

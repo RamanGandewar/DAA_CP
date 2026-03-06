@@ -10,6 +10,8 @@ import model.Cafe;
 import model.DietaryPreference;
 import model.Recommendation;
 import model.SearchQuery;
+import model.UserProfile;
+import model.VisitContext;
 import score.Weights;
 import service.InsightsService;
 import service.LiveStatus;
@@ -148,13 +150,15 @@ public class CafeHttpServer {
                 boolean indieOnly = RequestParsers.parseBoolean(q, "indieOnly", false);
                 String menuQuery = q.getOrDefault("menuQuery", "");
                 String acoustic = q.getOrDefault("acoustic", "");
+                UserProfile userProfile = RequestParsers.parseUserProfile(q, diet);
+                VisitContext visitContext = RequestParsers.parseVisitContext(q, (int) Math.max(1, Math.round(radius)));
                 String source = RequestParsers.parseSource(q.getOrDefault("source", SOURCE_CSV));
                 RecommendationService service = services.get(source);
                 InsightsService insightsService = insightsServices.get(source);
                 ex.getResponseHeaders().set("X-Data-Source", source);
 
                 SearchQuery query = new SearchQuery(lat, lon, radius, budget, cuisines, diet, weights, k,
-                        indieOnly, menuQuery, vibeTags, acoustic);
+                        indieOnly, menuQuery, vibeTags, acoustic, userProfile, visitContext);
                 List<Recommendation> results = service.recommend(query);
                 writeJson(ex, 200, JsonUtil.recommendationsJson(results, insightsService, liveStatusService, source));
                 System.out.println("Dataset selected: " + source + " (/api/recommend)");

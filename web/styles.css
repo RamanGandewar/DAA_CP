@@ -64,6 +64,14 @@ main {
   background: #f4ece1;
 }
 
+.onboarding-card {
+  margin: 8px 0 10px;
+  padding: 8px;
+  border: 1px dashed #b08968;
+  border-radius: 8px;
+  background: #f4ece1;
+}
+
 .map-wrap {
   border: 1px solid var(--line);
   border-radius: 12px;

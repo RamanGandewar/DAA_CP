@@ -1,6 +1,8 @@
 package web;
 
 import model.DietaryPreference;
+import model.UserProfile;
+import model.VisitContext;
 import score.Weights;
 
 import java.net.URLDecoder;
@@ -74,7 +76,17 @@ public final class RequestParsers {
         if (raw == null || raw.isBlank()) {
             return DietaryPreference.ANY;
         }
-        return DietaryPreference.valueOf(raw.trim().toUpperCase());
+        String normalized = raw.trim().toUpperCase();
+        if ("VEGETARIAN".equals(normalized)) {
+            return DietaryPreference.VEG;
+        }
+        if ("NON-VEGETARIAN".equals(normalized) || "NON_VEGETARIAN".equals(normalized) || "NONVEG".equals(normalized)) {
+            return DietaryPreference.NON_VEG;
+        }
+        if ("NO PREFERENCE".equals(normalized)) {
+            return DietaryPreference.ANY;
+        }
+        return DietaryPreference.valueOf(normalized);
     }
 
     public static Weights parseWeights(Map<String, String> q) {
@@ -107,6 +119,47 @@ public final class RequestParsers {
             throw new IllegalArgumentException("Invalid source. Use csv or xlsx.");
         }
         return normalized;
+    }
+
+    public static int parseInt(Map<String, String> q, String key, int defaultVal) {
+        String raw = q.get(key);
+        if (raw == null || raw.isBlank()) {
+            return defaultVal;
+        }
+        return Integer.parseInt(raw.trim());
+    }
+
+    public static UserProfile parseUserProfile(Map<String, String> q, DietaryPreference fallbackDiet) {
+        int distanceKm = parseInt(q, "preferredDistanceKm", 5);
+        DietaryPreference onboardingDiet = fallbackDiet;
+        if (q.containsKey("onboardingDiet")) {
+            onboardingDiet = parseDiet(q.get("onboardingDiet"));
+        }
+
+        return new UserProfile(
+                q.getOrDefault("userName", ""),
+                q.getOrDefault("ageGroup", ""),
+                q.getOrDefault("occupation", ""),
+                q.getOrDefault("defaultBudgetRange", ""),
+                q.getOrDefault("preferredCafeType", ""),
+                distanceKm,
+                onboardingDiet,
+                q.getOrDefault("usuallyVisitWith", ""),
+                q.getOrDefault("preferredSeating", ""),
+                q.getOrDefault("musicPreference", ""),
+                q.getOrDefault("lightingPreference", "")
+        );
+    }
+
+    public static VisitContext parseVisitContext(Map<String, String> q, int fallbackDistanceKm) {
+        int distanceKm = parseInt(q, "visitDistanceKm", fallbackDistanceKm);
+        return new VisitContext(
+                q.getOrDefault("visitPurpose", ""),
+                q.getOrDefault("visitBudgetRange", ""),
+                distanceKm,
+                q.getOrDefault("visitTime", ""),
+                q.getOrDefault("crowdTolerance", "")
+        );
     }
 
     private static String decode(String s) {

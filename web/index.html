@@ -37,6 +37,124 @@
           </select>
         </label>
       </div>
+      <div class="onboarding-card">
+        <h3>User Onboarding (Permanent)</h3>
+        <label>Name <input id="userName" type="text" placeholder="Your name" /></label>
+        <label>Age Group
+          <select id="ageGroup">
+            <option value="">Select</option>
+            <option>Student</option>
+            <option>Working Professional</option>
+            <option>Other</option>
+          </select>
+        </label>
+        <label>Occupation <input id="occupation" type="text" placeholder="Student, Engineer, Designer..." /></label>
+        <label>Default Budget Range
+          <select id="defaultBudgetRange">
+            <option>Low</option>
+            <option selected>Medium</option>
+            <option>High</option>
+          </select>
+        </label>
+        <label>Preferred Cafe Type
+          <select id="preferredCafeType">
+            <option>Quiet / Work-friendly</option>
+            <option>Social / Hangout</option>
+            <option>Premium / Aesthetic</option>
+          </select>
+        </label>
+        <label>Preferred Distance Range
+          <select id="preferredDistanceKm">
+            <option value="1">1 km</option>
+            <option value="3">3 km</option>
+            <option value="5" selected>5 km</option>
+            <option value="10">10 km</option>
+          </select>
+        </label>
+        <label>Dietary Preference
+          <select id="onboardingDiet">
+            <option value="VEG">Vegetarian</option>
+            <option value="NON_VEG">Non-Vegetarian</option>
+            <option value="VEGAN">Vegan</option>
+            <option value="ANY" selected>No preference</option>
+          </select>
+        </label>
+        <label>Usually Visit Cafes
+          <select id="usuallyVisitWith">
+            <option>Alone</option>
+            <option selected>With friends</option>
+            <option>With colleagues</option>
+            <option>With partner</option>
+          </select>
+        </label>
+        <label>Preferred Seating
+          <select id="preferredSeating">
+            <option>Indoor</option>
+            <option>Outdoor</option>
+            <option selected>Doesn't matter</option>
+          </select>
+        </label>
+        <label>Music Preference
+          <select id="musicPreference">
+            <option>Silent</option>
+            <option selected>Light music</option>
+            <option>Loud / party vibe</option>
+          </select>
+        </label>
+        <label>Lighting Preference
+          <select id="lightingPreference">
+            <option>Bright</option>
+            <option selected>Cozy</option>
+            <option>Aesthetic / dim</option>
+          </select>
+        </label>
+        <button id="saveProfileBtn" class="btn alt" type="button">Save Onboarding Profile</button>
+        <div id="profileSummary" class="status"></div>
+      </div>
+
+      <div class="onboarding-card">
+        <h3>Current Visit Context (Dynamic)</h3>
+        <label>Purpose of Visit
+          <select id="visitPurpose">
+            <option>Work / Study</option>
+            <option selected>Casual hangout</option>
+            <option>Date</option>
+            <option>Coffee break</option>
+            <option>Meeting</option>
+          </select>
+        </label>
+        <label>Current Budget for this visit
+          <select id="visitBudgetRange">
+            <option>Low</option>
+            <option selected>Medium</option>
+            <option>High</option>
+          </select>
+        </label>
+        <label>Travel Distance for this visit
+          <select id="visitDistanceKm">
+            <option value="1">1 km</option>
+            <option value="3">3 km</option>
+            <option value="5" selected>5 km</option>
+            <option value="10">10 km</option>
+          </select>
+        </label>
+        <label>Time of Visit
+          <select id="visitTime">
+            <option>Morning</option>
+            <option>Afternoon</option>
+            <option selected>Evening</option>
+            <option>Late night</option>
+          </select>
+        </label>
+        <label>Crowd Tolerance
+          <select id="crowdTolerance">
+            <option>Quiet</option>
+            <option selected>Moderate</option>
+            <option>Lively</option>
+          </select>
+        </label>
+      </div>
+
       <label>Latitude <input id="lat" type="number" step="0.000001" value="18.5204" /></label>
       <label>Longitude <input id="lon" type="number" step="0.000001" value="73.8567" /></label>
       <label>Radius (km) <input id="radius" type="number" step="0.1" value="5" /></label>

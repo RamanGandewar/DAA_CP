@@ -8,9 +8,14 @@ let markers = [];
 const markerCluster = L.markerClusterGroup({ spiderfyOnMaxZoom: true, showCoverageOnHover: false });
 map.addLayer(markerCluster);
 let radiusCircle = null;
+const PROFILE_KEY = 'cafe_user_profile_v1';
 
 function q(id) {
-  return document.getElementById(id).value.trim();
+  const node = document.getElementById(id);
+  if (!node) {
+    return '';
+  }
+  return node.value.trim();
 }
 
 function clearMap() {
@@ -36,6 +41,82 @@ function setUserLocation(lat, lon) {
   document.getElementById('lat').value = Number(lat).toFixed(6);
   document.getElementById('lon').value = Number(lon).toFixed(6);
   map.setView([lat, lon], 13);
+}
+
+function budgetRangeToAmount(range) {
+  const normalized = (range || '').toLowerCase();
+  if (normalized === 'low') return 400;
+  if (normalized === 'high') return 1200;
+  return 800;
+}
+
+function getProfileFormData() {
+  return {
+    userName: q('userName'),
+    ageGroup: q('ageGroup'),
+    occupation: q('occupation'),
+    defaultBudgetRange: q('defaultBudgetRange'),
+    preferredCafeType: q('preferredCafeType'),
+    preferredDistanceKm: q('preferredDistanceKm'),
+    onboardingDiet: q('onboardingDiet'),
+    usuallyVisitWith: q('usuallyVisitWith'),
+    preferredSeating: q('preferredSeating'),
+    musicPreference: q('musicPreference'),
+    lightingPreference: q('lightingPreference')
+  };
+}
+
+function hasOnboardingProfile(profile) {
+  return !!(profile && profile.userName && profile.userName.trim().length > 0);
+}
+
+function renderProfileSummary(profile) {
+  const summary = document.getElementById('profileSummary');
+  if (!summary) return;
+  if (!hasOnboardingProfile(profile)) {
+    summary.textContent = 'Complete onboarding once to unlock personalized recommendations.';
+    return;
+  }
+  summary.textContent = `Profile saved for ${profile.userName} (${profile.ageGroup || 'N/A'}) | ${profile.preferredCafeType || 'General'} | ${profile.defaultBudgetRange || 'Medium'} budget`;
+}
+
+function applyProfileToForm(profile) {
+  if (!profile) return;
+  Object.entries(profile).forEach(([key, value]) => {
+    const node = document.getElementById(key);
+    if (node) {
+      node.value = value;
+    }
+  });
+}
+
+function loadSavedProfile() {
+  try {
+    const raw = localStorage.getItem(PROFILE_KEY);
+    if (!raw) {
+      renderProfileSummary(null);
+      return null;
+    }
+    const parsed = JSON.parse(raw);
+    applyProfileToForm(parsed);
+    renderProfileSummary(parsed);
+    return parsed;
+  } catch (err) {
+    renderProfileSummary(null);
+    return null;
+  }
+}
+
+function saveProfile() {
+  const profile = getProfileFormData();
+  if (!hasOnboardingProfile(profile)) {
+    setStatus('Please provide at least your name in onboarding profile.');
+    return null;
+  }
+  localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
+  renderProfileSummary(profile);
+  setStatus('Onboarding profile saved.');
+  return profile;
 }
 
 function meter(label, value) {
@@ -86,6 +167,8 @@ function renderResults(data) {
           <div class="meta">Match ${r.displayMatch.toFixed(0)}%</div>
         </div>
       </div>
+      <div class="meta"><b>${r.profileTag || 'General Profile'}</b></div>
+      <div class="meta">${r.explanation || ''}</div>
 
       <div class="tag-row">${tags}</div>
       <div class="grid">
@@ -178,9 +261,23 @@ async function runSearch() {
   setStatus('Searching...');
   clearMap();
 
+  let profile = loadSavedProfile();
+  if (!hasOnboardingProfile(profile)) {
+    profile = saveProfile();
+    if (!hasOnboardingProfile(profile)) {
+      setStatus('Please complete onboarding profile before searching.');
+      return;
+    }
+  }
+
   const lat = Number(q('lat'));
   const lon = Number(q('lon'));
-  const radius = Number(q('radius'));
+  const dynamicDistance = Number(q('visitDistanceKm'));
+  const radius = Number.isFinite(dynamicDistance) && dynamicDistance > 0 ? dynamicDistance : Number(q('radius'));
+  const dynamicBudgetRange = q('visitBudgetRange');
+  const dynamicBudgetValue = budgetRangeToAmount(dynamicBudgetRange);
+  document.getElementById('radius').value = String(radius);
+  document.getElementById('budget').value = String(dynamicBudgetValue);
 
   if (!Number.isFinite(lat) || !Number.isFinite(lon) || !Number.isFinite(radius)) {
     setStatus('Invalid coordinates or radius.');
@@ -193,8 +290,8 @@ async function runSearch() {
   const params = new URLSearchParams({
     lat: q('lat'),
     lon: q('lon'),
-    radius: q('radius'),
-    budget: q('budget'),
+    radius: String(radius),
+    budget: String(dynamicBudgetValue),
     source: q('source'),
     cuisines: q('cuisines'),
     vibes: q('vibes'),
@@ -206,7 +303,23 @@ async function runSearch() {
     w1: q('w1'),
     w2: q('w2'),
     w3: q('w3'),
-    w4: q('w4')
+    w4: q('w4'),
+    userName: profile.userName || '',
+    ageGroup: profile.ageGroup || '',
+    occupation: profile.occupation || '',
+    defaultBudgetRange: profile.defaultBudgetRange || '',
+    preferredCafeType: profile.preferredCafeType || '',
+    preferredDistanceKm: profile.preferredDistanceKm || '5',
+    onboardingDiet: profile.onboardingDiet || 'ANY',
+    usuallyVisitWith: profile.usuallyVisitWith || '',
+    preferredSeating: profile.preferredSeating || '',
+    musicPreference: profile.musicPreference || '',
+    lightingPreference: profile.lightingPreference || '',
+    visitPurpose: q('visitPurpose'),
+    visitBudgetRange: dynamicBudgetRange,
+    visitDistanceKm: q('visitDistanceKm'),
+    visitTime: q('visitTime'),
+    crowdTolerance: q('crowdTolerance')
   });
 
   try {
@@ -226,4 +339,6 @@ async function runSearch() {
 document.getElementById('searchBtn').addEventListener('click', runSearch);
 document.getElementById('liveLocationBtn').addEventListener('click', useLiveLocation);
 document.getElementById('locateAddressBtn').addEventListener('click', useAddressLocation);
+document.getElementById('saveProfileBtn').addEventListener('click', saveProfile);
+loadSavedProfile();
 useLiveLocation();
