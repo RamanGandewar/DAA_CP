@@ -3,13 +3,22 @@ package web;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
+import db.DatabaseManager;
+import db.DatabaseStatus;
+import db.OnboardingRepository;
+import db.SQLiteOnboardingRepository;
 import data.DataLoader;
 import data.DataValidator;
 import data.GlobalStats;
+import model.AmbiencePreference;
+import model.AppUser;
 import model.Cafe;
 import model.DietaryPreference;
+import model.OnboardingProfile;
 import model.Recommendation;
 import model.SearchQuery;
+import model.SocialPreference;
+import model.StoredVisitContext;
 import model.UserProfile;
 import model.VisitContext;
 import score.Weights;
@@ -40,19 +49,22 @@ public class CafeHttpServer {
     private final Map<String, RecommendationService> recommendationServices;
     private final Map<String, InsightsService> insightsServices;
     private final LiveStatusService liveStatusService;
+    private final OnboardingRepository onboardingRepository;
 
     public CafeHttpServer(int port,
                           String csvPath,
                           String xlsxPath,
                           Map<String, RecommendationService> recommendationServices,
                           Map<String, InsightsService> insightsServices,
-                          LiveStatusService liveStatusService) {
+                          LiveStatusService liveStatusService,
+                          OnboardingRepository onboardingRepository) {
         this.port = port;
         this.csvPath = csvPath;
         this.xlsxPath = xlsxPath;
         this.recommendationServices = recommendationServices;
         this.insightsServices = insightsServices;
         this.liveStatusService = liveStatusService;
+        this.onboardingRepository = onboardingRepository;
     }
 
     public static CafeHttpServer buildDefault(int port) throws IOException {
@@ -69,7 +81,7 @@ public class CafeHttpServer {
         registerSource(recommendationServices, insightsServices, SOURCE_XLSX, xlsxPath);
 
         LiveStatusService liveStatusService = new LiveStatusService();
-        return new CafeHttpServer(port, csvPath, xlsxPath, recommendationServices, insightsServices, liveStatusService);
+        return new CafeHttpServer(port, csvPath, xlsxPath, recommendationServices, insightsServices, liveStatusService, new SQLiteOnboardingRepository());
     }
 
     public static CafeHttpServer buildDefault(int port, String dataPath) throws IOException {
@@ -84,13 +96,16 @@ public class CafeHttpServer {
         RecommendationService service = new RecommendationService(cafes, kdTree, stats, insightsService);
         Map<String, RecommendationService> recommendationServices = Map.of(SOURCE_XLSX, service, SOURCE_CSV, service);
         Map<String, InsightsService> insightsServices = Map.of(SOURCE_XLSX, insightsService, SOURCE_CSV, insightsService);
-        return new CafeHttpServer(port, dataPath, dataPath, recommendationServices, insightsServices, liveStatusService);
+        return new CafeHttpServer(port, dataPath, dataPath, recommendationServices, insightsServices, liveStatusService, new SQLiteOnboardingRepository());
     }
 
     public void start() throws IOException {
         HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
         server.createContext("/api/health", new HealthHandler());
-        server.createContext("/api/recommend", new RecommendHandler(recommendationServices, insightsServices, liveStatusService));
+        server.createContext("/api/recommend", new RecommendHandler(recommendationServices, insightsServices, liveStatusService, onboardingRepository));
+        server.createContext("/api/onboarding/status", new OnboardingStatusHandler(onboardingRepository));
+        server.createContext("/api/onboarding/profile", new OnboardingProfileHandler(onboardingRepository));
+        server.createContext("/api/onboarding/context", new VisitContextHandler(onboardingRepository));
         server.createContext("/api/live/seat", new SeatStatusHandler(liveStatusService));
         server.createContext("/api/live/table-share", new TableShareHandler(liveStatusService));
         server.createContext("/", new StaticFileHandler());
@@ -102,6 +117,8 @@ public class CafeHttpServer {
         System.out.println("Dataset selected: csv (default). Change in UI to xlsx when needed.");
         System.out.println("CSV dataset path: " + csvPath);
         System.out.println("XLSX dataset path: " + xlsxPath);
+        DatabaseStatus databaseStatus = DatabaseManager.getStatus();
+        System.out.println("SQLite onboarding storage: " + (databaseStatus.isEnabled() ? "enabled" : "disabled"));
     }
 
     private static class HealthHandler implements HttpHandler {
@@ -111,7 +128,16 @@ public class CafeHttpServer {
                 writeJson(ex, 405, JsonUtil.errorJson("Method not allowed"));
                 return;
             }
-            writeJson(ex, 200, "{\"status\":\"ok\",\"defaultSource\":\"csv\",\"availableSources\":[\"csv\",\"xlsx\"]}");
+            DatabaseStatus databaseStatus = DatabaseManager.getStatus();
+            String health = "{"
+                    + "\"status\":\"ok\","
+                    + "\"defaultSource\":\"csv\","
+                    + "\"availableSources\":[\"csv\",\"xlsx\"],"
+                    + "\"databaseEnabled\":" + databaseStatus.isEnabled() + ","
+                    + "\"databaseUrl\":\"" + escapeJson(databaseStatus.getJdbcUrl()) + "\","
+                    + "\"databaseMessage\":\"" + escapeJson(databaseStatus.getMessage()) + "\""
+                    + "}";
+            writeJson(ex, 200, health);
         }
     }
 
@@ -119,13 +145,16 @@ public class CafeHttpServer {
         private final Map<String, RecommendationService> services;
         private final Map<String, InsightsService> insightsServices;
         private final LiveStatusService liveStatusService;
+        private final OnboardingRepository onboardingRepository;
 
         RecommendHandler(Map<String, RecommendationService> services,
                          Map<String, InsightsService> insightsServices,
-                         LiveStatusService liveStatusService) {
+                         LiveStatusService liveStatusService,
+                         OnboardingRepository onboardingRepository) {
             this.services = services;
             this.insightsServices = insightsServices;
             this.liveStatusService = liveStatusService;
+            this.onboardingRepository = onboardingRepository;
         }
 
         @Override
@@ -150,16 +179,22 @@ public class CafeHttpServer {
                 boolean indieOnly = RequestParsers.parseBoolean(q, "indieOnly", false);
                 String menuQuery = q.getOrDefault("menuQuery", "");
                 String acoustic = q.getOrDefault("acoustic", "");
-                UserProfile userProfile = RequestParsers.parseUserProfile(q, diet);
-                VisitContext visitContext = RequestParsers.parseVisitContext(q, (int) Math.max(1, Math.round(radius)));
+                UserProfile requestUserProfile = RequestParsers.parseUserProfile(q, diet);
+                VisitContext requestVisitContext = RequestParsers.parseVisitContext(q, (int) Math.max(1, Math.round(radius)));
                 String source = RequestParsers.parseSource(q.getOrDefault("source", SOURCE_CSV));
+                String userKey = q.getOrDefault("userKey", "").trim();
                 RecommendationService service = services.get(source);
                 InsightsService insightsService = insightsServices.get(source);
                 ex.getResponseHeaders().set("X-Data-Source", source);
 
+                OnboardingProfile storedOnboarding = loadStoredOnboarding(userKey);
+                UserProfile userProfile = mergeUserProfile(storedOnboarding, requestUserProfile);
+                VisitContext visitContext = mergeVisitContext(storedOnboarding, requestVisitContext);
+
                 SearchQuery query = new SearchQuery(lat, lon, radius, budget, cuisines, diet, weights, k,
                         indieOnly, menuQuery, vibeTags, acoustic, userProfile, visitContext);
                 List<Recommendation> results = service.recommend(query);
+                persistRecommendationTrace(userKey, storedOnboarding, source, lat, lon, radius, budget, k, results);
                 writeJson(ex, 200, JsonUtil.recommendationsJson(results, insightsService, liveStatusService, source));
                 System.out.println("Dataset selected: " + source + " (/api/recommend)");
             } catch (Exception err) {
@@ -173,6 +208,179 @@ public class CafeHttpServer {
                 throw new IllegalArgumentException("Missing required parameter: " + key);
             }
             return v;
+        }
+
+        private OnboardingProfile loadStoredOnboarding(String userKey) {
+            DatabaseStatus databaseStatus = DatabaseManager.getStatus();
+            if (!databaseStatus.isEnabled() || userKey.isBlank()) {
+                return null;
+            }
+            return onboardingRepository.findOnboardingProfile(userKey).orElse(null);
+        }
+
+        private void persistRecommendationTrace(String userKey,
+                                                OnboardingProfile onboardingProfile,
+                                                String source,
+                                                double lat,
+                                                double lon,
+                                                double radius,
+                                                double budget,
+                                                int topK,
+                                                List<Recommendation> results) {
+            DatabaseStatus databaseStatus = DatabaseManager.getStatus();
+            if (!databaseStatus.isEnabled() || userKey.isBlank()) {
+                return;
+            }
+
+            AppUser appUser = onboardingProfile == null
+                    ? onboardingRepository.createOrGetUser(userKey, "")
+                    : onboardingProfile.getAppUser();
+            Long visitContextId = null;
+            StoredVisitContext activeContext = onboardingProfile == null ? null : onboardingProfile.getActiveVisitContext();
+            if (activeContext != null) {
+                visitContextId = activeContext.getId();
+            }
+
+            try {
+                model.RecommendationHistoryEntry history = onboardingRepository.saveRecommendationHistory(
+                        appUser.getId(),
+                        visitContextId,
+                        source,
+                        lat,
+                        lon,
+                        radius,
+                        budget,
+                        topK,
+                        results.size()
+                );
+                onboardingRepository.saveRecommendationExplanations(history.getId(), results);
+            } catch (Exception ignored) {
+                System.err.println("Warning: failed to persist recommendation history: " + ignored.getMessage());
+            }
+        }
+    }
+
+    private static class OnboardingStatusHandler implements HttpHandler {
+        private final OnboardingRepository onboardingRepository;
+
+        OnboardingStatusHandler(OnboardingRepository onboardingRepository) {
+            this.onboardingRepository = onboardingRepository;
+        }
+
+        @Override
+        public void handle(HttpExchange ex) throws IOException {
+            if (!"GET".equalsIgnoreCase(ex.getRequestMethod())) {
+                writeJson(ex, 405, JsonUtil.errorJson("Use GET"));
+                return;
+            }
+            if (!ensureDatabaseReady(ex)) {
+                return;
+            }
+
+            try {
+                Map<String, String> q = RequestParsers.parseQuery(ex.getRequestURI().getRawQuery());
+                String userKey = required(q, "userKey");
+                java.util.Optional<AppUser> appUser = onboardingRepository.findUserByKey(userKey);
+                boolean profilePresent = appUser.flatMap(user -> onboardingRepository.findOnboardingProfile(user.getUserKey()))
+                        .map(profile -> profile.getStoredUserProfile() != null)
+                        .orElse(false);
+                writeJson(ex, 200, JsonUtil.onboardingStatusJson(true, appUser.orElse(null), profilePresent));
+            } catch (Exception err) {
+                writeJson(ex, 400, JsonUtil.errorJson(err.getMessage()));
+            }
+        }
+    }
+
+    private static class OnboardingProfileHandler implements HttpHandler {
+        private final OnboardingRepository onboardingRepository;
+
+        OnboardingProfileHandler(OnboardingRepository onboardingRepository) {
+            this.onboardingRepository = onboardingRepository;
+        }
+
+        @Override
+        public void handle(HttpExchange ex) throws IOException {
+            if (!ensureDatabaseReady(ex)) {
+                return;
+            }
+
+            try {
+                Map<String, String> q = RequestParsers.parseQuery(ex.getRequestURI().getRawQuery());
+                if ("GET".equalsIgnoreCase(ex.getRequestMethod())) {
+                    String userKey = required(q, "userKey");
+                    java.util.Optional<OnboardingProfile> profile = onboardingRepository.findOnboardingProfile(userKey);
+                    if (profile.isEmpty()) {
+                        writeJson(ex, 404, JsonUtil.errorJson("Onboarding profile not found."));
+                        return;
+                    }
+                    writeJson(ex, 200, JsonUtil.onboardingProfileJson(profile.get()));
+                    return;
+                }
+
+                if (!"POST".equalsIgnoreCase(ex.getRequestMethod())) {
+                    writeJson(ex, 405, JsonUtil.errorJson("Use GET/POST"));
+                    return;
+                }
+
+                String userKey = required(q, "userKey");
+                DietaryPreference fallbackDiet = RequestParsers.parseDiet(q.getOrDefault("onboardingDiet", q.getOrDefault("diet", "ANY")));
+                UserProfile userProfile = RequestParsers.parseUserProfile(q, fallbackDiet);
+                AppUser appUser = onboardingRepository.createOrGetUser(userKey, userProfile.getName());
+                onboardingRepository.saveUserProfile(appUser.getId(), userProfile);
+                onboardingRepository.saveSocialPreference(appUser.getId(),
+                        new SocialPreference(userProfile.getUsuallyVisitWith(), userProfile.getPreferredSeating()));
+                onboardingRepository.saveAmbiencePreference(appUser.getId(),
+                        new AmbiencePreference(userProfile.getMusicPreference(), userProfile.getLightingPreference()));
+
+                OnboardingProfile profile = onboardingRepository.findOnboardingProfile(userKey)
+                        .orElseThrow(() -> new IllegalStateException("Failed to reload onboarding profile after save."));
+                writeJson(ex, 200, JsonUtil.onboardingProfileJson(profile));
+            } catch (Exception err) {
+                writeJson(ex, 400, JsonUtil.errorJson(err.getMessage()));
+            }
+        }
+    }
+
+    private static class VisitContextHandler implements HttpHandler {
+        private final OnboardingRepository onboardingRepository;
+
+        VisitContextHandler(OnboardingRepository onboardingRepository) {
+            this.onboardingRepository = onboardingRepository;
+        }
+
+        @Override
+        public void handle(HttpExchange ex) throws IOException {
+            if (!ensureDatabaseReady(ex)) {
+                return;
+            }
+
+            try {
+                Map<String, String> q = RequestParsers.parseQuery(ex.getRequestURI().getRawQuery());
+                String userKey = required(q, "userKey");
+                AppUser appUser = onboardingRepository.createOrGetUser(userKey, q.getOrDefault("userName", ""));
+
+                if ("GET".equalsIgnoreCase(ex.getRequestMethod())) {
+                    java.util.Optional<model.StoredVisitContext> visitContext = onboardingRepository.findActiveVisitContext(appUser.getId());
+                    if (visitContext.isEmpty()) {
+                        writeJson(ex, 404, JsonUtil.errorJson("Active visit context not found."));
+                        return;
+                    }
+                    writeJson(ex, 200, JsonUtil.visitContextJson(visitContext.get()));
+                    return;
+                }
+
+                if (!"POST".equalsIgnoreCase(ex.getRequestMethod())) {
+                    writeJson(ex, 405, JsonUtil.errorJson("Use GET/POST"));
+                    return;
+                }
+
+                int fallbackDistanceKm = RequestParsers.parseInt(q, "preferredDistanceKm", 5);
+                VisitContext visitContext = RequestParsers.parseVisitContext(q, fallbackDistanceKm);
+                model.StoredVisitContext stored = onboardingRepository.saveVisitContext(appUser.getId(), visitContext, true);
+                writeJson(ex, 200, JsonUtil.visitContextJson(stored));
+            } catch (Exception err) {
+                writeJson(ex, 400, JsonUtil.errorJson(err.getMessage()));
+            }
         }
     }
 
@@ -319,5 +527,71 @@ public class CafeHttpServer {
         try (OutputStream os = ex.getResponseBody()) {
             os.write(body);
         }
+    }
+
+    private static boolean ensureDatabaseReady(HttpExchange ex) throws IOException {
+        DatabaseStatus databaseStatus = DatabaseManager.getStatus();
+        if (databaseStatus.isEnabled()) {
+            return true;
+        }
+        writeJson(ex, 503, JsonUtil.errorJson(databaseStatus.getMessage()));
+        return false;
+    }
+
+    private static String required(Map<String, String> q, String key) {
+        String v = q.get(key);
+        if (v == null || v.isBlank()) {
+            throw new IllegalArgumentException("Missing required parameter: " + key);
+        }
+        return v;
+    }
+
+    private static UserProfile mergeUserProfile(OnboardingProfile stored, UserProfile request) {
+        UserProfile base = stored == null ? UserProfile.empty() : stored.toUserProfile();
+        if (request == null || !request.isProvided()) {
+            return base;
+        }
+
+        return new UserProfile(
+                choose(request.getName(), base.getName()),
+                choose(request.getAgeGroup(), base.getAgeGroup()),
+                choose(request.getOccupation(), base.getOccupation()),
+                choose(request.getDefaultBudgetRange(), base.getDefaultBudgetRange()),
+                choose(request.getPreferredCafeType(), base.getPreferredCafeType()),
+                request.getPreferredDistanceKm() > 0 ? request.getPreferredDistanceKm() : base.getPreferredDistanceKm(),
+                request.getDietaryPreference() != null && request.getDietaryPreference() != DietaryPreference.ANY
+                        ? request.getDietaryPreference()
+                        : base.getDietaryPreference(),
+                choose(request.getUsuallyVisitWith(), base.getUsuallyVisitWith()),
+                choose(request.getPreferredSeating(), base.getPreferredSeating()),
+                choose(request.getMusicPreference(), base.getMusicPreference()),
+                choose(request.getLightingPreference(), base.getLightingPreference())
+        );
+    }
+
+    private static VisitContext mergeVisitContext(OnboardingProfile stored, VisitContext request) {
+        VisitContext base = stored == null ? VisitContext.empty() : stored.toActiveVisitContext();
+        if (request == null || !request.isProvided()) {
+            return base;
+        }
+
+        return new VisitContext(
+                choose(request.getPurposeOfVisit(), base.getPurposeOfVisit()),
+                choose(request.getCurrentBudgetRange(), base.getCurrentBudgetRange()),
+                request.getTravelDistanceKm() > 0 ? request.getTravelDistanceKm() : base.getTravelDistanceKm(),
+                choose(request.getTimeOfVisit(), base.getTimeOfVisit()),
+                choose(request.getCrowdTolerance(), base.getCrowdTolerance())
+        );
+    }
+
+    private static String choose(String preferred, String fallback) {
+        return preferred != null && !preferred.isBlank() ? preferred : (fallback == null ? "" : fallback);
+    }
+
+    private static String escapeJson(String value) {
+        if (value == null) {
+            return "";
+        }
+        return value.replace("\\", "\\\\").replace("\"", "\\\"");
     }
 }

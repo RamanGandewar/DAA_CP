@@ -9,7 +9,19 @@ if ($files.Count -eq 0) {
   throw "No Java files found under src"
 }
 
-javac -d out $files
+$libClasspath = ""
+if (Test-Path lib) {
+  $jarFiles = Get-ChildItem -Path lib -Filter *.jar -File | ForEach-Object { $_.FullName }
+  if ($jarFiles.Count -gt 0) {
+    $libClasspath = ($jarFiles -join ';')
+  }
+}
+
+if ($libClasspath) {
+  javac -cp $libClasspath -d out $files
+} else {
+  javac -d out $files
+}
 
 function Test-PortAvailable([int]$Port) {
   $listener = $null
@@ -44,4 +56,8 @@ if ($selectedPort -eq $null) {
 
 Write-Host "Starting server on http://localhost:$selectedPort"
 Write-Host "Dataset mode is selected from the UI (CSV or XLSX)."
-java -cp out Main $selectedPort
+if ($libClasspath) {
+  java -cp "out;$libClasspath" Main $selectedPort
+} else {
+  java -cp out Main $selectedPort
+}

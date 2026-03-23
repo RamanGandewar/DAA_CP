@@ -1,4 +1,4 @@
-const map = L.map('map').setView([18.5204, 73.8567], 12);
+const map = L.map('map').setView([20.5937, 78.9629], 5);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   maxZoom: 19,
   attribution: '&copy; OpenStreetMap contributors'
@@ -8,38 +8,108 @@ let markers = [];
 const markerCluster = L.markerClusterGroup({ spiderfyOnMaxZoom: true, showCoverageOnHover: false });
 map.addLayer(markerCluster);
 let radiusCircle = null;
-const PROFILE_KEY = 'cafe_user_profile_v1';
+let userLocationMarker = null;
+let userAccuracyCircle = null;
+let cafeMarkersById = new Map();
+let hasResolvedLocation = false;
+
+const PROFILE_CACHE_KEY = 'cafe_user_profile_v2';
+const USER_KEY_STORAGE = 'cafe_user_key_v1';
 
 function q(id) {
   const node = document.getElementById(id);
-  if (!node) {
-    return '';
-  }
+  if (!node) return '';
   return node.value.trim();
 }
 
 function clearMap() {
   markers.forEach(m => markerCluster.removeLayer(m));
   markers = [];
+  cafeMarkersById = new Map();
   if (radiusCircle) {
     map.removeLayer(radiusCircle);
     radiusCircle = null;
   }
 }
 
-function addMarker(lat, lon, popupHtml) {
+function addMarker(id, lat, lon, popupHtml) {
   const marker = L.marker([lat, lon]).bindPopup(popupHtml);
   markerCluster.addLayer(marker);
   markers.push(marker);
+  if (id) {
+    cafeMarkersById.set(id, marker);
+  }
+  return marker;
+}
+
+function focusCafeOnMap(cafeId) {
+  const marker = cafeMarkersById.get(cafeId);
+  if (!marker) return;
+  const position = marker.getLatLng();
+  map.setView(position, 16);
+  markerCluster.zoomToShowLayer(marker, () => marker.openPopup());
+}
+
+function fitMapToVisiblePoints(results) {
+  const points = [];
+  if (userLocationMarker) {
+    points.push(userLocationMarker.getLatLng());
+  }
+  results.forEach(r => {
+    if (Number.isFinite(r.latitude) && Number.isFinite(r.longitude)) {
+      points.push(L.latLng(r.latitude, r.longitude));
+    }
+  });
+  if (points.length >= 2) {
+    map.fitBounds(L.latLngBounds(points), { padding: [40, 40] });
+  }
 }
 
 function setStatus(message) {
   document.getElementById('status').textContent = message;
 }
 
-function setUserLocation(lat, lon) {
+function setProfileStatus(message) {
+  const summary = document.getElementById('profileSummary');
+  if (summary) {
+    summary.textContent = message;
+  }
+}
+
+function clearUserLocationVisuals() {
+  if (userLocationMarker) {
+    map.removeLayer(userLocationMarker);
+    userLocationMarker = null;
+  }
+  if (userAccuracyCircle) {
+    map.removeLayer(userAccuracyCircle);
+    userAccuracyCircle = null;
+  }
+}
+
+function setUserLocation(lat, lon, accuracyMeters) {
   document.getElementById('lat').value = Number(lat).toFixed(6);
   document.getElementById('lon').value = Number(lon).toFixed(6);
+  hasResolvedLocation = true;
+
+  clearUserLocationVisuals();
+  userAccuracyCircle = L.circle([lat, lon], {
+    radius: Math.max(accuracyMeters || 40, 25),
+    color: '#2f80ed',
+    weight: 1,
+    fillColor: '#5aa9ff',
+    fillOpacity: 0.15
+  }).addTo(map);
+
+  userLocationMarker = L.circleMarker([lat, lon], {
+    radius: 8,
+    color: '#ffffff',
+    weight: 3,
+    fillColor: '#2f80ed',
+    fillOpacity: 1
+  }).addTo(map);
+
+  userLocationMarker.bindPopup('<b>Your Live Location</b>');
   map.setView([lat, lon], 13);
 }
 
@@ -48,6 +118,34 @@ function budgetRangeToAmount(range) {
   if (normalized === 'low') return 400;
   if (normalized === 'high') return 1200;
   return 800;
+}
+
+function slugify(value) {
+  return (value || '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+function getStoredUserKey() {
+  return localStorage.getItem(USER_KEY_STORAGE) || '';
+}
+
+function persistUserKey(userKey) {
+  if (userKey) {
+    localStorage.setItem(USER_KEY_STORAGE, userKey);
+  }
+}
+
+function ensureUserKey(profile) {
+  const existing = getStoredUserKey();
+  if (existing) {
+    return existing;
+  }
+  const base = slugify(profile && profile.userName ? profile.userName : 'guest');
+  const created = `${base || 'guest'}-${Math.random().toString(36).slice(2, 8)}`;
+  persistUserKey(created);
+  return created;
 }
 
 function getProfileFormData() {
@@ -66,57 +164,193 @@ function getProfileFormData() {
   };
 }
 
+function getVisitContextFormData() {
+  return {
+    visitPurpose: q('visitPurpose'),
+    visitBudgetRange: q('visitBudgetRange'),
+    visitDistanceKm: q('visitDistanceKm'),
+    visitTime: q('visitTime'),
+    crowdTolerance: q('crowdTolerance')
+  };
+}
+
 function hasOnboardingProfile(profile) {
   return !!(profile && profile.userName && profile.userName.trim().length > 0);
 }
 
-function renderProfileSummary(profile) {
-  const summary = document.getElementById('profileSummary');
-  if (!summary) return;
-  if (!hasOnboardingProfile(profile)) {
-    summary.textContent = 'Complete onboarding once to unlock personalized recommendations.';
-    return;
+function saveProfileCache(profile) {
+  localStorage.setItem(PROFILE_CACHE_KEY, JSON.stringify(profile));
+}
+
+function loadProfileCache() {
+  try {
+    const raw = localStorage.getItem(PROFILE_CACHE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch (err) {
+    return null;
   }
-  summary.textContent = `Profile saved for ${profile.userName} (${profile.ageGroup || 'N/A'}) | ${profile.preferredCafeType || 'General'} | ${profile.defaultBudgetRange || 'Medium'} budget`;
 }
 
 function applyProfileToForm(profile) {
   if (!profile) return;
   Object.entries(profile).forEach(([key, value]) => {
     const node = document.getElementById(key);
-    if (node) {
-      node.value = value;
+    if (node && value !== undefined && value !== null) {
+      node.value = String(value);
     }
   });
 }
 
-function loadSavedProfile() {
-  try {
-    const raw = localStorage.getItem(PROFILE_KEY);
-    if (!raw) {
-      renderProfileSummary(null);
-      return null;
+function applyVisitContextToForm(context) {
+  if (!context) return;
+  const mapping = {
+    visitPurpose: context.purposeOfVisit,
+    visitBudgetRange: context.currentBudgetRange,
+    visitDistanceKm: context.travelDistanceKm,
+    visitTime: context.timeOfVisit,
+    crowdTolerance: context.crowdTolerance
+  };
+  Object.entries(mapping).forEach(([key, value]) => {
+    const node = document.getElementById(key);
+    if (node && value !== undefined && value !== null) {
+      node.value = String(value);
     }
-    const parsed = JSON.parse(raw);
-    applyProfileToForm(parsed);
-    renderProfileSummary(parsed);
-    return parsed;
+  });
+}
+
+function renderProfileSummary(profile) {
+  if (!hasOnboardingProfile(profile)) {
+    setProfileStatus('Complete onboarding once to unlock personalized recommendations.');
+    return;
+  }
+  setProfileStatus(
+    `Profile saved for ${profile.userName} | ${profile.preferredCafeType || 'General'} | ${profile.defaultBudgetRange || 'Medium'} budget`
+  );
+}
+
+function profileFromApi(payload) {
+  if (!payload || !payload.profile) return null;
+  return {
+    userName: payload.profile.name || '',
+    ageGroup: payload.profile.ageGroup || '',
+    occupation: payload.profile.occupation || '',
+    defaultBudgetRange: payload.profile.defaultBudgetRange || '',
+    preferredCafeType: payload.profile.preferredCafeType || '',
+    preferredDistanceKm: String(payload.profile.preferredDistanceKm || 5),
+    onboardingDiet: payload.profile.dietaryPreference || 'ANY',
+    usuallyVisitWith: payload.socialPreference ? (payload.socialPreference.usuallyVisitWith || '') : '',
+    preferredSeating: payload.socialPreference ? (payload.socialPreference.preferredSeating || '') : '',
+    musicPreference: payload.ambiencePreference ? (payload.ambiencePreference.musicPreference || '') : '',
+    lightingPreference: payload.ambiencePreference ? (payload.ambiencePreference.lightingPreference || '') : ''
+  };
+}
+
+function toQuery(params) {
+  return new URLSearchParams(params).toString();
+}
+
+async function fetchJson(url, options) {
+  const res = await fetch(url, options);
+  const data = await res.json();
+  if (!res.ok) {
+    throw new Error(data.error || 'Request failed');
+  }
+  return data;
+}
+
+async function loadOnboardingFromApi() {
+  const userKey = getStoredUserKey();
+  if (!userKey) {
+    const cached = loadProfileCache();
+    applyProfileToForm(cached);
+    renderProfileSummary(cached);
+    return cached;
+  }
+
+  try {
+    const status = await fetchJson(`/api/onboarding/status?${toQuery({ userKey })}`);
+    if (!status.databaseEnabled) {
+      const cached = loadProfileCache();
+      applyProfileToForm(cached);
+      renderProfileSummary(cached);
+      setStatus('SQLite onboarding storage is not enabled yet. Using local cache only.');
+      return cached;
+    }
+    if (!status.profilePresent) {
+      const cached = loadProfileCache();
+      applyProfileToForm(cached);
+      renderProfileSummary(cached);
+      return cached;
+    }
+
+    const profilePayload = await fetchJson(`/api/onboarding/profile?${toQuery({ userKey })}`);
+    const profile = profileFromApi(profilePayload);
+    if (profile) {
+      applyProfileToForm(profile);
+      saveProfileCache(profile);
+      renderProfileSummary(profile);
+    }
+    if (profilePayload.activeVisitContext) {
+      applyVisitContextToForm(profilePayload.activeVisitContext);
+    }
+    return profile;
   } catch (err) {
-    renderProfileSummary(null);
-    return null;
+    const cached = loadProfileCache();
+    applyProfileToForm(cached);
+    renderProfileSummary(cached);
+    setStatus(`Onboarding sync fallback: ${err.message}`);
+    return cached;
   }
 }
 
-function saveProfile() {
+async function saveProfile() {
   const profile = getProfileFormData();
   if (!hasOnboardingProfile(profile)) {
     setStatus('Please provide at least your name in onboarding profile.');
     return null;
   }
-  localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
-  renderProfileSummary(profile);
-  setStatus('Onboarding profile saved.');
-  return profile;
+
+  const userKey = ensureUserKey(profile);
+  saveProfileCache(profile);
+
+  try {
+    const payload = await fetchJson(`/api/onboarding/profile?${toQuery({
+      userKey,
+      ...profile
+    })}`, { method: 'POST' });
+    const savedProfile = profileFromApi(payload) || profile;
+    applyProfileToForm(savedProfile);
+    saveProfileCache(savedProfile);
+    renderProfileSummary(savedProfile);
+    setStatus('Onboarding profile saved to database.');
+    return savedProfile;
+  } catch (err) {
+    renderProfileSummary(profile);
+    setStatus(`Profile saved locally. Database sync pending: ${err.message}`);
+    return profile;
+  }
+}
+
+async function saveVisitContext() {
+  const profile = getProfileFormData();
+  const userKey = ensureUserKey(profile);
+  const visitContext = getVisitContextFormData();
+
+  try {
+    const payload = await fetchJson(`/api/onboarding/context?${toQuery({
+      userKey,
+      userName: profile.userName || '',
+      preferredDistanceKm: profile.preferredDistanceKm || '5',
+      ...visitContext
+    })}`, { method: 'POST' });
+    if (payload.activeVisitContext) {
+      applyVisitContextToForm(payload.activeVisitContext);
+    }
+    return payload;
+  } catch (err) {
+    setStatus(`Visit context not persisted to database: ${err.message}`);
+    return null;
+  }
 }
 
 function meter(label, value) {
@@ -146,7 +380,7 @@ function renderResults(data) {
   }
 
   data.results.forEach((r, idx) => {
-    addMarker(r.latitude, r.longitude, `<b>${r.name}</b><br/>${r.distanceKm.toFixed(2)} km | ${r.acousticProfile}`);
+    addMarker(r.id, r.latitude, r.longitude, `<b>${r.name}</b><br/>${r.distanceKm.toFixed(2)} km | ${r.acousticProfile}`);
 
     const card = document.createElement('div');
     card.className = 'card';
@@ -161,6 +395,8 @@ function renderResults(data) {
           <div class="name">#${idx + 1} ${r.name}</div>
           <div class="meta">${r.distanceKm.toFixed(2)} km | Rs ${r.avgPrice.toFixed(0)} | ${r.rating.toFixed(1)}/5</div>
           <div class="meta">${r.address}</div>
+          <div class="meta">Coords: ${r.latitude.toFixed(5)}, ${r.longitude.toFixed(5)}</div>
+          <button class="btn alt" type="button" data-focus-cafe="${r.id}">Show On Map</button>
         </div>
         <div>
           <div class="source-badge">Source: ${sourceLabel}</div>
@@ -217,6 +453,11 @@ function renderResults(data) {
   resultsDiv.querySelectorAll('[data-share-off]').forEach(btn => {
     btn.addEventListener('click', () => toggleTableShare(btn.getAttribute('data-share-off'), false));
   });
+  resultsDiv.querySelectorAll('[data-focus-cafe]').forEach(btn => {
+    btn.addEventListener('click', () => focusCafeOnMap(btn.getAttribute('data-focus-cafe')));
+  });
+
+  fitMapToVisiblePoints(data.results);
 }
 
 async function useAddressLocation() {
@@ -234,7 +475,7 @@ async function useAddressLocation() {
     if (!Array.isArray(data) || data.length === 0) {
       throw new Error('Address not found.');
     }
-    setUserLocation(Number(data[0].lat), Number(data[0].lon));
+    setUserLocation(Number(data[0].lat), Number(data[0].lon), 30);
     await runSearch();
   } catch (err) {
     setStatus(`Address lookup failed: ${err.message}`);
@@ -249,10 +490,13 @@ function useLiveLocation() {
   setStatus('Fetching your live location...');
   navigator.geolocation.getCurrentPosition(
     async pos => {
-      setUserLocation(pos.coords.latitude, pos.coords.longitude);
+      setUserLocation(pos.coords.latitude, pos.coords.longitude, pos.coords.accuracy);
       await runSearch();
     },
-    err => setStatus(`Unable to get live location: ${err.message}`),
+    err => {
+      hasResolvedLocation = false;
+      setStatus(`Unable to get live location: ${err.message}`);
+    },
     { enableHighAccuracy: true, timeout: 10000, maximumAge: 30000 }
   );
 }
@@ -261,13 +505,16 @@ async function runSearch() {
   setStatus('Searching...');
   clearMap();
 
-  let profile = loadSavedProfile();
+  let profile = getProfileFormData();
   if (!hasOnboardingProfile(profile)) {
-    profile = saveProfile();
-    if (!hasOnboardingProfile(profile)) {
-      setStatus('Please complete onboarding profile before searching.');
-      return;
+    profile = loadProfileCache();
+    if (profile) {
+      applyProfileToForm(profile);
     }
+  }
+  if (!hasOnboardingProfile(profile)) {
+    setStatus('Please complete onboarding profile before searching.');
+    return;
   }
 
   const lat = Number(q('lat'));
@@ -280,11 +527,17 @@ async function runSearch() {
   document.getElementById('budget').value = String(dynamicBudgetValue);
 
   if (!Number.isFinite(lat) || !Number.isFinite(lon) || !Number.isFinite(radius)) {
-    setStatus('Invalid coordinates or radius.');
+    setStatus('Location not available yet. Use live location or enter an address first.');
     return;
   }
 
-  addMarker(lat, lon, '<b>Your Location</b>');
+  if (!hasResolvedLocation && q('address') === '') {
+    setStatus('Please allow live location or use an address before searching.');
+    return;
+  }
+
+  await saveVisitContext();
+
   radiusCircle = L.circle([lat, lon], { radius: radius * 1000, color: '#8f3e27', fillOpacity: 0.08 }).addTo(map);
 
   const params = new URLSearchParams({
@@ -330,7 +583,7 @@ async function runSearch() {
     }
     renderResults(data);
     const usedSource = (data.source || q('source')).toUpperCase();
-    setStatus(`Returned ${data.count} cafes from ${usedSource} pipeline. Clusters indicate overlapping markers.`);
+    setStatus(`Returned ${data.count} cafes from ${usedSource} pipeline. Onboarding and visit context were applied.`);
   } catch (err) {
     setStatus(`Error: ${err.message}`);
   }
@@ -339,6 +592,11 @@ async function runSearch() {
 document.getElementById('searchBtn').addEventListener('click', runSearch);
 document.getElementById('liveLocationBtn').addEventListener('click', useLiveLocation);
 document.getElementById('locateAddressBtn').addEventListener('click', useAddressLocation);
-document.getElementById('saveProfileBtn').addEventListener('click', saveProfile);
-loadSavedProfile();
-useLiveLocation();
+document.getElementById('saveProfileBtn').addEventListener('click', async () => {
+  await saveProfile();
+});
+
+(async function init() {
+  await loadOnboardingFromApi();
+  useLiveLocation();
+})();

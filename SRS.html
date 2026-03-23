@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Software Requirements Specification - Cafe Vibe Finder and Onboarding Platform</title>
+  <style>
+    :root {
+      --bg: #f4f1eb;
+      --surface: #ffffff;
+      --surface-alt: #f8f5ef;
+      --ink: #1f2933;
+      --muted: #52606d;
+      --line: #d9e2ec;
+      --accent: #8c4f2d;
+      --accent-dark: #6d3c22;
+      --ok: #1f7a4d;
+      --warn: #a16207;
+      --shadow: 0 18px 48px rgba(15, 23, 42, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(140, 79, 45, 0.10), transparent 28%),
+        linear-gradient(180deg, #efe7dc 0%, var(--bg) 100%);
+      color: var(--ink);
+      line-height: 1.6;
+    }
+
+    .page {
+      width: min(1180px, calc(100% - 40px));
+      margin: 32px auto 56px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #2b211c 0%, #4c3226 100%);
+      color: #fff;
+      border-radius: 24px;
+      padding: 36px 40px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto -80px -80px auto;
+      width: 240px;
+      height: 240px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .kicker {
+      display: inline-block;
+      padding: 6px 10px;
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      border-radius: 999px;
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 16px 0 12px;
+      font-size: clamp(34px, 5vw, 52px);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+    }
+
+    .subtitle {
+      max-width: 780px;
+      margin: 0;
+      color: rgba(255, 255, 255, 0.88);
+      font-size: 17px;
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 14px;
+      margin-top: 28px;
+    }
+
+    .meta-card {
+      background: rgba(255, 255, 255, 0.09);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 16px;
+      padding: 14px 16px;
+    }
+
+    .meta-card strong,
+    .meta-card span {
+      display: block;
+    }
+
+    .meta-card strong {
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 6px;
+    }
+
+    .meta-card span {
+      font-size: 15px;
+      color: #fff;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 280px minmax(0, 1fr);
+      gap: 24px;
+      margin-top: 28px;
+      align-items: start;
+    }
+
+    .toc,
+    .content section,
+    .content article {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .toc {
+      position: sticky;
+      top: 24px;
+      padding: 20px;
+    }
+
+    .toc h2 {
+      margin: 0 0 12px;
+      font-size: 14px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .toc a {
+      display: block;
+      color: var(--ink);
+      text-decoration: none;
+      padding: 8px 10px;
+      border-radius: 10px;
+      margin-bottom: 4px;
+      font-size: 14px;
+    }
+
+    .toc a:hover {
+      background: var(--surface-alt);
+      color: var(--accent-dark);
+    }
+
+    .content {
+      display: grid;
+      gap: 20px;
+    }
+
+    section,
+    article {
+      padding: 26px 28px;
+    }
+
+    h2 {
+      margin: 0 0 12px;
+      font-size: 24px;
+      letter-spacing: -0.02em;
+    }
+
+    h3 {
+      margin: 20px 0 10px;
+      font-size: 17px;
+      color: var(--accent-dark);
+    }
+
+    p {
+      margin: 0 0 12px;
+      color: var(--ink);
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .panel {
+      background: var(--surface-alt);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px 18px;
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent-dark);
+      background: #f0e1d7;
+      border: 1px solid #dfc1af;
+      border-radius: 999px;
+      padding: 4px 10px;
+      margin-bottom: 10px;
+    }
+
+    ul,
+    ol {
+      margin: 8px 0 12px 20px;
+      padding: 0;
+    }
+
+    li {
+      margin: 6px 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      font-size: 14px;
+    }
+
+    th,
+    td {
+      border: 1px solid var(--line);
+      padding: 12px 10px;
+      vertical-align: top;
+      text-align: left;
+    }
+
+    th {
+      background: #f6efe8;
+      color: var(--accent-dark);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    code {
+      background: #f3ede6;
+      border: 1px solid #ead9cb;
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 0.95em;
+    }
+
+    .req {
+      border-left: 4px solid var(--accent);
+      padding-left: 14px;
+      margin-bottom: 14px;
+    }
+
+    .req strong {
+      display: inline-block;
+      margin-bottom: 6px;
+    }
+
+    .status-ok {
+      color: var(--ok);
+      font-weight: 600;
+    }
+
+    .status-warn {
+      color: var(--warn);
+      font-weight: 600;
+    }
+
+    footer {
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+      margin-top: 16px;
+    }
+
+    @media (max-width: 980px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .toc {
+        position: static;
+      }
+
+      .grid-2,
+      .grid-3 {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="hero">
+      <span class="kicker">Software Requirements Specification</span>
+      <h1>Cafe Vibe Finder and Recommendation Engine</h1>
+      <p class="subtitle">
+        Industry-grade SRS for a location-aware cafe discovery platform with CSV and XLSX data pipelines,
+        structured onboarding, profile-aware ranking, explainable recommendations, live crowd signals,
+        and a browser-based decision support interface.
+      </p>
+      <div class="meta-grid">
+        <div class="meta-card">
+          <strong>Document ID</strong>
+          <span>SRS-CVF-1.2</span>
+        </div>
+        <div class="meta-card">
+          <strong>Version</strong>
+          <span>1.2</span>
+        </div>
+        <div class="meta-card">
+          <strong>Status</strong>
+          <span>Controlled Baseline</span>
+        </div>
+        <div class="meta-card">
+          <strong>Prepared For</strong>
+          <span>Project Stakeholders</span>
+        </div>
+        <div class="meta-card">
+          <strong>System Type</strong>
+          <span>Web-based recommendation system</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="layout">
+      <nav class="toc">
+        <h2>Contents</h2>
+        <a href="#control">0. Document Control</a>
+        <a href="#intro">1. Introduction</a>
+        <a href="#overview">2. Overall Description</a>
+        <a href="#interfaces">3. External Interface Requirements</a>
+        <a href="#functional">4. Functional Requirements</a>
+        <a href="#nonfunctional">5. Non-Functional Requirements</a>
+        <a href="#data">6. Data Requirements</a>
+        <a href="#acceptance">7. Acceptance Criteria</a>
+        <a href="#risks">8. Risks and Assumptions</a>
+        <a href="#appendix">9. Appendix</a>
+      </nav>
+
+      <main class="content">
+        <section id="control">
+          <span class="badge">Section 0</span>
+          <h2>Document Control</h2>
+          <div class="grid-2">
+            <div class="panel">
+              <h3>0.1 Document Metadata</h3>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Field</th>
+                    <th>Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Document Title</td>
+                    <td>Software Requirements Specification for Cafe Vibe Finder and Recommendation Engine</td>
+                  </tr>
+                  <tr>
+                    <td>Document ID</td>
+                    <td>SRS-CVF-1.2</td>
+                  </tr>
+                  <tr>
+                    <td>Version</td>
+                    <td>1.2</td>
+                  </tr>
+                  <tr>
+                    <td>Status</td>
+                    <td>Controlled Baseline</td>
+                  </tr>
+                  <tr>
+                    <td>System Scope</td>
+                    <td>Local web-based cafe recommendation, onboarding, and explainability platform</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="panel">
+              <h3>0.2 Revision Summary</h3>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Version</th>
+                    <th>Summary</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1.0</td>
+                    <td>Initial structured SRS baseline for the recommendation platform.</td>
+                  </tr>
+                  <tr>
+                    <td>1.1</td>
+                    <td>Aligned requirements with onboarding APIs, profile-aware scoring, and map-based interaction.</td>
+                  </tr>
+                  <tr>
+                    <td>1.2</td>
+                    <td>Raised document quality to a controlled baseline with clearer scope, dependency, and operational framing.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section id="intro">
+          <span class="badge">Section 1</span>
+          <h2>Introduction</h2>
+          <h3>1.1 Purpose</h3>
+          <p>
+            This Software Requirements Specification defines the functional and non-functional requirements for
+            the Cafe Vibe Finder and Recommendation Engine. The system recommends cafes based on user location,
+            budget, cuisine preference, dietary constraints, ambience-oriented filters, and live crowd signals.
+          </p>
+          <h3>1.2 Scope</h3>
+          <p>
+            The product is a lightweight web application composed of a Java backend and a browser frontend. It
+            ingests cafe data from two supported source formats, <code>.csv</code> and <code>.xlsx</code>, stores
+            onboarding data in SQLite when the JDBC driver is available, and exposes recommendation, onboarding,
+            and live-status APIs over HTTP. The frontend renders a geographic map, ranked results, and real-time
+            interaction controls.
+          </p>
+          <h3>1.3 Intended Audience</h3>
+          <ul>
+            <li>Project sponsors and academic evaluators reviewing scope and quality.</li>
+            <li>Developers implementing and maintaining backend, data, and frontend modules.</li>
+            <li>Test engineers defining validation scenarios and acceptance coverage.</li>
+            <li>Operators or demonstrators running the system locally for review or presentation.</li>
+          </ul>
+          <h3>1.4 Definitions</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Term</th>
+                <th>Definition</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>KD-tree</td>
+                <td>Spatial index used to prefilter cafes by geographic search radius.</td>
+              </tr>
+              <tr>
+                <td>Top-k</td>
+                <td>Selection of the best <code>k</code> ranked results without full sorting of all candidates.</td>
+              </tr>
+              <tr>
+                <td>Live signal</td>
+                <td>User-submitted runtime signal such as seat availability or table-sharing status.</td>
+              </tr>
+              <tr>
+                <td>CSV pipeline</td>
+                <td>Recommendation pipeline built from the structured <code>data/cafes.csv</code> dataset.</td>
+              </tr>
+              <tr>
+                <td>XLSX pipeline</td>
+                <td>Recommendation pipeline built from the Excel dataset, optionally enriched with geocoded coordinates.</td>
+              </tr>
+            </tbody>
+          </table>
+          <h3>1.5 References</h3>
+          <ul>
+            <li>Project source modules under <code>src/</code> and frontend assets under <code>web/</code>.</li>
+            <li>Onboarding schema reference in <code>docs/onboarding_schema.sql</code>.</li>
+            <li>Local launcher script <code>run.ps1</code> for compile-and-run execution.</li>
+          </ul>
+        </section>
+
+        <section id="overview">
+          <span class="badge">Section 2</span>
+          <h2>Overall Description</h2>
+          <div class="grid-2">
+            <div class="panel">
+              <h3>2.1 Product Perspective</h3>
+              <p>
+                The application is a self-contained local web system. It serves static frontend assets and REST-like
+                HTTP APIs from a single Java process. Recommendation, onboarding, and live-status logic run in-process.
+                Onboarding persistence is available through a local SQLite database when the SQLite JDBC dependency is present.
+              </p>
+            </div>
+            <div class="panel">
+              <h3>2.2 Product Functions</h3>
+              <ul>
+                <li>Load and validate cafe datasets from CSV and XLSX sources.</li>
+                <li>Search nearby cafes using a spatial index and Haversine refinement.</li>
+                <li>Collect permanent onboarding preferences and dynamic visit context.</li>
+                <li>Apply budget, diet, vibe, acoustic, and menu-based filters.</li>
+                <li>Rank candidate cafes using weighted and profile-aware scoring.</li>
+                <li>Display recommendations on an interactive map with result cards and map-focus actions.</li>
+                <li>Collect live crowd-sourced seat and table-sharing signals.</li>
+              </ul>
+            </div>
+          </div>
+
+          <h3>2.3 User Classes</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>User Class</th>
+                <th>Description</th>
+                <th>Primary Needs</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>End User</td>
+                <td>User searching for cafes based on practical and vibe-oriented preferences.</td>
+                <td>Fast search, understandable results, clear filters, live crowd context.</td>
+              </tr>
+              <tr>
+                <td>Operator</td>
+                <td>Person launching the application and validating local demo behavior.</td>
+                <td>Simple startup, visible health status, deterministic dataset selection.</td>
+              </tr>
+              <tr>
+                <td>Developer</td>
+                <td>Maintainer extending ranking logic, datasets, UI, or APIs.</td>
+                <td>Clear module boundaries, predictable behavior, verifiable requirements.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>2.4 System Context</h3>
+          <p>
+            The platform operates as a single local application process that serves both browser assets and HTTP APIs.
+            Users interact through a browser, the browser may supply geolocation and address resolution inputs, and the
+            backend coordinates dataset loading, recommendation scoring, onboarding persistence, and live-status updates.
+          </p>
+
+          <div class="grid-3">
+            <div class="panel">
+              <h3>2.5 Operating Environment</h3>
+              <ul>
+                <li>OS: Windows with PowerShell launcher support.</li>
+                <li>Runtime: Java JDK for compilation and execution.</li>
+                <li>Browser: Modern Chromium, Edge, or Firefox-class browser.</li>
+                <li>Optional tooling: Python 3 with geocoding dependencies.</li>
+              </ul>
+            </div>
+            <div class="panel">
+              <h3>2.6 Design Constraints</h3>
+              <ul>
+                <li>No external Java Excel library is used for XLSX parsing.</li>
+                <li>SQLite onboarding persistence depends on the external <code>sqlite-jdbc</code> jar.</li>
+                <li>Weight inputs must sum exactly to <code>1.0</code>.</li>
+                <li>Live seat state is stored in process memory only.</li>
+                <li>Frontend and backend are served from one local application.</li>
+              </ul>
+            </div>
+            <div class="panel">
+              <h3>2.7 Dependencies</h3>
+              <ul>
+                <li>Leaflet and marker-cluster assets loaded by the browser.</li>
+                <li>Browser geolocation API for live user location.</li>
+                <li>Nominatim lookup from browser for address-to-coordinate search.</li>
+                <li>Optional geocoded Excel artifact generated offline.</li>
+                <li>SQLite JDBC driver for onboarding persistence.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="interfaces">
+          <span class="badge">Section 3</span>
+          <h2>External Interface Requirements</h2>
+          <h3>3.1 User Interface</h3>
+          <p>
+            The user interface shall present a map, onboarding controls, search controls, dataset-method selector,
+            result cards, and live-signal controls. The UI shall allow the user to select either the CSV or XLSX
+            recommendation pipeline before executing a search. The map shall display the user's resolved location
+            using a blue marker and shall support focusing on individual recommended cafes.
+          </p>
+
+          <h3>3.2 Software Interfaces</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Interface</th>
+                <th>Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>GET /api/health</code></td>
+                <td>HTTP JSON</td>
+                <td>Returns service readiness and available source information.</td>
+              </tr>
+              <tr>
+                <td><code>GET /api/recommend</code></td>
+                <td>HTTP JSON</td>
+                <td>Returns ranked cafe recommendations with profile tags, explanation text, and live status.</td>
+              </tr>
+              <tr>
+                <td><code>/api/onboarding/*</code></td>
+                <td>HTTP JSON</td>
+                <td>Creates, loads, and updates onboarding profile and active visit context data.</td>
+              </tr>
+              <tr>
+                <td><code>POST /api/live/seat</code></td>
+                <td>HTTP JSON</td>
+                <td>Records seat availability crowd signals for a given cafe.</td>
+              </tr>
+              <tr>
+                <td><code>POST /api/live/table-share</code></td>
+                <td>HTTP JSON</td>
+                <td>Sets table-sharing availability signal for a given cafe.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>3.3 Hardware Interfaces</h3>
+          <p class="muted">
+            No dedicated hardware interface is required beyond a general-purpose computer with network-capable browser support.
+          </p>
+
+          <h3>3.4 Communications Interfaces</h3>
+          <p>
+            The system communicates over HTTP on <code>localhost</code>. The application shall bind to the first
+            available port in the configured startup range and display the selected port at startup.
+          </p>
+        </section>
+
+        <section id="functional">
+          <span class="badge">Section 4</span>
+          <h2>Functional Requirements</h2>
+
+          <div class="req">
+            <strong>FR-01 Dataset Initialization</strong>
+            <p>The system shall preload one recommendation pipeline for <code>data/cafes.csv</code> and one recommendation pipeline for the XLSX source during server startup.</p>
+          </div>
+
+          <div class="req">
+            <strong>FR-02 Dataset Selection</strong>
+            <p>The system shall allow the user to select the recommendation source as <code>csv</code> or <code>xlsx</code> through the frontend UI and shall route the search request accordingly.</p>
+          </div>
+
+          <div class="req">
+            <strong>FR-03 Source Disclosure</strong>
+            <p>The system shall include the selected source in recommendation responses and shall display the active source in the UI status area and result cards.</p>
+          </div>
+
+          <div class="req">
+            <strong>FR-04 Geographic Search</strong>
+            <p>The system shall accept user latitude, longitude, and radius inputs and shall return cafes within the radius after KD-tree prefiltering and exact Haversine distance evaluation.</p>
+          </div>
+
+          <div class="req">
+            <strong>FR-04A Location Resolution</strong>
+            <p>The system shall require a resolved user location from browser geolocation or address lookup before search execution and shall not rely on a hardcoded city-center coordinate as the effective user location.</p>
+          </div>
+
+          <div class="req">
+            <strong>FR-04B Onboarding Persistence</strong>
+            <p>The system shall support saving and retrieving permanent onboarding preferences and the active dynamic visit context through onboarding APIs.</p>
+          </div>
+
+          <div class="req">
+            <strong>FR-05 Constraint Filtering</strong>
+            <p>The system shall support filtering by budget, diet, menu query, vibe tags, acoustic profile, and independent-cafe preference.</p>
+          </div>
+
+          <div class="req">
+            <strong>FR-06 Weighted Ranking</strong>
+            <p>The system shall compute a score using distance, price, rating, and cuisine-match weights and shall return top-ranked results according to ascending score.</p>
+          </div>
+
+          <div class="req">
+            <strong>FR-06A Profile-Aware Ranking</strong>
+            <p>The system shall incorporate stored and request-time onboarding data into recommendation scoring, including user profile score, dynamic context score, category match, ambience match, budget compatibility, and distance score.</p>
+          </div>
+
+          <div class="req">
+            <strong>FR-07 Top-k Selection</strong>
+            <p>The system shall accept a user-provided <code>k</code> value and return at most <code>k</code> ranked recommendations.</p>
+          </div>
+
+          <div class="req">
+            <strong>FR-08 Fallback Recommendations</strong>
+            <p>If no recommendation satisfies the initial search constraints, the system shall execute a fallback search with an expanded radius and return the lowest-price subset of fallback results.</p>
+          </div>
+
+          <div class="req">
+            <strong>FR-09 Live Seat Voting</strong>
+            <p>The system shall allow users to submit seat status as <code>easy</code> or <code>standing</code> and shall expose the aggregate counts in recommendation results and seat-status endpoints.</p>
+          </div>
+
+          <div class="req">
+            <strong>FR-10 Table Share Signaling</strong>
+            <p>The system shall allow users to indicate whether table sharing is available for a cafe and shall expose the latest status in API responses.</p>
+          </div>
+
+          <div class="req">
+            <strong>FR-11 Address Lookup Trigger</strong>
+            <p>The frontend shall support conversion of a free-form address to coordinates using browser-side geocoding and shall populate the search inputs with the resolved location.</p>
+          </div>
+
+          <div class="req">
+            <strong>FR-12 Health Monitoring</strong>
+            <p>The system shall expose a health endpoint reporting service availability and supported dataset source options.</p>
+          </div>
+
+          <div class="req">
+            <strong>FR-12A Recommendation Explanation</strong>
+            <p>The system shall return an explanation for each recommendation based on the strongest matching factors from the scoring process.</p>
+          </div>
+
+          <div class="req">
+            <strong>FR-13 Data Ingestion</strong>
+            <p>The system shall support both CSV and XLSX ingestion and shall derive missing operational fields for XLSX rows when exact structured data is absent.</p>
+          </div>
+
+          <div class="req">
+            <strong>FR-14 Geocoded XLSX Preference</strong>
+            <p>For the XLSX pipeline, the system shall prefer the geocoded workbook if it exists; otherwise it shall use the base workbook.</p>
+          </div>
+
+          <div class="req">
+            <strong>FR-15 Validation Failure Handling</strong>
+            <p>The system shall reject invalid or incomplete request parameters with clear error responses and shall fail startup if no valid cafe dataset is loaded.</p>
+          </div>
+        </section>
+
+        <section id="nonfunctional">
+          <span class="badge">Section 5</span>
+          <h2>Non-Functional Requirements</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Category</th>
+                <th>Requirement</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>NFR-01</td>
+                <td>Performance</td>
+                <td>The system should avoid full dataset scans for standard searches by using spatial pruning before detailed scoring.</td>
+              </tr>
+              <tr>
+                <td>NFR-02</td>
+                <td>Usability</td>
+                <td>The user shall be able to execute a recommendation query from the UI without interacting with backend code or configuration files.</td>
+              </tr>
+              <tr>
+                <td>NFR-03</td>
+                <td>Reliability</td>
+                <td>The system shall return structured JSON error responses for invalid requests rather than failing silently.</td>
+              </tr>
+              <tr>
+                <td>NFR-04</td>
+                <td>Maintainability</td>
+                <td>Core responsibilities shall remain separated across data, spatial, filter, score, rank, service, and web layers.</td>
+              </tr>
+              <tr>
+                <td>NFR-05</td>
+                <td>Portability</td>
+                <td>The application shall run locally with Java and a browser on a standard desktop environment; onboarding persistence shall activate automatically when the SQLite JDBC dependency is available.</td>
+              </tr>
+              <tr>
+                <td>NFR-06</td>
+                <td>Security</td>
+                <td>The system shall not execute arbitrary client input as code and shall treat query parameters as data only.</td>
+              </tr>
+              <tr>
+                <td>NFR-07</td>
+                <td>Observability</td>
+                <td>The server shall log startup state, selected port, and selected dataset source for recommendation requests.</td>
+              </tr>
+              <tr>
+                <td>NFR-08</td>
+                <td>Data Integrity</td>
+                <td>The system shall enforce exact weight-sum validation and reject inconsistent scoring input.</td>
+              </tr>
+              <tr>
+                <td>NFR-09</td>
+                <td>Explainability</td>
+                <td>The recommendation response shall provide concise, human-readable reasoning tied to actual ranking signals.</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section id="data">
+          <span class="badge">Section 6</span>
+          <h2>Data Requirements</h2>
+          <div class="grid-2">
+            <div class="panel">
+              <h3>6.1 Core Runtime Data</h3>
+              <ul>
+                <li><code>id</code>, <code>name</code></li>
+                <li><code>latitude</code>, <code>longitude</code></li>
+                <li><code>cuisines</code>, <code>avgPrice</code>, <code>rating</code></li>
+                <li><code>veg</code>, <code>nonVeg</code>, <code>vegan</code></li>
+                <li><code>operatingHours</code>, <code>address</code>, <code>contact</code></li>
+              </ul>
+            </div>
+            <div class="panel">
+              <h3>6.2 XLSX Input Mapping</h3>
+              <ul>
+                <li><code>Name</code>, <code>Location</code>, <code>Food</code>, <code>Ambience</code></li>
+                <li><code>Event</code>, <code>Wi-Fi</code>, <code>Time</code></li>
+                <li><code>No. of People</code>, <code>Speciality</code>, <code>MaxCapacity</code></li>
+                <li>Optional: <code>Latitude</code>, <code>Longitude</code></li>
+              </ul>
+            </div>
+          </div>
+
+          <h3>6.3 Data Quality Rules</h3>
+          <ul>
+            <li>Datasets shall contain at least one valid cafe record after loading and validation.</li>
+            <li>CSV records shall provide explicit coordinates and structured attributes.</li>
+            <li>XLSX records may rely on derived values where source fields are incomplete.</li>
+            <li>Geocoded XLSX coordinates shall override approximated coordinates when present.</li>
+          </ul>
+
+          <h3>6.4 Retention and State</h3>
+          <p>
+            Live seat and table-share data are transient runtime state and are reset when the application restarts.
+            When SQLite is enabled, onboarding profile data, active visit context, recommendation history, and
+            explanation records may be persisted locally. Without the JDBC dependency, onboarding falls back to
+            browser-local storage only.
+          </p>
+        </section>
+
+        <section id="acceptance">
+          <span class="badge">Section 7</span>
+          <h2>Acceptance Criteria</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Scenario</th>
+                <th>Acceptance Condition</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>AC-01</td>
+                <td>Startup</td>
+                <td>Running <code>.\run.ps1</code> starts the application on a free local port and prints health and dataset information.</td>
+              </tr>
+              <tr>
+                <td>AC-02</td>
+                <td>Dataset selection</td>
+                <td>Changing the UI source selector from CSV to XLSX changes the <code>source</code> value returned by <code>/api/recommend</code>.</td>
+              </tr>
+              <tr>
+                <td>AC-03</td>
+                <td>Recommendation output</td>
+                <td>Each successful recommendation response includes result count, selected source, ranked items, profile tag, explanation text, insights, and live status fields.</td>
+              </tr>
+              <tr>
+                <td>AC-04</td>
+                <td>Seat voting</td>
+                <td>Submitting a seat vote updates the corresponding cafe live-status values on the next query.</td>
+              </tr>
+              <tr>
+                <td>AC-05</td>
+                <td>Input validation</td>
+                <td>Invalid source names or malformed numeric parameters return a client error response with a readable message.</td>
+              </tr>
+              <tr>
+                <td>AC-06</td>
+                <td>Fallback behavior</td>
+                <td>When no cafes satisfy the initial criteria, the system returns a non-crashing fallback set when qualifying cafes exist in the expanded radius.</td>
+              </tr>
+              <tr>
+                <td>AC-07</td>
+                <td>Location handling</td>
+                <td>The system does not execute a search until location is captured from browser geolocation or resolved from a user-provided address.</td>
+              </tr>
+              <tr>
+                <td>AC-08</td>
+                <td>Map interaction</td>
+                <td>Recommended cafes appear on the map, the map fits the visible recommendation set, and each result card can focus its cafe marker on the map.</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <article id="risks">
+          <span class="badge">Section 8</span>
+          <h2>Risks and Assumptions</h2>
+          <h3>8.1 Assumptions</h3>
+          <ul>
+            <li>The user operates the system on a machine capable of running Java and a modern browser.</li>
+            <li>The browser permits geolocation when the live-location feature is used.</li>
+            <li>The datasets remain small enough for local-memory operation without external storage.</li>
+            <li>The project is currently executed in a local or demo environment rather than a hardened production deployment.</li>
+          </ul>
+          <h3>8.2 Key Risks</h3>
+          <ul>
+            <li><span class="status-warn">Approximate XLSX coordinates</span> may reduce recommendation accuracy if geocoding has not been completed.</li>
+            <li><span class="status-warn">In-memory live state</span> may be lost on restart and is unsuitable for production persistence requirements.</li>
+            <li><span class="status-warn">SQLite dependency gap</span> leaves onboarding persistence disabled until the JDBC jar is added to the local runtime.</li>
+            <li><span class="status-warn">Strict weight validation</span> may reject user input if UI-supplied values do not sum exactly to <code>1.0</code>.</li>
+            <li><span class="status-warn">External geocoding dependency</span> may be limited by network or upstream service constraints during data enrichment.</li>
+          </ul>
+        </article>
+
+        <article id="appendix">
+          <span class="badge">Section 9</span>
+          <h2>Appendix</h2>
+          <h3>9.1 Implementation Alignment</h3>
+          <p>
+            This specification aligns with the current implementation structure built around
+            <code>src/app</code>, <code>src/data</code>, <code>src/db</code>, <code>src/spatial</code>,
+            <code>src/filter</code>, <code>src/score</code>, <code>src/rank</code>, <code>src/service</code>,
+            and <code>src/web</code>.
+          </p>
+          <h3>9.2 Current Delivery Status</h3>
+          <ul>
+            <li><span class="status-ok">Implemented:</span> dual dataset pipelines, onboarding APIs, profile-aware scoring, explainable recommendations, live signal APIs, and map-based UI.</li>
+            <li><span class="status-ok">Implemented:</span> source disclosure in API payloads, visible result-card badges, blue live-location marker, and map focus for recommended cafes.</li>
+            <li><span class="status-warn">Conditional:</span> SQLite persistence activates only when the <code>sqlite-jdbc</code> jar is present in the runtime.</li>
+            <li><span class="status-warn">Deferred:</span> authentication, production-grade monitoring, and automated test suite.</li>
+          </ul>
+        </article>
+      </main>
+    </div>
+
+    <footer>
+      Software Requirements Specification for Cafe Vibe Finder, Onboarding, and Recommendation Engine
+    </footer>
+  </div>
+</body>
+</html>

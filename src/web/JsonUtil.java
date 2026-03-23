@@ -1,8 +1,16 @@
 package web;
 
+import model.AmbiencePreference;
+import model.AppUser;
 import model.Cafe;
 import model.CafeInsights;
+import model.OnboardingProfile;
 import model.Recommendation;
+import model.SocialPreference;
+import model.StoredUserProfile;
+import model.StoredVisitContext;
+import model.UserProfile;
+import model.VisitContext;
 import service.InsightsService;
 import service.LiveStatus;
 import service.LiveStatusService;
@@ -36,6 +44,35 @@ public final class JsonUtil {
 
     public static String errorJson(String message) {
         return "{\"error\":\"" + esc(message) + "\"}";
+    }
+
+    public static String onboardingStatusJson(boolean databaseEnabled, AppUser appUser, boolean profilePresent) {
+        return "{"
+                + "\"databaseEnabled\":" + databaseEnabled + ","
+                + "\"userExists\":" + (appUser != null) + ","
+                + "\"onboardingCompleted\":" + (appUser != null && appUser.isOnboardingCompleted()) + ","
+                + "\"profilePresent\":" + profilePresent + ","
+                + "\"user\":" + appUserJson(appUser)
+                + "}";
+    }
+
+    public static String onboardingProfileJson(OnboardingProfile onboardingProfile) {
+        if (onboardingProfile == null) {
+            return "{\"profile\":null}";
+        }
+        return "{"
+                + "\"user\":" + appUserJson(onboardingProfile.getAppUser()) + ","
+                + "\"profile\":" + storedUserProfileJson(onboardingProfile.getStoredUserProfile()) + ","
+                + "\"socialPreference\":" + socialPreferenceJson(onboardingProfile.getSocialPreference()) + ","
+                + "\"ambiencePreference\":" + ambiencePreferenceJson(onboardingProfile.getAmbiencePreference()) + ","
+                + "\"activeVisitContext\":" + storedVisitContextJson(onboardingProfile.getActiveVisitContext())
+                + "}";
+    }
+
+    public static String visitContextJson(StoredVisitContext visitContext) {
+        return "{"
+                + "\"activeVisitContext\":" + storedVisitContextJson(visitContext)
+                + "}";
     }
 
     private static String recommendationJson(Recommendation r, CafeInsights i, LiveStatus live) {
@@ -85,6 +122,78 @@ public final class JsonUtil {
                     "\"tableShareAvailable\":" + live.isTableShareAvailable() +
                 "}" +
                 "}";
+    }
+
+    private static String appUserJson(AppUser appUser) {
+        if (appUser == null) {
+            return "null";
+        }
+        return "{"
+                + "\"id\":" + appUser.getId() + ","
+                + "\"userKey\":\"" + esc(appUser.getUserKey()) + "\","
+                + "\"displayName\":\"" + esc(appUser.getDisplayName()) + "\","
+                + "\"onboardingCompleted\":" + appUser.isOnboardingCompleted() + ","
+                + "\"createdAt\":\"" + esc(appUser.getCreatedAt()) + "\","
+                + "\"updatedAt\":\"" + esc(appUser.getUpdatedAt()) + "\""
+                + "}";
+    }
+
+    private static String storedUserProfileJson(StoredUserProfile storedUserProfile) {
+        if (storedUserProfile == null) {
+            return "null";
+        }
+        UserProfile profile = storedUserProfile.getProfile();
+        return "{"
+                + "\"userId\":" + storedUserProfile.getUserId() + ","
+                + "\"name\":\"" + esc(profile.getName()) + "\","
+                + "\"ageGroup\":\"" + esc(profile.getAgeGroup()) + "\","
+                + "\"occupation\":\"" + esc(profile.getOccupation()) + "\","
+                + "\"defaultBudgetRange\":\"" + esc(profile.getDefaultBudgetRange()) + "\","
+                + "\"preferredCafeType\":\"" + esc(profile.getPreferredCafeType()) + "\","
+                + "\"preferredDistanceKm\":" + profile.getPreferredDistanceKm() + ","
+                + "\"dietaryPreference\":\"" + esc(profile.getDietaryPreference().name()) + "\","
+                + "\"dominantProfileTag\":\"" + esc(storedUserProfile.getDominantProfileTag() == null ? "" : storedUserProfile.getDominantProfileTag().getLabel()) + "\","
+                + "\"createdAt\":\"" + esc(storedUserProfile.getCreatedAt()) + "\","
+                + "\"updatedAt\":\"" + esc(storedUserProfile.getUpdatedAt()) + "\""
+                + "}";
+    }
+
+    private static String socialPreferenceJson(SocialPreference socialPreference) {
+        if (socialPreference == null) {
+            return "null";
+        }
+        return "{"
+                + "\"usuallyVisitWith\":\"" + esc(socialPreference.getUsuallyVisitWith()) + "\","
+                + "\"preferredSeating\":\"" + esc(socialPreference.getPreferredSeating()) + "\""
+                + "}";
+    }
+
+    private static String ambiencePreferenceJson(AmbiencePreference ambiencePreference) {
+        if (ambiencePreference == null) {
+            return "null";
+        }
+        return "{"
+                + "\"musicPreference\":\"" + esc(ambiencePreference.getMusicPreference()) + "\","
+                + "\"lightingPreference\":\"" + esc(ambiencePreference.getLightingPreference()) + "\""
+                + "}";
+    }
+
+    private static String storedVisitContextJson(StoredVisitContext storedVisitContext) {
+        if (storedVisitContext == null) {
+            return "null";
+        }
+        VisitContext visitContext = storedVisitContext.getVisitContext();
+        return "{"
+                + "\"id\":" + storedVisitContext.getId() + ","
+                + "\"userId\":" + storedVisitContext.getUserId() + ","
+                + "\"purposeOfVisit\":\"" + esc(visitContext.getPurposeOfVisit()) + "\","
+                + "\"currentBudgetRange\":\"" + esc(visitContext.getCurrentBudgetRange()) + "\","
+                + "\"travelDistanceKm\":" + visitContext.getTravelDistanceKm() + ","
+                + "\"timeOfVisit\":\"" + esc(visitContext.getTimeOfVisit()) + "\","
+                + "\"crowdTolerance\":\"" + esc(visitContext.getCrowdTolerance()) + "\","
+                + "\"active\":" + storedVisitContext.isActive() + ","
+                + "\"createdAt\":\"" + esc(storedVisitContext.getCreatedAt()) + "\""
+                + "}";
     }
 
     private static String jsonArray(Set<String> values) {

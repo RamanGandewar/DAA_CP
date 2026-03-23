@@ -1,6 +1,7 @@
 package service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import data.GlobalStats;
 import filter.ConstraintFilter;
@@ -69,10 +70,10 @@ public class RecommendationService {
                 OnboardingScoreBreakdown breakdown = onboardingScorer.score(cafe, insights, query, distance);
                 score = breakdown.getFinalPenaltyScore();
                 profileTag = breakdown.getProfileTag();
-                explanation = buildOnboardingExplanation(query, distance, breakdown);
+                explanation = buildOnboardingExplanation(cafe, query, distance, breakdown, false);
             } else {
                 score = scoreCalculator.computeScore(cafe, distance, query.getRadiusKm(), query.getPreferredCuisines(), query.getWeights());
-                explanation = "Recommended due to strong distance, budget, and category score.";
+                explanation = buildClassicExplanation(cafe, query, distance);
             }
 
             double matchRatio = scoreCalculator.cuisineMatchRatio(query.getPreferredCuisines(), cafe);
@@ -100,10 +101,10 @@ public class RecommendationService {
                 OnboardingScoreBreakdown breakdown = onboardingScorer.score(cafe, insights, query, distance);
                 score = breakdown.getFinalPenaltyScore();
                 profileTag = breakdown.getProfileTag();
-                explanation = buildOnboardingExplanation(query, distance, breakdown);
+                explanation = buildOnboardingExplanation(cafe, query, distance, breakdown, true);
             } else {
                 score = scoreCalculator.computeScore(cafe, distance, expandedRadius, query.getPreferredCuisines(), query.getWeights());
-                explanation = "Fallback match based on distance and affordability in expanded radius.";
+                explanation = buildFallbackExplanation(cafe, distance);
             }
             double matchRatio = scoreCalculator.cuisineMatchRatio(query.getPreferredCuisines(), cafe);
             fallback.add(new Recommendation(cafe, score, distance, matchRatio, explanation, profileTag));
@@ -118,15 +119,125 @@ public class RecommendationService {
         return fallback.subList(0, k);
     }
 
-    private String buildOnboardingExplanation(SearchQuery query, double distanceKm, OnboardingScoreBreakdown breakdown) {
-        String purpose = query.getVisitContext().getPurposeOfVisit().isBlank() ? "current plan" : query.getVisitContext().getPurposeOfVisit();
+    private String buildOnboardingExplanation(Cafe cafe,
+                                              SearchQuery query,
+                                              double distanceKm,
+                                              OnboardingScoreBreakdown breakdown,
+                                              boolean fallback) {
+        String purpose = humanize(query.getVisitContext().getPurposeOfVisit(), "current visit");
         String profile = breakdown.getProfileTag().getLabel();
-        return String.format(
-                "Recommended because it matches your %s, fits your %s intent, and is within %.1f km.",
-                profile,
-                purpose,
-                distanceKm
-        );
+
+        List<Reason> reasons = new ArrayList<>();
+        reasons.add(new Reason(breakdown.getDistanceScore(),
+                String.format("it is within %.1f km", distanceKm)));
+        reasons.add(new Reason(breakdown.getBudgetCompatibility(),
+                String.format("it fits your %s budget", humanize(query.getVisitContext().getCurrentBudgetRange(), "selected"))));
+        reasons.add(new Reason(breakdown.getCategoryMatch(),
+                String.format("it matches your %s profile", profile.toLowerCase())));
+        reasons.add(new Reason(breakdown.getAmbienceMatch(),
+                ambienceReason(query)));
+        reasons.add(new Reason(breakdown.getDynamicContextMatch(),
+                String.format("it suits your %s plan", purpose)));
+        reasons.add(new Reason(breakdown.getUserProfileScore(),
+                personalReason(query, cafe)));
+
+        reasons.sort(Comparator.comparingDouble(Reason::score).reversed());
+        List<String> topReasons = new ArrayList<>();
+        for (Reason reason : reasons) {
+            if (reason.score() >= 0.65 && !topReasons.contains(reason.text())) {
+                topReasons.add(reason.text());
+            }
+            if (topReasons.size() == 3) {
+                break;
+            }
+        }
+        if (topReasons.isEmpty()) {
+            topReasons.add(String.format("it is %.1f km away", distanceKm));
+            topReasons.add(String.format("it aligns with your %s intent", purpose));
+        }
+
+        String prefix = fallback ? "Fallback recommendation because " : "Recommended because ";
+        return prefix + joinReasons(topReasons) + ".";
+    }
+
+    private String buildClassicExplanation(Cafe cafe, SearchQuery query, double distanceKm) {
+        List<String> reasons = new ArrayList<>();
+        reasons.add(String.format("it is within %.1f km", distanceKm));
+        if (cafe.getAvgPrice() <= query.getBudget()) {
+            reasons.add(String.format("it is within your budget of Rs %.0f", query.getBudget()));
+        }
+        if (!query.getPreferredCuisines().isEmpty()) {
+            reasons.add("it matches your cuisine preferences");
+        }
+        if (cafe.getRating() >= 4.0) {
+            reasons.add(String.format("it has a strong %.1f/5 rating", cafe.getRating()));
+        }
+        return "Recommended because " + joinReasons(reasons) + ".";
+    }
+
+    private String buildFallbackExplanation(Cafe cafe, double distanceKm) {
+        List<String> reasons = new ArrayList<>();
+        reasons.add(String.format("it is still reasonably close at %.1f km", distanceKm));
+        reasons.add(String.format("it stays affordable at around Rs %.0f", cafe.getAvgPrice()));
+        if (cafe.getRating() >= 4.0) {
+            reasons.add(String.format("it has a %.1f/5 rating", cafe.getRating()));
+        }
+        return "Fallback recommendation because " + joinReasons(reasons) + ".";
+    }
+
+    private String ambienceReason(SearchQuery query) {
+        String music = humanize(query.getUserProfile().getMusicPreference(), "");
+        String lighting = humanize(query.getUserProfile().getLightingPreference(), "");
+        if (!music.isBlank() && !lighting.isBlank()) {
+            return String.format("its ambience fits your %s music and %s lighting preference", music, lighting);
+        }
+        if (!music.isBlank()) {
+            return String.format("its sound profile fits your %s music preference", music);
+        }
+        if (!lighting.isBlank()) {
+            return String.format("its ambience fits your %s lighting preference", lighting);
+        }
+        return "its ambience aligns well with your preferences";
+    }
+
+    private String personalReason(SearchQuery query, Cafe cafe) {
+        String visitWith = humanize(query.getUserProfile().getUsuallyVisitWith(), "");
+        if (!visitWith.isBlank()) {
+            return String.format("it fits how you usually visit cafes (%s)", visitWith);
+        }
+        if (query.getUserProfile().getDietaryPreference() != null && query.getUserProfile().getDietaryPreference() != model.DietaryPreference.ANY) {
+            return "it aligns with your dietary preference";
+        }
+        return String.format("it balances distance and practicality for a %.0f rupee spend", cafe.getAvgPrice());
+    }
+
+    private String humanize(String raw, String fallback) {
+        if (raw == null || raw.isBlank()) {
+            return fallback;
+        }
+        return raw.replace('_', ' ').toLowerCase();
+    }
+
+    private String joinReasons(List<String> reasons) {
+        List<String> cleaned = new ArrayList<>();
+        for (String reason : reasons) {
+            if (reason != null && !reason.isBlank() && !cleaned.contains(reason)) {
+                cleaned.add(reason);
+            }
+        }
+        if (cleaned.isEmpty()) {
+            return "it balances your selected factors well";
+        }
+        if (cleaned.size() == 1) {
+            return cleaned.get(0);
+        }
+        if (cleaned.size() == 2) {
+            return cleaned.get(0) + " and " + cleaned.get(1);
+        }
+        return cleaned.get(0) + ", " + cleaned.get(1) + ", and " + cleaned.get(2);
+    }
+
+    private record Reason(double score, String text) {
     }
 
     private List<Cafe> applyExtendedFilters(List<Cafe> cafes, SearchQuery query) {
