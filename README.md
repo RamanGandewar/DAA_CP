@@ -1,4 +1,4 @@
-# Cafe Vibe Finder and Recommendation Engine
+ï»¿# Cafe Vibe Finder and Recommendation Engine
 
 Production-grade academic project for location-aware cafe discovery, onboarding-driven personalization, and explainable ranking using Design and Analysis of Algorithms (DAA) techniques instead of machine learning.
 
@@ -102,29 +102,29 @@ C:.
 +---docs
 +---lib
 +---out
-¦   +---app
-¦   +---data
-¦   +---db
-¦   +---filter
-¦   +---model
-¦   +---rank
-¦   +---score
-¦   +---service
-¦   +---spatial
-¦   +---web
+Â¦   +---app
+Â¦   +---data
+Â¦   +---db
+Â¦   +---filter
+Â¦   +---model
+Â¦   +---rank
+Â¦   +---score
+Â¦   +---service
+Â¦   +---spatial
+Â¦   +---web
 +---scripts
-¦   +---__pycache__
+Â¦   +---__pycache__
 +---src
-¦   +---app
-¦   +---data
-¦   +---db
-¦   +---filter
-¦   +---model
-¦   +---rank
-¦   +---score
-¦   +---service
-¦   +---spatial
-¦   +---web
+Â¦   +---app
+Â¦   +---data
+Â¦   +---db
+Â¦   +---filter
+Â¦   +---model
+Â¦   +---rank
+Â¦   +---score
+Â¦   +---service
+Â¦   +---spatial
+Â¦   +---web
 +---web
 ```
 
@@ -228,6 +228,64 @@ Each recommendation is returned with a human-readable explanation based on the s
 - distance fit
 - ambience alignment
 - dynamic visit purpose fit
+
+---
+
+### DAA Core Reasoning
+The system is intentionally grounded in Design and Analysis of Algorithms. Even though the project now includes onboarding, richer UI behavior, and optional persistence, the recommendation core still depends on classical algorithmic ideas:
+- spatial indexing through a KD-tree to reduce search space
+- deterministic filtering to eliminate infeasible candidates early
+- weighted scoring to evaluate feasible candidates without black-box learning
+- heap-based top-k selection to avoid unnecessary full sorting
+- fallback expansion to maintain graceful behavior when strict constraints produce no result
+
+This keeps the project aligned with DAA thinking: reduce the effective input size early, apply predictable scoring, and optimize query cost instead of relying on model training.
+
+### Time and Space Complexity
+Let:
+- `n` = total cafes in the active dataset
+- `m` = cafes remaining after spatial pruning and hard filtering
+- `k` = requested number of recommendations
+- `c` = number of active category or cuisine preferences considered during scoring
+
+#### Build-Time Complexity
+- Data loading:
+  - CSV ingestion: `O(n)`
+  - XLSX ingestion: `O(n)` over row traversal
+- KD-tree construction:
+  - typical current implementation: `O(n log^2 n)`
+  - space: `O(n)`
+- Insight and derived metadata preparation:
+  - time: `O(n)`
+  - additional space: `O(n)`
+
+#### Query-Time Complexity
+- KD-tree candidate search:
+  - average: `O(log n + m)`
+  - worst case: `O(n)`
+- Exact Haversine refinement:
+  - time: `O(m)`
+  - extra space: `O(m)` in the current candidate collection flow
+- Hard filtering:
+  - time: `O(m)`
+  - extra space: `O(m)` for filtered candidate lists
+- Scoring:
+  - time: `O(m * c)` in the general case
+  - extra space: `O(m)` for scored candidates and explanation context
+- Top-k heap selection:
+  - time: `O(m log k)`
+  - extra space: `O(k)`
+
+#### End-to-End Recommendation Cost
+- Average practical query cost: `O(log n + m log k + m * c)`
+- Worst-case query cost: `O(n log k)` when pruning is ineffective and most cafes survive to ranking
+- Dominant persistent memory footprint: `O(n)` for loaded cafes, indexes, and derived runtime metadata
+
+#### Why This Matters
+- KD-tree pruning prevents scoring every cafe on every query.
+- Heap-based ranking is more efficient than full sorting when only top results are needed.
+- Deterministic onboarding scoring adds personalization without changing the asymptotic structure of the pipeline.
+- The project remains algorithm-centric even as features expand, which preserves the DAA identity of the system.
 
 ---
 
