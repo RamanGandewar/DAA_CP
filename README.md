@@ -540,3 +540,8 @@ Recommended next validation steps:
 4. Open the displayed local URL.
 5. Login, complete onboarding, resolve location, and search cafes.
 
+---
+
+## 19. Developer
+
+**Raman** — [https://github.com/RamanGandewar](https://github.com/RamanGandewar)
