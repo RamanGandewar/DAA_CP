@@ -1,6 +1,9 @@
 package db;
 
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -22,6 +25,8 @@ public final class SchemaInitializer {
                         updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
                     )
                     """);
+
+            ensureAppUserColumns(connection);
 
             stmt.executeUpdate("""
                     CREATE TABLE IF NOT EXISTS user_profiles (
@@ -128,8 +133,36 @@ public final class SchemaInitializer {
                     """);
 
             stmt.executeUpdate("""
+                    CREATE TABLE IF NOT EXISTS user_sessions (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        user_id INTEGER NOT NULL,
+                        session_token TEXT,
+                        login_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                        logout_at TEXT,
+                        location_lat REAL,
+                        location_lon REAL,
+                        location_source TEXT NOT NULL DEFAULT 'unknown' CHECK (
+                            location_source IN ('live', 'address', 'unknown')
+                        ),
+                        FOREIGN KEY (user_id) REFERENCES app_users(id) ON DELETE CASCADE
+                    )
+                    """);
+
+            stmt.executeUpdate("""
                     CREATE INDEX IF NOT EXISTS idx_app_users_user_key
                     ON app_users(user_key)
+                    """);
+
+            stmt.executeUpdate("""
+                    CREATE UNIQUE INDEX IF NOT EXISTS idx_app_users_email_unique
+                    ON app_users(email)
+                    WHERE email IS NOT NULL AND email <> ''
+                    """);
+
+            stmt.executeUpdate("""
+                    CREATE UNIQUE INDEX IF NOT EXISTS idx_app_users_single_admin
+                    ON app_users(role)
+                    WHERE role = 'ADMIN'
                     """);
 
             stmt.executeUpdate("""
@@ -150,6 +183,19 @@ public final class SchemaInitializer {
             stmt.executeUpdate("""
                     CREATE INDEX IF NOT EXISTS idx_recommendation_explanations_history_id
                     ON recommendation_explanations(recommendation_history_id, rank_position)
+                    """);
+
+            stmt.executeUpdate("""
+                    CREATE INDEX IF NOT EXISTS idx_user_sessions_user_id
+                    ON user_sessions(user_id, login_at DESC)
+                    """);
+
+            addColumnIfMissing(connection, "user_sessions", "session_token", "TEXT");
+
+            stmt.executeUpdate("""
+                    CREATE UNIQUE INDEX IF NOT EXISTS idx_user_sessions_token
+                    ON user_sessions(session_token)
+                    WHERE session_token IS NOT NULL AND session_token <> ''
                     """);
 
             stmt.executeUpdate("""
@@ -196,5 +242,44 @@ public final class SchemaInitializer {
                     END
                     """);
         }
+
+        AdminSeeder.ensureSeededAdmin(connection);
+    }
+
+    private static void ensureAppUserColumns(Connection connection) throws SQLException {
+        addColumnIfMissing(connection, "app_users", "email", "TEXT");
+        addColumnIfMissing(connection, "app_users", "password_hash", "TEXT");
+        addColumnIfMissing(connection, "app_users", "role", "TEXT NOT NULL DEFAULT 'USER' CHECK (role IN ('USER', 'ADMIN', 'GUEST'))");
+        addColumnIfMissing(connection, "app_users", "is_active", "INTEGER NOT NULL DEFAULT 1 CHECK (is_active IN (0, 1))");
+        addColumnIfMissing(connection, "app_users", "last_login_at", "TEXT");
+        addColumnIfMissing(connection, "app_users", "login_count", "INTEGER NOT NULL DEFAULT 0");
+    }
+
+    private static void addColumnIfMissing(Connection connection, String tableName, String columnName, String columnSql) throws SQLException {
+        if (hasColumn(connection, tableName, columnName)) {
+            return;
+        }
+        try (Statement stmt = connection.createStatement()) {
+            stmt.executeUpdate("ALTER TABLE " + tableName + " ADD COLUMN " + columnName + " " + columnSql);
+        }
+    }
+
+    private static boolean hasColumn(Connection connection, String tableName, String columnName) throws SQLException {
+        DatabaseMetaData metaData = connection.getMetaData();
+        try (ResultSet columns = metaData.getColumns(null, null, tableName, columnName)) {
+            if (columns.next()) {
+                return true;
+            }
+        }
+
+        try (PreparedStatement ps = connection.prepareStatement("PRAGMA table_info(" + tableName + ")");
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                if (columnName.equalsIgnoreCase(rs.getString("name"))) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

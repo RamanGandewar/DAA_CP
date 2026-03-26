@@ -53,7 +53,8 @@ public class SQLiteOnboardingRepository implements OnboardingRepository {
     @Override
     public Optional<AppUser> findUserByKey(String userKey) {
         final String sql = """
-                SELECT id, user_key, display_name, onboarding_completed, created_at, updated_at
+                SELECT id, user_key, display_name, email, role, is_active, onboarding_completed,
+                       last_login_at, login_count, created_at, updated_at
                 FROM app_users
                 WHERE user_key = ?
                 """;
@@ -331,7 +332,8 @@ public class SQLiteOnboardingRepository implements OnboardingRepository {
 
     private AppUser requireUserById(Connection connection, long userId) throws SQLException {
         final String sql = """
-                SELECT id, user_key, display_name, onboarding_completed, created_at, updated_at
+                SELECT id, user_key, display_name, email, role, is_active, onboarding_completed,
+                       last_login_at, login_count, created_at, updated_at
                 FROM app_users
                 WHERE id = ?
                 """;
@@ -514,7 +516,12 @@ public class SQLiteOnboardingRepository implements OnboardingRepository {
                 rs.getLong("id"),
                 rs.getString("user_key"),
                 rs.getString("display_name"),
+                rs.getString("email"),
+                rs.getString("role"),
+                rs.getInt("is_active") == 1,
                 rs.getInt("onboarding_completed") == 1,
+                rs.getString("last_login_at"),
+                rs.getInt("login_count"),
                 rs.getString("created_at"),
                 rs.getString("updated_at")
         );

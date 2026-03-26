@@ -27,7 +27,7 @@ public class OnboardingWeights {
     }
 
     public static OnboardingWeights defaults() {
-        return new OnboardingWeights(0.25, 0.20, 0.20, 0.20, 0.10, 0.05);
+        return new OnboardingWeights(0.16, 0.16, 0.22, 0.14, 0.22, 0.10);
     }
 
     public double getDistance() { return distance; }

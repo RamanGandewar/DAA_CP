@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Software Requirements Specification - Cafe Vibe Finder and Onboarding Platform</title>
+  <title>Software Requirements Specification - ESPRESSO YOURSELF Platform</title>
   <style>
     :root {
       --bg: #f4f1eb;
@@ -313,20 +313,20 @@
   <div class="page">
     <header class="hero">
       <span class="kicker">Software Requirements Specification</span>
-      <h1>Cafe Vibe Finder and Recommendation Engine</h1>
+      <h1>ESPRESSO YOURSELF Platform</h1>
       <p class="subtitle">
-        Industry-grade SRS for a location-aware cafe discovery platform with CSV and XLSX data pipelines,
-        structured onboarding, profile-aware ranking, explainable recommendations, live crowd signals,
-        and a browser-based decision support interface.
+        Industry-grade SRS for a branded cafe recommendation platform with landing, authentication,
+        onboarding, admin oversight, intent-aware ranking, explainable recommendations, live crowd signals,
+        and DAA-driven personalization.
       </p>
       <div class="meta-grid">
         <div class="meta-card">
           <strong>Document ID</strong>
-          <span>SRS-CVF-1.2</span>
+          <span>SRS-EY-1.3</span>
         </div>
         <div class="meta-card">
           <strong>Version</strong>
-          <span>1.2</span>
+          <span>1.3</span>
         </div>
         <div class="meta-card">
           <strong>Status</strong>
@@ -338,7 +338,7 @@
         </div>
         <div class="meta-card">
           <strong>System Type</strong>
-          <span>Web-based recommendation system</span>
+          <span>Web-based recommendation and onboarding system</span>
         </div>
       </div>
     </header>
@@ -375,15 +375,15 @@
                 <tbody>
                   <tr>
                     <td>Document Title</td>
-                    <td>Software Requirements Specification for Cafe Vibe Finder and Recommendation Engine</td>
+                    <td>Software Requirements Specification for ESPRESSO YOURSELF Platform</td>
                   </tr>
                   <tr>
                     <td>Document ID</td>
-                    <td>SRS-CVF-1.2</td>
+                    <td>SRS-EY-1.3</td>
                   </tr>
                   <tr>
                     <td>Version</td>
-                    <td>1.2</td>
+                    <td>1.3</td>
                   </tr>
                   <tr>
                     <td>Status</td>
@@ -391,7 +391,7 @@
                   </tr>
                   <tr>
                     <td>System Scope</td>
-                    <td>Local web-based cafe recommendation, onboarding, and explainability platform</td>
+                    <td>Local web-based cafe recommendation, onboarding, authentication, and admin oversight platform</td>
                   </tr>
                 </tbody>
               </table>
@@ -418,6 +418,10 @@
                     <td>1.2</td>
                     <td>Raised document quality to a controlled baseline with clearer scope, dependency, and operational framing.</td>
                   </tr>
+                  <tr>
+                    <td>1.3</td>
+                    <td>Aligned requirements with branded landing flow, authentication, seeded admin control, fixed backend weights, and intent-aware personalization.</td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -430,16 +434,16 @@
           <h3>1.1 Purpose</h3>
           <p>
             This Software Requirements Specification defines the functional and non-functional requirements for
-            the Cafe Vibe Finder and Recommendation Engine. The system recommends cafes based on user location,
-            budget, cuisine preference, dietary constraints, ambience-oriented filters, and live crowd signals.
+            the ESPRESSO YOURSELF platform. The system recommends cafes based on user location, onboarding profile,
+            current visit intent, dietary constraints, ambience-oriented filters, and live crowd signals.
           </p>
           <h3>1.2 Scope</h3>
           <p>
             The product is a lightweight web application composed of a Java backend and a browser frontend. It
             ingests cafe data from two supported source formats, <code>.csv</code> and <code>.xlsx</code>, stores
-            onboarding data in SQLite when the JDBC driver is available, and exposes recommendation, onboarding,
-            and live-status APIs over HTTP. The frontend renders a geographic map, ranked results, and real-time
-            interaction controls.
+            users, sessions, onboarding data, and recommendation history in SQLite, and exposes authentication,
+            admin, recommendation, onboarding, and live-status APIs over HTTP. The frontend provides a landing page,
+            shared login flow, admin dashboard, and user dashboard with geographic map and ranked results.
           </p>
           <h3>1.3 Intended Audience</h3>
           <ul>
@@ -495,19 +499,22 @@
               <h3>2.1 Product Perspective</h3>
               <p>
                 The application is a self-contained local web system. It serves static frontend assets and REST-like
-                HTTP APIs from a single Java process. Recommendation, onboarding, and live-status logic run in-process.
-                Onboarding persistence is available through a local SQLite database when the SQLite JDBC dependency is present.
+                HTTP APIs from a single Java process. Authentication, onboarding, recommendation, admin analytics,
+                and live-status logic run in-process. Persistence is provided through a local SQLite database.
               </p>
             </div>
             <div class="panel">
               <h3>2.2 Product Functions</h3>
               <ul>
+                <li>Serve a branded landing page, shared login flow, and guest access path.</li>
+                <li>Register users and authenticate users and the single seeded admin.</li>
                 <li>Load and validate cafe datasets from CSV and XLSX sources.</li>
                 <li>Search nearby cafes using a spatial index and Haversine refinement.</li>
                 <li>Collect permanent onboarding preferences and dynamic visit context.</li>
                 <li>Apply budget, diet, vibe, acoustic, and menu-based filters.</li>
-                <li>Rank candidate cafes using weighted and profile-aware scoring.</li>
+                <li>Rank candidate cafes using weighted, profile-aware, and intent-aware scoring.</li>
                 <li>Display recommendations on an interactive map with result cards and map-focus actions.</li>
+                <li>Provide an admin dashboard showing users, onboarding status, login counts, search counts, and last known location summary.</li>
                 <li>Collect live crowd-sourced seat and table-sharing signals.</li>
               </ul>
             </div>
@@ -524,19 +531,24 @@
             </thead>
             <tbody>
               <tr>
-                <td>End User</td>
-                <td>User searching for cafes based on practical and vibe-oriented preferences.</td>
-                <td>Fast search, understandable results, clear filters, live crowd context.</td>
+                <td>Registered User</td>
+                <td>User searching for cafes based on practical preferences, stable onboarding profile, and current visit context.</td>
+                <td>Fast search, understandable results, persistent profile, clear map behavior, and personalized output.</td>
               </tr>
               <tr>
-                <td>Operator</td>
-                <td>Person launching the application and validating local demo behavior.</td>
-                <td>Simple startup, visible health status, deterministic dataset selection.</td>
+                <td>Administrator</td>
+                <td>Single seeded admin account overseeing users and high-level platform activity.</td>
+                <td>Secure login, overview metrics, user activity visibility, and controlled platform administration.</td>
               </tr>
               <tr>
-                <td>Developer</td>
-                <td>Maintainer extending ranking logic, datasets, UI, or APIs.</td>
-                <td>Clear module boundaries, predictable behavior, verifiable requirements.</td>
+                <td>Guest User</td>
+                <td>Visitor using the application without account creation for demonstration or trial use.</td>
+                <td>Simple entry, location-aware search, and understandable recommendations without admin-only controls.</td>
+              </tr>
+              <tr>
+                <td>Developer or Operator</td>
+                <td>Maintainer launching the application and extending ranking logic, datasets, UI, or APIs.</td>
+                <td>Simple startup, visible health status, clear module boundaries, and verifiable requirements.</td>
               </tr>
             </tbody>
           </table>
@@ -561,9 +573,10 @@
             <div class="panel">
               <h3>2.6 Design Constraints</h3>
               <ul>
+                <li>No machine learning model shall be used in the recommendation core.</li>
                 <li>No external Java Excel library is used for XLSX parsing.</li>
-                <li>SQLite onboarding persistence depends on the external <code>sqlite-jdbc</code> jar.</li>
-                <li>Weight inputs must sum exactly to <code>1.0</code>.</li>
+                <li>SQLite persistence depends on the external <code>sqlite-jdbc</code> jar.</li>
+                <li>User-facing scoring weights shall not be editable from the dashboard.</li>
                 <li>Live seat state is stored in process memory only.</li>
                 <li>Frontend and backend are served from one local application.</li>
               </ul>
@@ -575,7 +588,7 @@
                 <li>Browser geolocation API for live user location.</li>
                 <li>Nominatim lookup from browser for address-to-coordinate search.</li>
                 <li>Optional geocoded Excel artifact generated offline.</li>
-                <li>SQLite JDBC driver for onboarding persistence.</li>
+                <li>SQLite JDBC driver for persistence and authentication state.</li>
               </ul>
             </div>
           </div>
@@ -586,10 +599,11 @@
           <h2>External Interface Requirements</h2>
           <h3>3.1 User Interface</h3>
           <p>
-            The user interface shall present a map, onboarding controls, search controls, dataset-method selector,
-            result cards, and live-signal controls. The UI shall allow the user to select either the CSV or XLSX
-            recommendation pipeline before executing a search. The map shall display the user's resolved location
-            using a blue marker and shall support focusing on individual recommended cafes.
+            The user interface shall provide a landing page, shared authentication page, user dashboard, and admin
+            dashboard. The user dashboard shall present a map, onboarding controls, search controls, result cards,
+            and live-signal controls. The map shall display the user's resolved location using a blue pulsing marker
+            and shall support focusing on individual recommended cafes. Dataset selection and scoring-weight control
+            shall not be exposed to normal users.
           </p>
 
           <h3>3.2 Software Interfaces</h3>
@@ -608,9 +622,19 @@
                 <td>Returns service readiness and available source information.</td>
               </tr>
               <tr>
+                <td><code>/api/auth/*</code></td>
+                <td>HTTP JSON</td>
+                <td>Registers users, authenticates sessions, resolves current session state, and handles logout.</td>
+              </tr>
+              <tr>
+                <td><code>GET /api/admin/overview</code></td>
+                <td>HTTP JSON</td>
+                <td>Returns aggregate platform metrics and per-user activity summaries for the administrator.</td>
+              </tr>
+              <tr>
                 <td><code>GET /api/recommend</code></td>
                 <td>HTTP JSON</td>
-                <td>Returns ranked cafe recommendations with profile tags, explanation text, and live status.</td>
+                <td>Returns ranked cafe recommendations with profile tags, ranking reasons, explanation text, and live status.</td>
               </tr>
               <tr>
                 <td><code>/api/onboarding/*</code></td>
@@ -653,12 +677,32 @@
 
           <div class="req">
             <strong>FR-02 Dataset Selection</strong>
-            <p>The system shall allow the user to select the recommendation source as <code>csv</code> or <code>xlsx</code> through the frontend UI and shall route the search request accordingly.</p>
+            <p>The system shall preload both recommendation pipelines during startup, but normal users shall not select the recommendation source from the dashboard; dataset governance shall remain a controlled platform concern.</p>
           </div>
 
           <div class="req">
             <strong>FR-03 Source Disclosure</strong>
             <p>The system shall include the selected source in recommendation responses and shall display the active source in the UI status area and result cards.</p>
+          </div>
+
+          <div class="req">
+            <strong>FR-03A Landing Experience</strong>
+            <p>The system shall provide a branded landing page that routes visitors to user login, admin login, or guest access.</p>
+          </div>
+
+          <div class="req">
+            <strong>FR-03B Authentication</strong>
+            <p>The system shall support user registration, user login, admin login, session lookup, and logout through backend APIs backed by SQLite persistence.</p>
+          </div>
+
+          <div class="req">
+            <strong>FR-03C Seeded Admin</strong>
+            <p>The system shall maintain exactly one seeded administrator account and shall prevent public creation of administrator accounts through the signup flow.</p>
+          </div>
+
+          <div class="req">
+            <strong>FR-03D Admin Overview</strong>
+            <p>The system shall provide an administrator dashboard showing aggregate user count, login count, search count, onboarding completion count, and user activity summaries.</p>
           </div>
 
           <div class="req">
@@ -683,12 +727,22 @@
 
           <div class="req">
             <strong>FR-06 Weighted Ranking</strong>
-            <p>The system shall compute a score using distance, price, rating, and cuisine-match weights and shall return top-ranked results according to ascending score.</p>
+            <p>The system shall compute a deterministic weighted score and shall return top-ranked results according to descending relevance.</p>
           </div>
 
           <div class="req">
             <strong>FR-06A Profile-Aware Ranking</strong>
             <p>The system shall incorporate stored and request-time onboarding data into recommendation scoring, including user profile score, dynamic context score, category match, ambience match, budget compatibility, and distance score.</p>
+          </div>
+
+          <div class="req">
+            <strong>FR-06B Intent-Aware Ranking</strong>
+            <p>The system shall use the current visit motive as a strong ranking signal by applying intent-aware shortlist construction and mismatch penalties so that changing motive can change the returned cafes.</p>
+          </div>
+
+          <div class="req">
+            <strong>FR-06C Fixed User Weights</strong>
+            <p>The system shall keep recommendation weights generalized in backend logic and shall not expose direct weight editing to end users.</p>
           </div>
 
           <div class="req">
@@ -723,7 +777,7 @@
 
           <div class="req">
             <strong>FR-12A Recommendation Explanation</strong>
-            <p>The system shall return an explanation for each recommendation based on the strongest matching factors from the scoring process.</p>
+            <p>The system shall return both a compact ranking reason and a natural-language explanation for each recommendation based on the strongest matching factors from the scoring process.</p>
           </div>
 
           <div class="req">
@@ -762,7 +816,7 @@
               <tr>
                 <td>NFR-02</td>
                 <td>Usability</td>
-                <td>The user shall be able to execute a recommendation query from the UI without interacting with backend code or configuration files.</td>
+                <td>The user shall be able to execute a recommendation query from the UI without interacting with backend code, configuration files, weight tuning, or dataset controls.</td>
               </tr>
               <tr>
                 <td>NFR-03</td>
@@ -777,12 +831,12 @@
               <tr>
                 <td>NFR-05</td>
                 <td>Portability</td>
-                <td>The application shall run locally with Java and a browser on a standard desktop environment; onboarding persistence shall activate automatically when the SQLite JDBC dependency is available.</td>
+                <td>The application shall run locally with Java and a browser on a standard desktop environment; persistence and authentication shall activate automatically when the SQLite JDBC dependency is available.</td>
               </tr>
               <tr>
                 <td>NFR-06</td>
                 <td>Security</td>
-                <td>The system shall not execute arbitrary client input as code and shall treat query parameters as data only.</td>
+                <td>The system shall not execute arbitrary client input as code, shall hash stored passwords, and shall restrict admin-only data to authenticated administrator sessions.</td>
               </tr>
               <tr>
                 <td>NFR-07</td>
@@ -792,7 +846,7 @@
               <tr>
                 <td>NFR-08</td>
                 <td>Data Integrity</td>
-                <td>The system shall enforce exact weight-sum validation and reject inconsistent scoring input.</td>
+                <td>The system shall persist user, session, onboarding, and history data in a structured relational schema and shall keep end-user scoring weights fixed in backend logic.</td>
               </tr>
               <tr>
                 <td>NFR-09</td>
@@ -818,7 +872,29 @@
               </ul>
             </div>
             <div class="panel">
-              <h3>6.2 XLSX Input Mapping</h3>
+              <h3>6.2 Identity and Session Data</h3>
+              <ul>
+                <li><code>app_users.id</code>, <code>name</code>, <code>email</code>, <code>password_hash</code>, <code>role</code></li>
+                <li><code>is_active</code>, <code>created_at</code>, <code>last_login_at</code>, <code>login_count</code></li>
+                <li><code>user_sessions.session_token</code>, <code>login_at</code>, <code>logout_at</code></li>
+                <li><code>location_lat</code>, <code>location_lon</code>, <code>location_source</code></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="panel">
+              <h3>6.3 Onboarding and History Data</h3>
+              <ul>
+                <li>permanent onboarding profile fields</li>
+                <li>dynamic visit context fields</li>
+                <li>dominant profile tag</li>
+                <li>recommendation history records</li>
+                <li>recommendation explanation records</li>
+              </ul>
+            </div>
+            <div class="panel">
+              <h3>6.4 XLSX Input Mapping</h3>
               <ul>
                 <li><code>Name</code>, <code>Location</code>, <code>Food</code>, <code>Ambience</code></li>
                 <li><code>Event</code>, <code>Wi-Fi</code>, <code>Time</code></li>
@@ -828,7 +904,7 @@
             </div>
           </div>
 
-          <h3>6.3 Data Quality Rules</h3>
+          <h3>6.5 Data Quality Rules</h3>
           <ul>
             <li>Datasets shall contain at least one valid cafe record after loading and validation.</li>
             <li>CSV records shall provide explicit coordinates and structured attributes.</li>
@@ -836,12 +912,11 @@
             <li>Geocoded XLSX coordinates shall override approximated coordinates when present.</li>
           </ul>
 
-          <h3>6.4 Retention and State</h3>
+          <h3>6.6 Retention and State</h3>
           <p>
             Live seat and table-share data are transient runtime state and are reset when the application restarts.
-            When SQLite is enabled, onboarding profile data, active visit context, recommendation history, and
-            explanation records may be persisted locally. Without the JDBC dependency, onboarding falls back to
-            browser-local storage only.
+            When SQLite is enabled, user data, session data, onboarding profile data, active visit context,
+            recommendation history, and explanation records may be persisted locally.
           </p>
         </section>
 
@@ -864,13 +939,13 @@
               </tr>
               <tr>
                 <td>AC-02</td>
-                <td>Dataset selection</td>
-                <td>Changing the UI source selector from CSV to XLSX changes the <code>source</code> value returned by <code>/api/recommend</code>.</td>
+                <td>Landing and authentication</td>
+                <td>The landing page routes the visitor to user login, admin login, or guest access, and successful authentication creates a usable application session.</td>
               </tr>
               <tr>
                 <td>AC-03</td>
                 <td>Recommendation output</td>
-                <td>Each successful recommendation response includes result count, selected source, ranked items, profile tag, explanation text, insights, and live status fields.</td>
+                <td>Each successful recommendation response includes result count, selected source, ranked items, profile tag, ranking reason, explanation text, insights, and live status fields.</td>
               </tr>
               <tr>
                 <td>AC-04</td>
@@ -897,6 +972,16 @@
                 <td>Map interaction</td>
                 <td>Recommended cafes appear on the map, the map fits the visible recommendation set, and each result card can focus its cafe marker on the map.</td>
               </tr>
+              <tr>
+                <td>AC-09</td>
+                <td>Intent-aware personalization</td>
+                <td>Changing a user's current visit motive while keeping location constant produces a meaningfully different ranking order when the dataset contains distinguishable cafe characteristics.</td>
+              </tr>
+              <tr>
+                <td>AC-10</td>
+                <td>Admin overview</td>
+                <td>The administrator dashboard displays aggregate counts and user activity summaries sourced from SQLite-backed application state.</td>
+              </tr>
             </tbody>
           </table>
         </section>
@@ -910,13 +995,14 @@
             <li>The browser permits geolocation when the live-location feature is used.</li>
             <li>The datasets remain small enough for local-memory operation without external storage.</li>
             <li>The project is currently executed in a local or demo environment rather than a hardened production deployment.</li>
+            <li>The platform retains a single seeded administrator model unless governance requirements change.</li>
           </ul>
           <h3>8.2 Key Risks</h3>
           <ul>
             <li><span class="status-warn">Approximate XLSX coordinates</span> may reduce recommendation accuracy if geocoding has not been completed.</li>
             <li><span class="status-warn">In-memory live state</span> may be lost on restart and is unsuitable for production persistence requirements.</li>
-            <li><span class="status-warn">SQLite dependency gap</span> leaves onboarding persistence disabled until the JDBC jar is added to the local runtime.</li>
-            <li><span class="status-warn">Strict weight validation</span> may reject user input if UI-supplied values do not sum exactly to <code>1.0</code>.</li>
+            <li><span class="status-warn">Local auth scope</span> is suitable for academic or demo use but does not yet represent a hardened internet-facing identity system.</li>
+            <li><span class="status-warn">SQLite dependency gap</span> disables persistence and session-backed authentication if the JDBC jar is removed from the local runtime.</li>
             <li><span class="status-warn">External geocoding dependency</span> may be limited by network or upstream service constraints during data enrichment.</li>
           </ul>
         </article>
@@ -933,17 +1019,17 @@
           </p>
           <h3>9.2 Current Delivery Status</h3>
           <ul>
-            <li><span class="status-ok">Implemented:</span> dual dataset pipelines, onboarding APIs, profile-aware scoring, explainable recommendations, live signal APIs, and map-based UI.</li>
-            <li><span class="status-ok">Implemented:</span> source disclosure in API payloads, visible result-card badges, blue live-location marker, and map focus for recommended cafes.</li>
-            <li><span class="status-warn">Conditional:</span> SQLite persistence activates only when the <code>sqlite-jdbc</code> jar is present in the runtime.</li>
-            <li><span class="status-warn">Deferred:</span> authentication, production-grade monitoring, and automated test suite.</li>
+            <li><span class="status-ok">Implemented:</span> dual dataset loading, landing page, authentication flow, seeded admin, admin dashboard, onboarding APIs, intent-aware scoring, explainable recommendations, live signal APIs, and map-based UI.</li>
+            <li><span class="status-ok">Implemented:</span> source disclosure in API payloads, visible result-card badges, blue live-location marker, pulsing user marker, map focus controls, and ranking-reason display.</li>
+            <li><span class="status-ok">Implemented:</span> SQLite-backed persistence is active when the <code>sqlite-jdbc</code> jar is present in the runtime.</li>
+            <li><span class="status-warn">Deferred:</span> production-grade monitoring, stronger security hardening, and automated test suite.</li>
           </ul>
         </article>
       </main>
     </div>
 
     <footer>
-      Software Requirements Specification for Cafe Vibe Finder, Onboarding, and Recommendation Engine
+      Software Requirements Specification for ESPRESSO YOURSELF Platform
     </footer>
   </div>
 </body>

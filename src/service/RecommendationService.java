@@ -48,6 +48,7 @@ public class RecommendationService {
         List<Cafe> budgetFiltered = constraintFilter.byBudget(extractCafes(withinRadius), query.getBudget());
         List<Cafe> valid = constraintFilter.byDiet(budgetFiltered, query.getDietaryPreference());
         valid = applyExtendedFilters(valid, query);
+        valid = applyIntentShortlist(valid, query);
 
         List<Recommendation> scored = score(valid, query);
         if (scored.isEmpty()) {
@@ -64,6 +65,7 @@ public class RecommendationService {
             CafeInsights insights = insightsService.forCafe(cafe);
             double score;
             String explanation;
+            String rankingReason;
             model.ProfileTag profileTag = null;
 
             if (query.hasOnboardingContext()) {
@@ -71,15 +73,41 @@ public class RecommendationService {
                 score = breakdown.getFinalPenaltyScore();
                 profileTag = breakdown.getProfileTag();
                 explanation = buildOnboardingExplanation(cafe, query, distance, breakdown, false);
+                rankingReason = buildRankingReason(query);
             } else {
                 score = scoreCalculator.computeScore(cafe, distance, query.getRadiusKm(), query.getPreferredCuisines(), query.getWeights());
                 explanation = buildClassicExplanation(cafe, query, distance);
+                rankingReason = "Ranked using distance, budget, rating, and cuisine fit.";
             }
 
             double matchRatio = scoreCalculator.cuisineMatchRatio(query.getPreferredCuisines(), cafe);
-            out.add(new Recommendation(cafe, score, distance, matchRatio, explanation, profileTag));
+            out.add(new Recommendation(cafe, score, distance, matchRatio, explanation, rankingReason, profileTag));
         }
         return out;
+    }
+
+    private List<Cafe> applyIntentShortlist(List<Cafe> cafes, SearchQuery query) {
+        if (!query.hasOnboardingContext() || cafes.size() <= Math.max(8, query.getTopK())) {
+            return cafes;
+        }
+
+        List<CafeIntentScore> intentScored = new ArrayList<>();
+        for (Cafe cafe : cafes) {
+            double distance = GeoUtils.haversineKm(query.getUserLatitude(), query.getUserLongitude(), cafe.getLatitude(), cafe.getLongitude());
+            CafeInsights insights = insightsService.forCafe(cafe);
+            intentScored.add(new CafeIntentScore(cafe, intentFit(query, insights, distance)));
+        }
+
+        intentScored.sort((a, b) -> Double.compare(b.intentScore, a.intentScore));
+        int keepCount = Math.min(intentScored.size(), Math.max(query.getTopK() * 4, 12));
+        List<Cafe> shortlisted = new ArrayList<>();
+        for (int i = 0; i < keepCount; i++) {
+            CafeIntentScore candidate = intentScored.get(i);
+            if (candidate.intentScore >= 0.45 || i < Math.max(query.getTopK() * 2, 8)) {
+                shortlisted.add(candidate.cafe);
+            }
+        }
+        return shortlisted.isEmpty() ? cafes : shortlisted;
     }
 
     private List<Recommendation> fallbackRecommendations(SearchQuery query) {
@@ -95,6 +123,7 @@ public class RecommendationService {
 
             double score;
             String explanation;
+            String rankingReason;
             model.ProfileTag profileTag = null;
             if (query.hasOnboardingContext()) {
                 CafeInsights insights = insightsService.forCafe(cafe);
@@ -102,12 +131,14 @@ public class RecommendationService {
                 score = breakdown.getFinalPenaltyScore();
                 profileTag = breakdown.getProfileTag();
                 explanation = buildOnboardingExplanation(cafe, query, distance, breakdown, true);
+                rankingReason = "Fallback ranking still prioritized your current visit intent.";
             } else {
                 score = scoreCalculator.computeScore(cafe, distance, expandedRadius, query.getPreferredCuisines(), query.getWeights());
                 explanation = buildFallbackExplanation(cafe, distance);
+                rankingReason = "Fallback ranking used affordability and nearby availability.";
             }
             double matchRatio = scoreCalculator.cuisineMatchRatio(query.getPreferredCuisines(), cafe);
-            fallback.add(new Recommendation(cafe, score, distance, matchRatio, explanation, profileTag));
+            fallback.add(new Recommendation(cafe, score, distance, matchRatio, explanation, rankingReason, profileTag));
         }
 
         if (fallback.isEmpty()) {
@@ -211,6 +242,27 @@ public class RecommendationService {
         return String.format("it balances distance and practicality for a %.0f rupee spend", cafe.getAvgPrice());
     }
 
+    private String buildRankingReason(SearchQuery query) {
+        String purpose = humanize(query.getVisitContext().getPurposeOfVisit(), "current visit");
+        String crowd = humanize(query.getVisitContext().getCrowdTolerance(), "");
+        String time = humanize(query.getVisitContext().getTimeOfVisit(), "");
+
+        List<String> parts = new ArrayList<>();
+        if (!purpose.isBlank()) {
+            parts.add(purpose);
+        }
+        if (!crowd.isBlank()) {
+            parts.add(crowd);
+        }
+        if (!time.isBlank()) {
+            parts.add(time);
+        }
+        if (parts.isEmpty()) {
+            return "Ranked using your current onboarding preferences.";
+        }
+        return "Ranked higher for: " + String.join(" + ", parts) + ".";
+    }
+
     private String humanize(String raw, String fallback) {
         if (raw == null || raw.isBlank()) {
             return fallback;
@@ -238,6 +290,51 @@ public class RecommendationService {
     }
 
     private record Reason(double score, String text) {
+    }
+
+    private double intentFit(SearchQuery query, CafeInsights insights, double distanceKm) {
+        String purpose = query.getVisitContext().getPurposeOfVisit();
+        String acoustic = insights.getAcousticProfile().toLowerCase();
+
+        double fit;
+        if (purpose.contains("work") || purpose.contains("study")) {
+            fit = clamp01((insights.getWorkabilityScore() / 10.0) * 0.7 + (acoustic.contains("library quiet") ? 0.3 : 0.1));
+        } else if (purpose.contains("hangout")) {
+            fit = clamp01((insights.getChairScore() / 10.0) * 0.45
+                    + (acoustic.contains("active chatter") ? 0.35 : 0.15)
+                    + (insights.getWalkabilityScore() / 10.0) * 0.20);
+        } else if (purpose.contains("date")) {
+            boolean aesthetic = insights.getVibeTags().contains("#darkacademia") || insights.getVibeTags().contains("#vintagecorners");
+            fit = clamp01((aesthetic ? 0.6 : 0.25)
+                    + (insights.getSunlightLabel().toLowerCase().contains("golden") ? 0.25 : 0.10)
+                    + 0.15);
+        } else if (purpose.contains("coffee break")) {
+            fit = clamp01((1.0 - Math.min(distanceKm, 5.0) / 5.0) * 0.55 + (insights.getWalkabilityScore() / 10.0) * 0.45);
+        } else if (purpose.contains("meeting")) {
+            fit = clamp01((insights.getWorkabilityScore() / 10.0) * 0.5
+                    + (insights.getChairScore() / 10.0) * 0.3
+                    + (acoustic.contains("lo-fi") ? 0.2 : 0.1));
+        } else {
+            fit = 0.6;
+        }
+
+        if (query.getVisitContext().getCrowdTolerance().contains("quiet") && acoustic.contains("active chatter")) {
+            fit -= 0.18;
+        }
+        if (query.getVisitContext().getCrowdTolerance().contains("lively") && acoustic.contains("library quiet")) {
+            fit -= 0.12;
+        }
+        return clamp01(fit);
+    }
+
+    private double clamp01(double value) {
+        if (value < 0.0) {
+            return 0.0;
+        }
+        if (value > 1.0) {
+            return 1.0;
+        }
+        return value;
     }
 
     private List<Cafe> applyExtendedFilters(List<Cafe> cafes, SearchQuery query) {
@@ -275,6 +372,16 @@ public class RecommendationService {
         CafeDistance(Cafe cafe, double distance) {
             this.cafe = cafe;
             this.distance = distance;
+        }
+    }
+
+    private static class CafeIntentScore {
+        final Cafe cafe;
+        final double intentScore;
+
+        CafeIntentScore(Cafe cafe, double intentScore) {
+            this.cafe = cafe;
+            this.intentScore = intentScore;
         }
     }
 }

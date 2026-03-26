@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - Cafe Vibe Finder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/auth.css" />
+</head>
+<body class="auth-body">
+  <main class="auth-shell">
+    <section class="auth-card">
+      <div class="brand-lockup brand-lockup-auth">
+        <img class="brand-logo auth-logo" src="/images/LOGO_DAA.png" alt="Espresso Yourself logo" />
+        <div class="brand-copy">
+          <p class="eyebrow">Cafe Identity</p>
+          <h2 class="brand-wordmark">ESPRESSO YOURSELF</h2>
+        </div>
+      </div>
+      <a class="back-link" href="/landing.html">Back to landing</a>
+      <p class="eyebrow">Authentication</p>
+      <h1 id="authTitle">User Login</h1>
+      <p class="lead compact">Sign in to continue with onboarding, search history, and personalized recommendations.</p>
+
+      <div class="tabs">
+        <button id="loginTab" class="tab active" type="button">Login</button>
+        <button id="signupTab" class="tab" type="button">Create Account</button>
+      </div>
+
+      <form id="loginForm" class="panel-form">
+        <label>Email <input id="loginEmail" type="email" placeholder="you@example.com" /></label>
+        <label>Password <input id="loginPassword" type="password" placeholder="Password" /></label>
+        <button class="btn hero-btn" type="submit">Login</button>
+      </form>
+
+      <form id="signupForm" class="panel-form hidden">
+        <label>Full Name <input id="signupName" type="text" placeholder="Your full name" /></label>
+        <label>Email <input id="signupEmail" type="email" placeholder="you@example.com" /></label>
+        <label>Password <input id="signupPassword" type="password" placeholder="At least 6 characters" /></label>
+        <button class="btn hero-btn" type="submit">Create Account</button>
+      </form>
+
+      <div id="authStatus" class="status-box"></div>
+    </section>
+  </main>
+
+  <script src="/auth.js"></script>
+</body>
+</html>

@@ -6,10 +6,11 @@ public class Recommendation {
     private final double distanceKm;
     private final double cuisineMatchRatio;
     private final String explanation;
+    private final String rankingReason;
     private final ProfileTag profileTag;
 
     public Recommendation(Cafe cafe, double score, double distanceKm, double cuisineMatchRatio) {
-        this(cafe, score, distanceKm, cuisineMatchRatio, "", null);
+        this(cafe, score, distanceKm, cuisineMatchRatio, "", "", null);
     }
 
     public Recommendation(Cafe cafe,
@@ -17,12 +18,14 @@ public class Recommendation {
                           double distanceKm,
                           double cuisineMatchRatio,
                           String explanation,
+                          String rankingReason,
                           ProfileTag profileTag) {
         this.cafe = cafe;
         this.score = score;
         this.distanceKm = distanceKm;
         this.cuisineMatchRatio = cuisineMatchRatio;
         this.explanation = explanation == null ? "" : explanation;
+        this.rankingReason = rankingReason == null ? "" : rankingReason;
         this.profileTag = profileTag;
     }
 
@@ -31,5 +34,6 @@ public class Recommendation {
     public double getDistanceKm() { return distanceKm; }
     public double getCuisineMatchRatio() { return cuisineMatchRatio; }
     public String getExplanation() { return explanation; }
+    public String getRankingReason() { return rankingReason; }
     public ProfileTag getProfileTag() { return profileTag; }
 }

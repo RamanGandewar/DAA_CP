@@ -12,9 +12,14 @@ let userLocationMarker = null;
 let userAccuracyCircle = null;
 let cafeMarkersById = new Map();
 let hasResolvedLocation = false;
+let locationWatchId = null;
+let locationCaptureSource = '';
 
 const PROFILE_CACHE_KEY = 'cafe_user_profile_v2';
 const USER_KEY_STORAGE = 'cafe_user_key_v1';
+const LOCATION_CACHE_KEY = 'cafe_last_location_v1';
+const AUTH_SESSION_KEY = 'cafe_auth_session_v1';
+let currentSession = null;
 
 function q(id) {
   const node = document.getElementById(id);
@@ -65,8 +70,25 @@ function fitMapToVisiblePoints(results) {
   }
 }
 
+function focusOnUserLocation(zoomLevel) {
+  if (!userLocationMarker) {
+    setStatus('Live location is not available yet.');
+    return;
+  }
+  const position = userLocationMarker.getLatLng();
+  map.flyTo(position, zoomLevel || 15, { animate: true, duration: 0.8 });
+  userLocationMarker.openPopup();
+}
+
 function setStatus(message) {
   document.getElementById('status').textContent = message;
+}
+
+function setLocationSummary(message) {
+  const node = document.getElementById('locationSummary');
+  if (node) {
+    node.textContent = message;
+  }
 }
 
 function setProfileStatus(message) {
@@ -74,6 +96,32 @@ function setProfileStatus(message) {
   if (summary) {
     summary.textContent = message;
   }
+}
+
+function setAuthBanner(message) {
+  const banner = document.getElementById('authBanner');
+  if (banner) {
+    banner.textContent = message;
+  }
+}
+
+function getStoredSession() {
+  try {
+    const raw = localStorage.getItem(AUTH_SESSION_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch (err) {
+    return null;
+  }
+}
+
+function saveStoredSession(payload) {
+  currentSession = payload;
+  localStorage.setItem(AUTH_SESSION_KEY, JSON.stringify(payload));
+}
+
+function clearStoredSession() {
+  currentSession = null;
+  localStorage.removeItem(AUTH_SESSION_KEY);
 }
 
 function clearUserLocationVisuals() {
@@ -87,10 +135,42 @@ function clearUserLocationVisuals() {
   }
 }
 
-function setUserLocation(lat, lon, accuracyMeters) {
+function createUserLocationMarker(lat, lon) {
+  const pulseIcon = L.divIcon({
+    className: 'user-location-pulse-wrapper',
+    html: '<div class="user-location-pulse"></div>',
+    iconSize: [22, 22],
+    iconAnchor: [11, 11]
+  });
+  return L.marker([lat, lon], { icon: pulseIcon, keyboard: false });
+}
+
+function saveLocationCache(lat, lon, accuracyMeters, source) {
+  const payload = {
+    lat: Number(lat),
+    lon: Number(lon),
+    accuracyMeters: Number(accuracyMeters || 0),
+    source: source || 'live',
+    capturedAt: new Date().toISOString()
+  };
+  localStorage.setItem(LOCATION_CACHE_KEY, JSON.stringify(payload));
+}
+
+function loadLocationCache() {
+  try {
+    const raw = localStorage.getItem(LOCATION_CACHE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch (err) {
+    return null;
+  }
+}
+
+function setUserLocation(lat, lon, accuracyMeters, source) {
   document.getElementById('lat').value = Number(lat).toFixed(6);
   document.getElementById('lon').value = Number(lon).toFixed(6);
   hasResolvedLocation = true;
+  locationCaptureSource = source || 'live';
+  saveLocationCache(lat, lon, accuracyMeters, source);
 
   clearUserLocationVisuals();
   userAccuracyCircle = L.circle([lat, lon], {
@@ -101,16 +181,16 @@ function setUserLocation(lat, lon, accuracyMeters) {
     fillOpacity: 0.15
   }).addTo(map);
 
-  userLocationMarker = L.circleMarker([lat, lon], {
-    radius: 8,
-    color: '#ffffff',
-    weight: 3,
-    fillColor: '#2f80ed',
-    fillOpacity: 1
-  }).addTo(map);
+  userLocationMarker = createUserLocationMarker(lat, lon).addTo(map);
 
-  userLocationMarker.bindPopup('<b>Your Live Location</b>');
-  map.setView([lat, lon], 13);
+  const sourceLabel = source === 'address' ? 'Resolved Address Location' : 'Your Live Location';
+  userLocationMarker.bindPopup(`<b>${sourceLabel}</b>`);
+  map.flyTo([lat, lon], source === 'live' ? 15 : 14, { animate: true, duration: 0.8 });
+  const accuracyLabel = Number.isFinite(Number(accuracyMeters)) && Number(accuracyMeters) > 0
+    ? ` +/-${Math.round(Number(accuracyMeters))}m`
+    : '';
+  const prettySource = source === 'address' ? 'Address' : 'Live';
+  setLocationSummary(`${prettySource} location captured: ${Number(lat).toFixed(5)}, ${Number(lon).toFixed(5)}${accuracyLabel}`);
 }
 
 function budgetRangeToAmount(range) {
@@ -258,6 +338,36 @@ async function fetchJson(url, options) {
   return data;
 }
 
+async function hydrateSession() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('guest') === '1') {
+    setAuthBanner('Guest mode active. Login to save account-based history.');
+    return null;
+  }
+
+  const stored = getStoredSession();
+  if (!stored || !stored.session || !stored.session.sessionToken) {
+    setAuthBanner('Guest mode active. Login to save account-based history.');
+    return null;
+  }
+
+  try {
+    const payload = await fetchJson(`/api/auth/me?${toQuery({ sessionToken: stored.session.sessionToken })}`);
+    saveStoredSession(payload);
+    persistUserKey(payload.user.userKey);
+    if (payload.user.role === 'ADMIN') {
+      window.location.href = '/admin.html';
+      return null;
+    }
+    setAuthBanner(`Signed in as ${payload.user.displayName || payload.user.email} (${payload.user.role})`);
+    return payload;
+  } catch (err) {
+    clearStoredSession();
+    setAuthBanner('Guest mode active. Session expired or unavailable.');
+    return null;
+  }
+}
+
 async function loadOnboardingFromApi() {
   const userKey = getStoredUserKey();
   if (!userKey) {
@@ -372,7 +482,7 @@ async function toggleTableShare(cafeId, available) {
 function renderResults(data) {
   const resultsDiv = document.getElementById('results');
   resultsDiv.innerHTML = '';
-  const sourceLabel = (data.source || q('source') || 'csv').toUpperCase();
+  const sourceLabel = (data.source || 'csv').toUpperCase();
 
   if (!data.results || data.results.length === 0) {
     resultsDiv.innerHTML = '<div class="card">No cafes found for this query.</div>';
@@ -404,6 +514,7 @@ function renderResults(data) {
         </div>
       </div>
       <div class="meta"><b>${r.profileTag || 'General Profile'}</b></div>
+      <div class="meta"><b>${r.rankingReason || ''}</b></div>
       <div class="meta">${r.explanation || ''}</div>
 
       <div class="tag-row">${tags}</div>
@@ -457,7 +568,11 @@ function renderResults(data) {
     btn.addEventListener('click', () => focusCafeOnMap(btn.getAttribute('data-focus-cafe')));
   });
 
-  fitMapToVisiblePoints(data.results);
+  if (locationCaptureSource === 'live') {
+    focusOnUserLocation(15);
+  } else {
+    fitMapToVisiblePoints(data.results);
+  }
 }
 
 async function useAddressLocation() {
@@ -475,11 +590,23 @@ async function useAddressLocation() {
     if (!Array.isArray(data) || data.length === 0) {
       throw new Error('Address not found.');
     }
-    setUserLocation(Number(data[0].lat), Number(data[0].lon), 30);
+    setUserLocation(Number(data[0].lat), Number(data[0].lon), 30, 'address');
     await runSearch();
   } catch (err) {
     setStatus(`Address lookup failed: ${err.message}`);
   }
+}
+
+function handleLiveLocationError(err) {
+  hasResolvedLocation = false;
+  const cached = loadLocationCache();
+  if (cached && Number.isFinite(Number(cached.lat)) && Number.isFinite(Number(cached.lon))) {
+    setUserLocation(cached.lat, cached.lon, cached.accuracyMeters || 40, cached.source || 'live');
+    setStatus(`Live location unavailable right now. Using last known ${cached.source || 'live'} location.`);
+    return;
+  }
+  setLocationSummary('Location not captured yet.');
+  setStatus(`Unable to get live location: ${err.message}`);
 }
 
 function useLiveLocation() {
@@ -488,16 +615,31 @@ function useLiveLocation() {
     return;
   }
   setStatus('Fetching your live location...');
-  navigator.geolocation.getCurrentPosition(
+  setLocationSummary('Waiting for browser location permission...');
+
+  if (locationWatchId !== null) {
+    navigator.geolocation.clearWatch(locationWatchId);
+    locationWatchId = null;
+  }
+
+  let hasTriggeredSearchFromLive = false;
+  locationWatchId = navigator.geolocation.watchPosition(
     async pos => {
-      setUserLocation(pos.coords.latitude, pos.coords.longitude, pos.coords.accuracy);
-      await runSearch();
+      setUserLocation(pos.coords.latitude, pos.coords.longitude, pos.coords.accuracy, 'live');
+      setStatus('Live location captured.');
+      if (!hasTriggeredSearchFromLive) {
+        hasTriggeredSearchFromLive = true;
+        await runSearch();
+      }
     },
     err => {
-      hasResolvedLocation = false;
-      setStatus(`Unable to get live location: ${err.message}`);
+      if (locationWatchId !== null) {
+        navigator.geolocation.clearWatch(locationWatchId);
+        locationWatchId = null;
+      }
+      handleLiveLocationError(err);
     },
-    { enableHighAccuracy: true, timeout: 10000, maximumAge: 30000 }
+    { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
   );
 }
 
@@ -531,7 +673,7 @@ async function runSearch() {
     return;
   }
 
-  if (!hasResolvedLocation && q('address') === '') {
+  if (!hasResolvedLocation) {
     setStatus('Please allow live location or use an address before searching.');
     return;
   }
@@ -545,7 +687,7 @@ async function runSearch() {
     lon: q('lon'),
     radius: String(radius),
     budget: String(dynamicBudgetValue),
-    source: q('source'),
+    source: 'csv',
     cuisines: q('cuisines'),
     vibes: q('vibes'),
     acoustic: q('acoustic'),
@@ -553,10 +695,6 @@ async function runSearch() {
     diet: q('diet'),
     k: q('k'),
     indieOnly: document.getElementById('indieOnly').checked ? 'true' : 'false',
-    w1: q('w1'),
-    w2: q('w2'),
-    w3: q('w3'),
-    w4: q('w4'),
     userName: profile.userName || '',
     ageGroup: profile.ageGroup || '',
     occupation: profile.occupation || '',
@@ -575,6 +713,13 @@ async function runSearch() {
     crowdTolerance: q('crowdTolerance')
   });
 
+  const activeSession = currentSession && currentSession.session ? currentSession.session : null;
+  if (activeSession && activeSession.sessionToken) {
+    params.set('sessionToken', activeSession.sessionToken);
+  }
+  params.set('userKey', ensureUserKey(profile));
+  params.set('locationSource', locationCaptureSource || 'unknown');
+
   try {
     const res = await fetch(`/api/recommend?${params.toString()}`);
     const data = await res.json();
@@ -582,7 +727,7 @@ async function runSearch() {
       throw new Error(data.error || 'Request failed');
     }
     renderResults(data);
-    const usedSource = (data.source || q('source')).toUpperCase();
+    const usedSource = (data.source || 'csv').toUpperCase();
     setStatus(`Returned ${data.count} cafes from ${usedSource} pipeline. Onboarding and visit context were applied.`);
   } catch (err) {
     setStatus(`Error: ${err.message}`);
@@ -591,12 +736,39 @@ async function runSearch() {
 
 document.getElementById('searchBtn').addEventListener('click', runSearch);
 document.getElementById('liveLocationBtn').addEventListener('click', useLiveLocation);
+document.getElementById('recenterLocationBtn').addEventListener('click', () => focusOnUserLocation(15));
+document.getElementById('logoutBtn').addEventListener('click', async () => {
+  try {
+    const stored = getStoredSession();
+    if (stored && stored.session && stored.session.sessionToken) {
+      await fetchJson(`/api/auth/logout?${toQuery({ sessionToken: stored.session.sessionToken })}`, { method: 'POST' });
+    }
+  } catch (err) {
+    // ignore logout errors and clear local session
+  }
+  clearStoredSession();
+  window.location.href = '/landing.html';
+});
 document.getElementById('locateAddressBtn').addEventListener('click', useAddressLocation);
 document.getElementById('saveProfileBtn').addEventListener('click', async () => {
   await saveProfile();
 });
 
 (async function init() {
+  await hydrateSession();
   await loadOnboardingFromApi();
+  const cachedLocation = loadLocationCache();
+  if (cachedLocation && Number.isFinite(Number(cachedLocation.lat)) && Number.isFinite(Number(cachedLocation.lon))) {
+    setUserLocation(
+      cachedLocation.lat,
+      cachedLocation.lon,
+      cachedLocation.accuracyMeters || 40,
+      cachedLocation.source || 'live'
+    );
+    setStatus('Restored last known location while refreshing live tracking.');
+  } else {
+    setLocationSummary('Location not captured yet.');
+  }
   useLiveLocation();
 })();
+

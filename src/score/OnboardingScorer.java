@@ -26,6 +26,7 @@ public class OnboardingScorer {
         double ambienceMatch = ambienceMatch(profile.getMusicPreference(), profile.getLightingPreference(), insights);
         double dynamicMatch = dynamicContextMatch(context, insights, distanceKm);
         double profileScore = userProfileScore(profile, cafe, insights, distanceKm);
+        double mismatchPenalty = intentMismatchPenalty(context, insights, distanceKm);
 
         double finalMatch = clamp01(
                 weights.getDistance() * distanceScore
@@ -35,6 +36,7 @@ public class OnboardingScorer {
                         + weights.getDynamicContext() * dynamicMatch
                         + weights.getUserProfile() * profileScore
         );
+        finalMatch = clamp01(finalMatch - mismatchPenalty);
         double finalPenalty = 1.0 - finalMatch;
 
         return new OnboardingScoreBreakdown(tag, distanceScore, budgetScore, categoryMatch, ambienceMatch, dynamicMatch, profileScore, finalMatch, finalPenalty);
@@ -95,7 +97,7 @@ public class OnboardingScorer {
         if (contains(purpose, "date")) byPurpose = aesthetic;
         if (contains(purpose, "coffee break")) byPurpose = quick;
 
-        return clamp01((byTag * 0.5) + (byType * 0.25) + (byPurpose * 0.25));
+        return clamp01((byTag * 0.25) + (byType * 0.15) + (byPurpose * 0.60));
     }
 
     private double ambienceMatch(String musicPreference, String lightingPreference, CafeInsights insights) {
@@ -147,7 +149,9 @@ public class OnboardingScorer {
             crowdFit = acoustic.contains("active chatter") ? 1.0 : 0.4;
         }
 
-        return clamp01((purposeFit * 0.7) + (crowdFit * 0.3));
+        double timeFit = timeOfDayFit(context.getTimeOfVisit(), insights);
+        double distanceFit = closenessScore(distanceKm, Math.max(1, context.getTravelDistanceKm()));
+        return clamp01((purposeFit * 0.50) + (crowdFit * 0.20) + (timeFit * 0.15) + (distanceFit * 0.15));
     }
 
     private double userProfileScore(UserProfile profile, Cafe cafe, CafeInsights insights, double distanceKm) {
@@ -180,6 +184,65 @@ public class OnboardingScorer {
         double mobility = insights.getWalkabilityScore() / 10.0;
         double distance = clamp01(1.0 - (distanceKm / 5.0));
         return clamp01((mobility * 0.5) + (distance * 0.5));
+    }
+
+    private double intentMismatchPenalty(VisitContext context, CafeInsights insights, double distanceKm) {
+        double penalty = 0.0;
+        String purpose = context.getPurposeOfVisit();
+        String acoustic = insights.getAcousticProfile().toLowerCase();
+
+        if (contains(purpose, "work") || contains(purpose, "study")) {
+            if (socialCategoryFit(insights) > 0.78 && !acoustic.contains("library quiet")) {
+                penalty += 0.18;
+            }
+        } else if (contains(purpose, "hangout")) {
+            if (workCategoryFit(insights) > 0.82 && acoustic.contains("library quiet")) {
+                penalty += 0.16;
+            }
+        } else if (contains(purpose, "date")) {
+            if (aestheticCategoryFit(insights) < 0.62) {
+                penalty += 0.20;
+            }
+        } else if (contains(purpose, "coffee break")) {
+            if (distanceKm > Math.max(1, context.getTravelDistanceKm())) {
+                penalty += 0.20;
+            }
+        } else if (contains(purpose, "meeting")) {
+            if (workCategoryFit(insights) < 0.45) {
+                penalty += 0.12;
+            }
+        }
+
+        if (contains(context.getCrowdTolerance(), "quiet") && acoustic.contains("active chatter")) {
+            penalty += 0.14;
+        }
+        if (contains(context.getCrowdTolerance(), "lively") && acoustic.contains("library quiet")) {
+            penalty += 0.10;
+        }
+
+        return clamp01(penalty);
+    }
+
+    private double timeOfDayFit(String timeOfVisit, CafeInsights insights) {
+        String sunlight = insights.getSunlightLabel().toLowerCase();
+        if (contains(timeOfVisit, "morning")) {
+            return sunlight.contains("golden") || sunlight.contains("balanced") ? 1.0 : 0.7;
+        }
+        if (contains(timeOfVisit, "afternoon")) {
+            return sunlight.contains("balanced") ? 1.0 : 0.75;
+        }
+        if (contains(timeOfVisit, "evening")) {
+            boolean warm = sunlight.contains("shade") || sunlight.contains("golden")
+                    || insights.getVibeTags().contains("#darkacademia")
+                    || insights.getVibeTags().contains("#vintagecorners");
+            return warm ? 0.95 : 0.7;
+        }
+        if (contains(timeOfVisit, "late night")) {
+            boolean cozy = insights.getAcousticProfile().equalsIgnoreCase("Lo-fi Beats")
+                    || insights.getVibeTags().contains("#darkacademia");
+            return cozy ? 0.9 : 0.65;
+        }
+        return 0.7;
     }
 
     private double closenessScore(double distanceKm, double targetKm) {

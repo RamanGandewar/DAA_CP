@@ -1,7 +1,9 @@
 package web;
 
 import model.AmbiencePreference;
+import model.AdminOverview;
 import model.AppUser;
+import model.AuthSession;
 import model.Cafe;
 import model.CafeInsights;
 import model.OnboardingProfile;
@@ -9,6 +11,7 @@ import model.Recommendation;
 import model.SocialPreference;
 import model.StoredUserProfile;
 import model.StoredVisitContext;
+import model.UserSummary;
 import model.UserProfile;
 import model.VisitContext;
 import service.InsightsService;
@@ -75,6 +78,27 @@ public final class JsonUtil {
                 + "}";
     }
 
+    public static String authPayloadJson(AppUser appUser, AuthSession session) {
+        return "{"
+                + "\"user\":" + appUserJson(appUser) + ","
+                + "\"session\":" + authSessionJson(session)
+                + "}";
+    }
+
+    public static String adminOverviewJson(AdminOverview overview) {
+        String users = overview.getUsers().stream()
+                .map(JsonUtil::userSummaryJson)
+                .collect(Collectors.joining(","));
+        return "{"
+                + "\"totalUsers\":" + overview.getTotalUsers() + ","
+                + "\"totalAdmins\":" + overview.getTotalAdmins() + ","
+                + "\"totalLogins\":" + overview.getTotalLogins() + ","
+                + "\"totalSearches\":" + overview.getTotalSearches() + ","
+                + "\"onboardingCompletedCount\":" + overview.getOnboardingCompletedCount() + ","
+                + "\"users\":[" + users + "]"
+                + "}";
+    }
+
     private static String recommendationJson(Recommendation r, CafeInsights i, LiveStatus live) {
         Cafe c = r.getCafe();
         String cuisines = jsonArray(c.getCuisines());
@@ -96,6 +120,7 @@ public final class JsonUtil {
                 "\"score\":" + fmt(r.getScore()) + "," +
                 "\"displayMatch\":" + fmt(matchPercent) + "," +
                 "\"profileTag\":\"" + esc(r.getProfileTag() == null ? "" : r.getProfileTag().getLabel()) + "\"," +
+                "\"rankingReason\":\"" + esc(r.getRankingReason()) + "\"," +
                 "\"explanation\":\"" + esc(r.getExplanation()) + "\"," +
                 "\"address\":\"" + esc(c.getAddress()) + "\"," +
                 "\"contact\":\"" + esc(c.getContact()) + "\"," +
@@ -132,9 +157,51 @@ public final class JsonUtil {
                 + "\"id\":" + appUser.getId() + ","
                 + "\"userKey\":\"" + esc(appUser.getUserKey()) + "\","
                 + "\"displayName\":\"" + esc(appUser.getDisplayName()) + "\","
+                + "\"email\":\"" + esc(appUser.getEmail()) + "\","
+                + "\"role\":\"" + esc(appUser.getRole()) + "\","
+                + "\"active\":" + appUser.isActive() + ","
                 + "\"onboardingCompleted\":" + appUser.isOnboardingCompleted() + ","
+                + "\"lastLoginAt\":\"" + esc(appUser.getLastLoginAt()) + "\","
+                + "\"loginCount\":" + appUser.getLoginCount() + ","
                 + "\"createdAt\":\"" + esc(appUser.getCreatedAt()) + "\","
                 + "\"updatedAt\":\"" + esc(appUser.getUpdatedAt()) + "\""
+                + "}";
+    }
+
+    private static String authSessionJson(AuthSession session) {
+        if (session == null) {
+            return "null";
+        }
+        return "{"
+                + "\"id\":" + session.getId() + ","
+                + "\"userId\":" + session.getUserId() + ","
+                + "\"sessionToken\":\"" + esc(session.getSessionToken()) + "\","
+                + "\"loginAt\":\"" + esc(session.getLoginAt()) + "\","
+                + "\"logoutAt\":\"" + esc(session.getLogoutAt()) + "\","
+                + "\"locationLat\":" + nullableDouble(session.getLocationLat()) + ","
+                + "\"locationLon\":" + nullableDouble(session.getLocationLon()) + ","
+                + "\"locationSource\":\"" + esc(session.getLocationSource()) + "\""
+                + "}";
+    }
+
+    private static String userSummaryJson(UserSummary user) {
+        return "{"
+                + "\"userId\":" + user.getUserId() + ","
+                + "\"displayName\":\"" + esc(user.getDisplayName()) + "\","
+                + "\"email\":\"" + esc(user.getEmail()) + "\","
+                + "\"role\":\"" + esc(user.getRole()) + "\","
+                + "\"active\":" + user.isActive() + ","
+                + "\"onboardingCompleted\":" + user.isOnboardingCompleted() + ","
+                + "\"loginCount\":" + user.getLoginCount() + ","
+                + "\"lastLoginAt\":\"" + esc(user.getLastLoginAt()) + "\","
+                + "\"createdAt\":\"" + esc(user.getCreatedAt()) + "\","
+                + "\"preferredCafeType\":\"" + esc(user.getPreferredCafeType()) + "\","
+                + "\"defaultBudgetRange\":\"" + esc(user.getDefaultBudgetRange()) + "\","
+                + "\"dietaryPreference\":\"" + esc(user.getDietaryPreference()) + "\","
+                + "\"lastLocationLat\":" + nullableDouble(user.getLastLocationLat()) + ","
+                + "\"lastLocationLon\":" + nullableDouble(user.getLastLocationLon()) + ","
+                + "\"lastLocationSource\":\"" + esc(user.getLastLocationSource()) + "\","
+                + "\"totalSearches\":" + user.getTotalSearches()
                 + "}";
     }
 
@@ -210,5 +277,9 @@ public final class JsonUtil {
 
     private static String fmt(double v) {
         return String.format(Locale.US, "%.6f", v);
+    }
+
+    private static String nullableDouble(Double value) {
+        return value == null ? "null" : fmt(value);
     }
 }

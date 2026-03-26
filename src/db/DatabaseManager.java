@@ -35,7 +35,14 @@ public final class DatabaseManager {
 
         try (Connection connection = getConnection()) {
             SchemaInitializer.initialize(connection);
-            status = new DatabaseStatus(true, JDBC_URL, "SQLite schema initialized successfully.");
+            status = new DatabaseStatus(
+                    true,
+                    JDBC_URL,
+                    "SQLite schema initialized successfully. Seeded admin: "
+                            + AdminSeeder.SEEDED_ADMIN_EMAIL
+                            + " / "
+                            + AdminSeeder.SEEDED_ADMIN_PASSWORD
+            );
         } catch (Exception e) {
             status = new DatabaseStatus(false, JDBC_URL, "SQLite initialization failed: " + e.getMessage());
         }

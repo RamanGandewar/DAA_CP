@@ -4,7 +4,13 @@ CREATE TABLE IF NOT EXISTS app_users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_key TEXT NOT NULL UNIQUE,
     display_name TEXT NOT NULL DEFAULT '',
+    email TEXT,
+    password_hash TEXT,
+    role TEXT NOT NULL DEFAULT 'USER' CHECK (role IN ('USER', 'ADMIN', 'GUEST')),
+    is_active INTEGER NOT NULL DEFAULT 1 CHECK (is_active IN (0, 1)),
     onboarding_completed INTEGER NOT NULL DEFAULT 0 CHECK (onboarding_completed IN (0, 1)),
+    last_login_at TEXT,
+    login_count INTEGER NOT NULL DEFAULT 0,
     created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -101,17 +107,28 @@ CREATE TABLE IF NOT EXISTS recommendation_explanations (
     FOREIGN KEY (recommendation_history_id) REFERENCES recommendation_history(id) ON DELETE CASCADE
 );
 
-CREATE INDEX IF NOT EXISTS idx_app_users_user_key
-ON app_users(user_key);
+CREATE TABLE IF NOT EXISTS user_sessions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    session_token TEXT,
+    login_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    logout_at TEXT,
+    location_lat REAL,
+    location_lon REAL,
+    location_source TEXT NOT NULL DEFAULT 'unknown' CHECK (
+        location_source IN ('live', 'address', 'unknown')
+    ),
+    FOREIGN KEY (user_id) REFERENCES app_users(id) ON DELETE CASCADE
+);
 
-CREATE INDEX IF NOT EXISTS idx_visit_contexts_user_id
-ON visit_contexts(user_id);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_app_users_email_unique
+ON app_users(email)
+WHERE email IS NOT NULL AND email <> '';
 
-CREATE INDEX IF NOT EXISTS idx_visit_contexts_user_id_active
-ON visit_contexts(user_id, is_active, created_at DESC);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_app_users_single_admin
+ON app_users(role)
+WHERE role = 'ADMIN';
 
-CREATE INDEX IF NOT EXISTS idx_recommendation_history_user_id
-ON recommendation_history(user_id, created_at DESC);
-
-CREATE INDEX IF NOT EXISTS idx_recommendation_explanations_history_id
-ON recommendation_explanations(recommendation_history_id, rank_position);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_user_sessions_token
+ON user_sessions(session_token)
+WHERE session_token IS NOT NULL AND session_token <> '';

@@ -17,11 +17,7 @@ if (Test-Path lib) {
   }
 }
 
-if ($libClasspath) {
-  javac -cp $libClasspath -d out $files
-} else {
-  javac -d out $files
-}
+javac -d out $files
 
 function Test-PortAvailable([int]$Port) {
   $listener = $null
@@ -57,7 +53,7 @@ if ($selectedPort -eq $null) {
 Write-Host "Starting server on http://localhost:$selectedPort"
 Write-Host "Dataset mode is selected from the UI (CSV or XLSX)."
 if ($libClasspath) {
-  java -cp "out;$libClasspath" Main $selectedPort
+  java --enable-native-access=ALL-UNNAMED -cp "out;$libClasspath" Main $selectedPort
 } else {
   java -cp out Main $selectedPort
 }

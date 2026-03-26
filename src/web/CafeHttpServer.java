@@ -5,13 +5,17 @@ import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import db.DatabaseManager;
 import db.DatabaseStatus;
+import db.AuthRepository;
 import db.OnboardingRepository;
+import db.SQLiteAuthRepository;
 import db.SQLiteOnboardingRepository;
 import data.DataLoader;
 import data.DataValidator;
 import data.GlobalStats;
 import model.AmbiencePreference;
+import model.AdminOverview;
 import model.AppUser;
+import model.AuthSession;
 import model.Cafe;
 import model.DietaryPreference;
 import model.OnboardingProfile;
@@ -36,6 +40,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.Executors;
 
@@ -50,6 +55,7 @@ public class CafeHttpServer {
     private final Map<String, InsightsService> insightsServices;
     private final LiveStatusService liveStatusService;
     private final OnboardingRepository onboardingRepository;
+    private final AuthRepository authRepository;
 
     public CafeHttpServer(int port,
                           String csvPath,
@@ -57,7 +63,8 @@ public class CafeHttpServer {
                           Map<String, RecommendationService> recommendationServices,
                           Map<String, InsightsService> insightsServices,
                           LiveStatusService liveStatusService,
-                          OnboardingRepository onboardingRepository) {
+                          OnboardingRepository onboardingRepository,
+                          AuthRepository authRepository) {
         this.port = port;
         this.csvPath = csvPath;
         this.xlsxPath = xlsxPath;
@@ -65,6 +72,7 @@ public class CafeHttpServer {
         this.insightsServices = insightsServices;
         this.liveStatusService = liveStatusService;
         this.onboardingRepository = onboardingRepository;
+        this.authRepository = authRepository;
     }
 
     public static CafeHttpServer buildDefault(int port) throws IOException {
@@ -81,7 +89,7 @@ public class CafeHttpServer {
         registerSource(recommendationServices, insightsServices, SOURCE_XLSX, xlsxPath);
 
         LiveStatusService liveStatusService = new LiveStatusService();
-        return new CafeHttpServer(port, csvPath, xlsxPath, recommendationServices, insightsServices, liveStatusService, new SQLiteOnboardingRepository());
+        return new CafeHttpServer(port, csvPath, xlsxPath, recommendationServices, insightsServices, liveStatusService, new SQLiteOnboardingRepository(), new SQLiteAuthRepository());
     }
 
     public static CafeHttpServer buildDefault(int port, String dataPath) throws IOException {
@@ -96,16 +104,21 @@ public class CafeHttpServer {
         RecommendationService service = new RecommendationService(cafes, kdTree, stats, insightsService);
         Map<String, RecommendationService> recommendationServices = Map.of(SOURCE_XLSX, service, SOURCE_CSV, service);
         Map<String, InsightsService> insightsServices = Map.of(SOURCE_XLSX, insightsService, SOURCE_CSV, insightsService);
-        return new CafeHttpServer(port, dataPath, dataPath, recommendationServices, insightsServices, liveStatusService, new SQLiteOnboardingRepository());
+        return new CafeHttpServer(port, dataPath, dataPath, recommendationServices, insightsServices, liveStatusService, new SQLiteOnboardingRepository(), new SQLiteAuthRepository());
     }
 
     public void start() throws IOException {
         HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
         server.createContext("/api/health", new HealthHandler());
-        server.createContext("/api/recommend", new RecommendHandler(recommendationServices, insightsServices, liveStatusService, onboardingRepository));
+        server.createContext("/api/recommend", new RecommendHandler(recommendationServices, insightsServices, liveStatusService, onboardingRepository, authRepository));
         server.createContext("/api/onboarding/status", new OnboardingStatusHandler(onboardingRepository));
         server.createContext("/api/onboarding/profile", new OnboardingProfileHandler(onboardingRepository));
         server.createContext("/api/onboarding/context", new VisitContextHandler(onboardingRepository));
+        server.createContext("/api/auth/register", new RegisterHandler(authRepository));
+        server.createContext("/api/auth/login", new LoginHandler(authRepository));
+        server.createContext("/api/auth/logout", new LogoutHandler(authRepository));
+        server.createContext("/api/auth/me", new MeHandler(authRepository));
+        server.createContext("/api/admin/overview", new AdminOverviewHandler(authRepository));
         server.createContext("/api/live/seat", new SeatStatusHandler(liveStatusService));
         server.createContext("/api/live/table-share", new TableShareHandler(liveStatusService));
         server.createContext("/", new StaticFileHandler());
@@ -146,15 +159,18 @@ public class CafeHttpServer {
         private final Map<String, InsightsService> insightsServices;
         private final LiveStatusService liveStatusService;
         private final OnboardingRepository onboardingRepository;
+        private final AuthRepository authRepository;
 
         RecommendHandler(Map<String, RecommendationService> services,
                          Map<String, InsightsService> insightsServices,
                          LiveStatusService liveStatusService,
-                         OnboardingRepository onboardingRepository) {
+                         OnboardingRepository onboardingRepository,
+                         AuthRepository authRepository) {
             this.services = services;
             this.insightsServices = insightsServices;
             this.liveStatusService = liveStatusService;
             this.onboardingRepository = onboardingRepository;
+            this.authRepository = authRepository;
         }
 
         @Override
@@ -182,7 +198,13 @@ public class CafeHttpServer {
                 UserProfile requestUserProfile = RequestParsers.parseUserProfile(q, diet);
                 VisitContext requestVisitContext = RequestParsers.parseVisitContext(q, (int) Math.max(1, Math.round(radius)));
                 String source = RequestParsers.parseSource(q.getOrDefault("source", SOURCE_CSV));
+                String sessionToken = q.getOrDefault("sessionToken", "").trim();
+                String locationSource = q.getOrDefault("locationSource", "unknown").trim();
                 String userKey = q.getOrDefault("userKey", "").trim();
+                Optional<AppUser> sessionUser = resolveSessionUser(sessionToken);
+                if (userKey.isBlank() && sessionUser.isPresent()) {
+                    userKey = sessionUser.get().getUserKey();
+                }
                 RecommendationService service = services.get(source);
                 InsightsService insightsService = insightsServices.get(source);
                 ex.getResponseHeaders().set("X-Data-Source", source);
@@ -194,6 +216,9 @@ public class CafeHttpServer {
                 SearchQuery query = new SearchQuery(lat, lon, radius, budget, cuisines, diet, weights, k,
                         indieOnly, menuQuery, vibeTags, acoustic, userProfile, visitContext);
                 List<Recommendation> results = service.recommend(query);
+                if (sessionToken != null && !sessionToken.isBlank()) {
+                    updateSessionLocation(sessionToken, lat, lon, locationSource);
+                }
                 persistRecommendationTrace(userKey, storedOnboarding, source, lat, lon, radius, budget, k, results);
                 writeJson(ex, 200, JsonUtil.recommendationsJson(results, insightsService, liveStatusService, source));
                 System.out.println("Dataset selected: " + source + " (/api/recommend)");
@@ -216,6 +241,22 @@ public class CafeHttpServer {
                 return null;
             }
             return onboardingRepository.findOnboardingProfile(userKey).orElse(null);
+        }
+
+        private Optional<AppUser> resolveSessionUser(String sessionToken) {
+            DatabaseStatus databaseStatus = DatabaseManager.getStatus();
+            if (!databaseStatus.isEnabled() || sessionToken == null || sessionToken.isBlank()) {
+                return Optional.empty();
+            }
+            return authRepository.findUserBySessionToken(sessionToken);
+        }
+
+        private void updateSessionLocation(String sessionToken, double lat, double lon, String locationSource) {
+            try {
+                authRepository.updateSessionLocation(sessionToken, lat, lon, locationSource);
+            } catch (Exception ignored) {
+                System.err.println("Warning: failed to update session location: " + ignored.getMessage());
+            }
         }
 
         private void persistRecommendationTrace(String userKey,
@@ -384,6 +425,149 @@ public class CafeHttpServer {
         }
     }
 
+    private static class RegisterHandler implements HttpHandler {
+        private final AuthRepository authRepository;
+
+        RegisterHandler(AuthRepository authRepository) {
+            this.authRepository = authRepository;
+        }
+
+        @Override
+        public void handle(HttpExchange ex) throws IOException {
+            if (!ensureDatabaseReady(ex)) {
+                return;
+            }
+            if (!"POST".equalsIgnoreCase(ex.getRequestMethod())) {
+                writeJson(ex, 405, JsonUtil.errorJson("Use POST"));
+                return;
+            }
+            try {
+                Map<String, String> q = RequestParsers.parseQuery(ex.getRequestURI().getRawQuery());
+                AppUser user = authRepository.registerUser(required(q, "name"), required(q, "email"), required(q, "password"));
+                AuthSession session = authRepository.login(required(q, "email"), required(q, "password"));
+                writeJson(ex, 200, JsonUtil.authPayloadJson(user, session));
+            } catch (Exception err) {
+                writeJson(ex, 400, JsonUtil.errorJson(err.getMessage()));
+            }
+        }
+    }
+
+    private static class LoginHandler implements HttpHandler {
+        private final AuthRepository authRepository;
+
+        LoginHandler(AuthRepository authRepository) {
+            this.authRepository = authRepository;
+        }
+
+        @Override
+        public void handle(HttpExchange ex) throws IOException {
+            if (!ensureDatabaseReady(ex)) {
+                return;
+            }
+            if (!"POST".equalsIgnoreCase(ex.getRequestMethod())) {
+                writeJson(ex, 405, JsonUtil.errorJson("Use POST"));
+                return;
+            }
+            try {
+                Map<String, String> q = RequestParsers.parseQuery(ex.getRequestURI().getRawQuery());
+                AuthSession session = authRepository.login(required(q, "email"), required(q, "password"));
+                AppUser user = authRepository.findUserBySessionToken(session.getSessionToken())
+                        .orElseThrow(() -> new IllegalStateException("Unable to resolve logged-in user."));
+                writeJson(ex, 200, JsonUtil.authPayloadJson(user, session));
+            } catch (Exception err) {
+                writeJson(ex, 401, JsonUtil.errorJson(err.getMessage()));
+            }
+        }
+    }
+
+    private static class LogoutHandler implements HttpHandler {
+        private final AuthRepository authRepository;
+
+        LogoutHandler(AuthRepository authRepository) {
+            this.authRepository = authRepository;
+        }
+
+        @Override
+        public void handle(HttpExchange ex) throws IOException {
+            if (!ensureDatabaseReady(ex)) {
+                return;
+            }
+            if (!"POST".equalsIgnoreCase(ex.getRequestMethod())) {
+                writeJson(ex, 405, JsonUtil.errorJson("Use POST"));
+                return;
+            }
+            try {
+                Map<String, String> q = RequestParsers.parseQuery(ex.getRequestURI().getRawQuery());
+                authRepository.logout(required(q, "sessionToken"));
+                writeJson(ex, 200, "{\"ok\":true}");
+            } catch (Exception err) {
+                writeJson(ex, 400, JsonUtil.errorJson(err.getMessage()));
+            }
+        }
+    }
+
+    private static class MeHandler implements HttpHandler {
+        private final AuthRepository authRepository;
+
+        MeHandler(AuthRepository authRepository) {
+            this.authRepository = authRepository;
+        }
+
+        @Override
+        public void handle(HttpExchange ex) throws IOException {
+            if (!ensureDatabaseReady(ex)) {
+                return;
+            }
+            if (!"GET".equalsIgnoreCase(ex.getRequestMethod())) {
+                writeJson(ex, 405, JsonUtil.errorJson("Use GET"));
+                return;
+            }
+            try {
+                Map<String, String> q = RequestParsers.parseQuery(ex.getRequestURI().getRawQuery());
+                String sessionToken = required(q, "sessionToken");
+                AppUser user = authRepository.findUserBySessionToken(sessionToken)
+                        .orElseThrow(() -> new IllegalArgumentException("Session not found."));
+                AuthSession session = authRepository.findActiveSession(sessionToken)
+                        .orElseThrow(() -> new IllegalArgumentException("Session not found."));
+                writeJson(ex, 200, JsonUtil.authPayloadJson(user, session));
+            } catch (Exception err) {
+                writeJson(ex, 401, JsonUtil.errorJson(err.getMessage()));
+            }
+        }
+    }
+
+    private static class AdminOverviewHandler implements HttpHandler {
+        private final AuthRepository authRepository;
+
+        AdminOverviewHandler(AuthRepository authRepository) {
+            this.authRepository = authRepository;
+        }
+
+        @Override
+        public void handle(HttpExchange ex) throws IOException {
+            if (!ensureDatabaseReady(ex)) {
+                return;
+            }
+            if (!"GET".equalsIgnoreCase(ex.getRequestMethod())) {
+                writeJson(ex, 405, JsonUtil.errorJson("Use GET"));
+                return;
+            }
+            try {
+                Map<String, String> q = RequestParsers.parseQuery(ex.getRequestURI().getRawQuery());
+                AppUser user = authRepository.findUserBySessionToken(required(q, "sessionToken"))
+                        .orElseThrow(() -> new IllegalArgumentException("Session not found."));
+                if (!"ADMIN".equalsIgnoreCase(user.getRole())) {
+                    writeJson(ex, 403, JsonUtil.errorJson("Admin access required."));
+                    return;
+                }
+                AdminOverview overview = authRepository.getAdminOverview();
+                writeJson(ex, 200, JsonUtil.adminOverviewJson(overview));
+            } catch (Exception err) {
+                writeJson(ex, 401, JsonUtil.errorJson(err.getMessage()));
+            }
+        }
+    }
+
     private static void registerSource(Map<String, RecommendationService> recommendationServices,
                                        Map<String, InsightsService> insightsServices,
                                        String key,
@@ -478,10 +662,15 @@ public class CafeHttpServer {
 
             String path = ex.getRequestURI().getPath();
             if (path.equals("/")) {
-                path = "/index.html";
+                path = "/landing.html";
             }
 
-            Path file = Path.of("web", path.substring(1));
+            Path file;
+            if (path.startsWith("/images/")) {
+                file = Path.of(path.substring(1));
+            } else {
+                file = Path.of("web", path.substring(1));
+            }
             if (!Files.exists(file) || Files.isDirectory(file)) {
                 ex.sendResponseHeaders(404, -1);
                 return;
@@ -505,6 +694,15 @@ public class CafeHttpServer {
             }
             if (path.endsWith(".js")) {
                 return "application/javascript; charset=UTF-8";
+            }
+            if (path.endsWith(".png")) {
+                return "image/png";
+            }
+            if (path.endsWith(".jpg") || path.endsWith(".jpeg")) {
+                return "image/jpeg";
+            }
+            if (path.endsWith(".svg")) {
+                return "image/svg+xml";
             }
             return "application/octet-stream";
         }
