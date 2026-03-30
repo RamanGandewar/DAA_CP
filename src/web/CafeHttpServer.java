@@ -99,7 +99,7 @@ public class CafeHttpServer {
         GlobalStats stats = loader.computeGlobalStats(cafes);
 
         KDTree kdTree = new KDTree(cafes);
-        InsightsService insightsService = new InsightsService(cafes);
+        InsightsService insightsService = new InsightsService(cafes, dataPath);
         LiveStatusService liveStatusService = new LiveStatusService();
         RecommendationService service = new RecommendationService(cafes, kdTree, stats, insightsService);
         Map<String, RecommendationService> recommendationServices = Map.of(SOURCE_XLSX, service, SOURCE_CSV, service);
@@ -127,7 +127,7 @@ public class CafeHttpServer {
 
         System.out.println("Cafe Recommendation App running at http://localhost:" + port);
         System.out.println("Health endpoint: http://localhost:" + port + "/api/health");
-        System.out.println("Dataset selected: csv (default). Change in UI to xlsx when needed.");
+        System.out.println("Dataset selected: csv (default user flow).");
         System.out.println("CSV dataset path: " + csvPath);
         System.out.println("XLSX dataset path: " + xlsxPath);
         DatabaseStatus databaseStatus = DatabaseManager.getStatus();
@@ -577,7 +577,7 @@ public class CafeHttpServer {
         DataValidator.validate(cafes);
         GlobalStats stats = loader.computeGlobalStats(cafes);
         KDTree kdTree = new KDTree(cafes);
-        InsightsService insightsService = new InsightsService(cafes);
+        InsightsService insightsService = new InsightsService(cafes, dataPath);
         RecommendationService recommendationService = new RecommendationService(cafes, kdTree, stats, insightsService);
         recommendationServices.put(key, recommendationService);
         insightsServices.put(key, insightsService);

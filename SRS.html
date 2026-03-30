@@ -322,11 +322,11 @@
       <div class="meta-grid">
         <div class="meta-card">
           <strong>Document ID</strong>
-          <span>SRS-EY-1.3</span>
+          <span>SRS-EY-1.4</span>
         </div>
         <div class="meta-card">
           <strong>Version</strong>
-          <span>1.3</span>
+          <span>1.4</span>
         </div>
         <div class="meta-card">
           <strong>Status</strong>
@@ -379,11 +379,11 @@
                   </tr>
                   <tr>
                     <td>Document ID</td>
-                    <td>SRS-EY-1.3</td>
+                    <td>SRS-EY-1.4</td>
                   </tr>
                   <tr>
                     <td>Version</td>
-                    <td>1.3</td>
+                    <td>1.4</td>
                   </tr>
                   <tr>
                     <td>Status</td>
@@ -422,6 +422,10 @@
                     <td>1.3</td>
                     <td>Aligned requirements with branded landing flow, authentication, seeded admin control, fixed backend weights, and intent-aware personalization.</td>
                   </tr>
+                  <tr>
+                    <td>1.4</td>
+                    <td>Aligned requirements with TSV-backed cafe enrichment, suitability disclosure, and UI-level fit summaries.</td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -440,10 +444,10 @@
           <h3>1.2 Scope</h3>
           <p>
             The product is a lightweight web application composed of a Java backend and a browser frontend. It
-            ingests cafe data from two supported source formats, <code>.csv</code> and <code>.xlsx</code>, stores
-            users, sessions, onboarding data, and recommendation history in SQLite, and exposes authentication,
+            ingests cafe data from two supported source formats, <code>.csv</code> and <code>.xlsx</code>, can load
+            TSV enrichment for CSV cafes, stores users, sessions, onboarding data, and recommendation history in SQLite, and exposes authentication,
             admin, recommendation, onboarding, and live-status APIs over HTTP. The frontend provides a landing page,
-            shared login flow, admin dashboard, and user dashboard with geographic map and ranked results.
+            shared login flow, admin dashboard, and user dashboard with geographic map, ranked results, and suitability-focused result details.
           </p>
           <h3>1.3 Intended Audience</h3>
           <ul>
@@ -509,11 +513,12 @@
                 <li>Serve a branded landing page, shared login flow, and guest access path.</li>
                 <li>Register users and authenticate users and the single seeded admin.</li>
                 <li>Load and validate cafe datasets from CSV and XLSX sources.</li>
+                <li>Load optional TSV enrichment metadata for CSV cafes.</li>
                 <li>Search nearby cafes using a spatial index and Haversine refinement.</li>
                 <li>Collect permanent onboarding preferences and dynamic visit context.</li>
                 <li>Apply budget, diet, vibe, acoustic, and menu-based filters.</li>
                 <li>Rank candidate cafes using weighted, profile-aware, and intent-aware scoring.</li>
-                <li>Display recommendations on an interactive map with result cards and map-focus actions.</li>
+                <li>Display recommendations on an interactive map with result cards, fit summaries, and map-focus actions.</li>
                 <li>Provide an admin dashboard showing users, onboarding status, login counts, search counts, and last known location summary.</li>
                 <li>Collect live crowd-sourced seat and table-sharing signals.</li>
               </ul>
@@ -589,6 +594,7 @@
                 <li>Nominatim lookup from browser for address-to-coordinate search.</li>
                 <li>Optional geocoded Excel artifact generated offline.</li>
                 <li>SQLite JDBC driver for persistence and authentication state.</li>
+                <li>Optional TSV enrichment artifact for CSV-side suitability scoring.</li>
               </ul>
             </div>
           </div>
@@ -601,9 +607,9 @@
           <p>
             The user interface shall provide a landing page, shared authentication page, user dashboard, and admin
             dashboard. The user dashboard shall present a map, onboarding controls, search controls, result cards,
-            and live-signal controls. The map shall display the user's resolved location using a blue pulsing marker
-            and shall support focusing on individual recommended cafes. Dataset selection and scoring-weight control
-            shall not be exposed to normal users.
+            live-signal controls, occasion tags, suitability meters, enrichment summaries, and best-fit guidance.
+            The map shall display the user's resolved location using a blue pulsing marker and shall support focusing
+            on individual recommended cafes. Dataset selection and scoring-weight control shall not be exposed to normal users.
           </p>
 
           <h3>3.2 Software Interfaces</h3>
@@ -634,7 +640,7 @@
               <tr>
                 <td><code>GET /api/recommend</code></td>
                 <td>HTTP JSON</td>
-                <td>Returns ranked cafe recommendations with profile tags, ranking reasons, explanation text, and live status.</td>
+                <td>Returns ranked cafe recommendations with profile tags, ranking reasons, explanation text, occasion tags, suitability values, enrichment summary, and live status.</td>
               </tr>
               <tr>
                 <td><code>/api/onboarding/*</code></td>
@@ -746,6 +752,11 @@
           </div>
 
           <div class="req">
+            <strong>FR-06D Enrichment Overlay</strong>
+            <p>The system shall load optional TSV metadata for CSV cafes and use it to influence occasion-fit, privacy, quick-service, and aesthetic scoring in a deterministic way.</p>
+          </div>
+
+          <div class="req">
             <strong>FR-07 Top-k Selection</strong>
             <p>The system shall accept a user-provided <code>k</code> value and return at most <code>k</code> ranked recommendations.</p>
           </div>
@@ -778,6 +789,11 @@
           <div class="req">
             <strong>FR-12A Recommendation Explanation</strong>
             <p>The system shall return both a compact ranking reason and a natural-language explanation for each recommendation based on the strongest matching factors from the scoring process.</p>
+          </div>
+
+          <div class="req">
+            <strong>FR-12B Suitability Disclosure</strong>
+            <p>The system shall expose occasion tags, suitability sub-scores, and an insight summary in recommendation responses so the frontend can display what the backend scoring is emphasizing.</p>
           </div>
 
           <div class="req">
@@ -853,6 +869,11 @@
                 <td>Explainability</td>
                 <td>The recommendation response shall provide concise, human-readable reasoning tied to actual ranking signals.</td>
               </tr>
+              <tr>
+                <td>NFR-10</td>
+                <td>Traceability</td>
+                <td>The frontend should surface the enrichment-derived occasion and suitability signals used by the backend so manual testing can validate ranking behavior directly in the UI.</td>
+              </tr>
             </tbody>
           </table>
         </section>
@@ -869,6 +890,7 @@
                 <li><code>cuisines</code>, <code>avgPrice</code>, <code>rating</code></li>
                 <li><code>veg</code>, <code>nonVeg</code>, <code>vegan</code></li>
                 <li><code>operatingHours</code>, <code>address</code>, <code>contact</code></li>
+                <li>optional enrichment fields for occasion tags, suitability scores, privacy, aesthetics, and insight summary</li>
               </ul>
             </div>
             <div class="panel">
@@ -945,7 +967,7 @@
               <tr>
                 <td>AC-03</td>
                 <td>Recommendation output</td>
-                <td>Each successful recommendation response includes result count, selected source, ranked items, profile tag, ranking reason, explanation text, insights, and live status fields.</td>
+                <td>Each successful recommendation response includes result count, selected source, ranked items, profile tag, ranking reason, explanation text, occasion tags, suitability values, insight summary, insights, and live status fields.</td>
               </tr>
               <tr>
                 <td>AC-04</td>
@@ -1004,6 +1026,7 @@
             <li><span class="status-warn">Local auth scope</span> is suitable for academic or demo use but does not yet represent a hardened internet-facing identity system.</li>
             <li><span class="status-warn">SQLite dependency gap</span> disables persistence and session-backed authentication if the JDBC jar is removed from the local runtime.</li>
             <li><span class="status-warn">External geocoding dependency</span> may be limited by network or upstream service constraints during data enrichment.</li>
+            <li><span class="status-warn">Enrichment quality variance</span> may affect ranking sharpness if the TSV overlay is generated from noisy source metadata.</li>
           </ul>
         </article>
 
@@ -1021,6 +1044,7 @@
           <ul>
             <li><span class="status-ok">Implemented:</span> dual dataset loading, landing page, authentication flow, seeded admin, admin dashboard, onboarding APIs, intent-aware scoring, explainable recommendations, live signal APIs, and map-based UI.</li>
             <li><span class="status-ok">Implemented:</span> source disclosure in API payloads, visible result-card badges, blue live-location marker, pulsing user marker, map focus controls, and ranking-reason display.</li>
+            <li><span class="status-ok">Implemented:</span> CSV-side enrichment loading, suitability disclosure in recommendation payloads, insight summaries, occasion tags, and UI-level best-fit guidance.</li>
             <li><span class="status-ok">Implemented:</span> SQLite-backed persistence is active when the <code>sqlite-jdbc</code> jar is present in the runtime.</li>
             <li><span class="status-warn">Deferred:</span> production-grade monitoring, stronger security hardening, and automated test suite.</li>
           </ul>

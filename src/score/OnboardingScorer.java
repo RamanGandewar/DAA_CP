@@ -165,25 +165,31 @@ public class OnboardingScorer {
     private double workCategoryFit(CafeInsights insights) {
         double workability = insights.getWorkabilityScore() / 10.0;
         double acoustic = insights.getAcousticProfile().equalsIgnoreCase("Library Quiet") ? 1.0 : 0.65;
-        return clamp01((workability * 0.75) + (acoustic * 0.25));
+        double meetingReadiness = insights.getMeetingScore() / 10.0;
+        return clamp01((workability * 0.55) + (acoustic * 0.20) + (meetingReadiness * 0.25));
     }
 
     private double socialCategoryFit(CafeInsights insights) {
         double chairs = insights.getChairScore() / 10.0;
         double acoustic = insights.getAcousticProfile().equalsIgnoreCase("Active Chatter") ? 1.0 : 0.6;
-        return clamp01((chairs * 0.5) + (acoustic * 0.5));
+        double hangout = insights.getHangoutScore() / 10.0;
+        return clamp01((chairs * 0.30) + (acoustic * 0.25) + (hangout * 0.45));
     }
 
     private double aestheticCategoryFit(CafeInsights insights) {
         double vibe = (insights.getVibeTags().contains("#darkacademia") || insights.getVibeTags().contains("#vintagecorners")) ? 1.0 : 0.7;
         double light = insights.getSunlightLabel().toLowerCase().contains("golden") ? 1.0 : 0.75;
-        return clamp01((vibe * 0.6) + (light * 0.4));
+        double dateFit = insights.getDateScore() / 10.0;
+        double privacy = insights.getPrivacyScore() / 10.0;
+        double aesthetic = insights.getAestheticScore() / 10.0;
+        return clamp01((vibe * 0.20) + (light * 0.15) + (dateFit * 0.35) + (privacy * 0.15) + (aesthetic * 0.15));
     }
 
     private double quickCategoryFit(CafeInsights insights, double distanceKm) {
         double mobility = insights.getWalkabilityScore() / 10.0;
         double distance = clamp01(1.0 - (distanceKm / 5.0));
-        return clamp01((mobility * 0.5) + (distance * 0.5));
+        double serviceSpeed = insights.getQuickServiceScore() / 10.0;
+        return clamp01((mobility * 0.25) + (distance * 0.35) + (serviceSpeed * 0.40));
     }
 
     private double intentMismatchPenalty(VisitContext context, CafeInsights insights, double distanceKm) {
@@ -200,15 +206,15 @@ public class OnboardingScorer {
                 penalty += 0.16;
             }
         } else if (contains(purpose, "date")) {
-            if (aestheticCategoryFit(insights) < 0.62) {
+            if (aestheticCategoryFit(insights) < 0.68 || insights.getPrivacyScore() <= 4) {
                 penalty += 0.20;
             }
         } else if (contains(purpose, "coffee break")) {
-            if (distanceKm > Math.max(1, context.getTravelDistanceKm())) {
+            if (distanceKm > Math.max(1, context.getTravelDistanceKm()) || insights.getQuickServiceScore() <= 4) {
                 penalty += 0.20;
             }
         } else if (contains(purpose, "meeting")) {
-            if (workCategoryFit(insights) < 0.45) {
+            if (workCategoryFit(insights) < 0.45 || insights.getMeetingScore() <= 4) {
                 penalty += 0.12;
             }
         }

@@ -103,6 +103,7 @@ public final class JsonUtil {
         Cafe c = r.getCafe();
         String cuisines = jsonArray(c.getCuisines());
         String tags = jsonArray(i.getVibeTags());
+        String occasions = jsonArray(i.getOccasionTags());
         String milks = jsonArray(i.getAltMilks());
         String menuItems = jsonArray(i.getMenuItems());
         double matchPercent = Math.max(0.0, (1.0 - r.getScore()) * 100.0);
@@ -126,12 +127,22 @@ public final class JsonUtil {
                 "\"contact\":\"" + esc(c.getContact()) + "\"," +
                 "\"operatingHours\":\"" + esc(c.getOperatingHours()) + "\"," +
                 "\"vibeTags\":" + tags + "," +
+                "\"occasionTags\":" + occasions + "," +
                 "\"workability\":{" +
                     "\"wifi\":" + i.getWifiScore() + "," +
                     "\"outlets\":" + i.getOutletScore() + "," +
                     "\"chairs\":" + i.getChairScore() + "," +
                     "\"overall\":" + i.getWorkabilityScore() +
                 "}," +
+                "\"suitability\":{" +
+                    "\"hangout\":" + i.getHangoutScore() + "," +
+                    "\"date\":" + i.getDateScore() + "," +
+                    "\"meeting\":" + i.getMeetingScore() + "," +
+                    "\"quickCoffee\":" + i.getQuickServiceScore() + "," +
+                    "\"privacy\":" + i.getPrivacyScore() + "," +
+                    "\"aesthetic\":" + i.getAestheticScore() +
+                "}," +
+                "\"insightSummary\":\"" + esc(i.getAiSummary()) + "\"," +
                 "\"acousticProfile\":\"" + esc(i.getAcousticProfile()) + "\"," +
                 "\"altMilks\":" + milks + "," +
                 "\"roastery\":\"" + esc(i.getRoastery()) + "\"," +

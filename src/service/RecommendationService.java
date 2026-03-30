@@ -298,22 +298,28 @@ public class RecommendationService {
 
         double fit;
         if (purpose.contains("work") || purpose.contains("study")) {
-            fit = clamp01((insights.getWorkabilityScore() / 10.0) * 0.7 + (acoustic.contains("library quiet") ? 0.3 : 0.1));
+            fit = clamp01((insights.getWorkabilityScore() / 10.0) * 0.50
+                    + (insights.getMeetingScore() / 10.0) * 0.25
+                    + (acoustic.contains("library quiet") ? 0.25 : 0.08));
         } else if (purpose.contains("hangout")) {
-            fit = clamp01((insights.getChairScore() / 10.0) * 0.45
-                    + (acoustic.contains("active chatter") ? 0.35 : 0.15)
-                    + (insights.getWalkabilityScore() / 10.0) * 0.20);
+            fit = clamp01((insights.getHangoutScore() / 10.0) * 0.50
+                    + (insights.getChairScore() / 10.0) * 0.20
+                    + (acoustic.contains("active chatter") ? 0.20 : 0.10)
+                    + (insights.getWalkabilityScore() / 10.0) * 0.10);
         } else if (purpose.contains("date")) {
-            boolean aesthetic = insights.getVibeTags().contains("#darkacademia") || insights.getVibeTags().contains("#vintagecorners");
-            fit = clamp01((aesthetic ? 0.6 : 0.25)
-                    + (insights.getSunlightLabel().toLowerCase().contains("golden") ? 0.25 : 0.10)
-                    + 0.15);
+            fit = clamp01((insights.getDateScore() / 10.0) * 0.45
+                    + (insights.getPrivacyScore() / 10.0) * 0.25
+                    + (insights.getAestheticScore() / 10.0) * 0.20
+                    + (insights.getSunlightLabel().toLowerCase().contains("golden") ? 0.10 : 0.04));
         } else if (purpose.contains("coffee break")) {
-            fit = clamp01((1.0 - Math.min(distanceKm, 5.0) / 5.0) * 0.55 + (insights.getWalkabilityScore() / 10.0) * 0.45);
+            fit = clamp01((1.0 - Math.min(distanceKm, 5.0) / 5.0) * 0.40
+                    + (insights.getWalkabilityScore() / 10.0) * 0.25
+                    + (insights.getQuickServiceScore() / 10.0) * 0.35);
         } else if (purpose.contains("meeting")) {
-            fit = clamp01((insights.getWorkabilityScore() / 10.0) * 0.5
-                    + (insights.getChairScore() / 10.0) * 0.3
-                    + (acoustic.contains("lo-fi") ? 0.2 : 0.1));
+            fit = clamp01((insights.getMeetingScore() / 10.0) * 0.45
+                    + (insights.getWorkabilityScore() / 10.0) * 0.30
+                    + (insights.getChairScore() / 10.0) * 0.15
+                    + (acoustic.contains("lo-fi") ? 0.10 : 0.05));
         } else {
             fit = 0.6;
         }

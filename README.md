@@ -41,6 +41,7 @@ This keeps the system interpretable, modular, and suitable for academic evaluati
 - Deterministic filtering over budget, diet, vibe, acoustic profile, and menu-related inputs
 - Onboarding-aware scoring using permanent profile and current visit context
 - Intent-aware shortlist creation before full ranking
+- Cafe enrichment overlay loaded from TSV for occasion fit, privacy, quick-stop, and aesthetic scoring
 - Top-k extraction using heap-based ranking
 - Fallback search when initial constraints return no results
 
@@ -63,10 +64,12 @@ This keeps the system interpretable, modular, and suitable for academic evaluati
 - Live location tracking with pulsing blue marker and accuracy radius
 - Address-based search fallback
 - Result-card source badges, coordinates, ranking reason, explanation, and `Show On Map`
+- Result-card occasion tags, suitability meters, cleaned insight summary, and quick `Best for / Weaker for` verdicts
 - Live seat and table-sharing crowd signals
 
 ### Data and Persistence
 - CSV prototype support through `data/cafes.csv`
+- CSV enrichment overlay through `data/cafes.enrichment.tsv`
 - XLSX pipeline support through `data/micuppa cafe dataset.xlsx`
 - Optional geocoded XLSX preference when `data/micuppa cafe dataset.geocoded.xlsx` exists
 - SQLite persistence for users, onboarding profiles, active visit context, sessions, recommendation history, and explanation history
@@ -158,6 +161,7 @@ C:.
 - `DataLoader.java`: CSV and XLSX ingestion.
 - `DataValidator.java`: dataset sanity validation.
 - `GlobalStats.java`: normalization support for scoring.
+- `CafeEnrichmentLoader.java`: loads TSV-based enrichment metadata for cafe occasion and ambience scoring.
 
 ### `src/db`
 - `DatabaseManager.java`: SQLite bootstrap and connection factory.
@@ -175,6 +179,7 @@ C:.
 
 ### `src/model`
 - Cafe, query, onboarding, auth session, admin overview, history, and response-domain models.
+- Includes cafe enrichment and extended cafe insight models used by ranking and UI serialization.
 
 ### `src/rank`
 - `TopKSelector.java`: heap-based top-k selection.
@@ -188,7 +193,7 @@ C:.
 
 ### `src/service`
 - `RecommendationService.java`: recommendation orchestration, shortlist logic, ranking reasons, and explanation generation.
-- `InsightsService.java`: derived cafe insights.
+- `InsightsService.java`: derived cafe insights plus enrichment-driven occasion and suitability overlays.
 - `LiveStatusService.java`: runtime live crowd signals.
 - `LiveStatus.java`: seat and table-share state model.
 
@@ -215,6 +220,7 @@ C:.
 
 ### `scripts`
 - `geocode_micuppa.py`: optional data enrichment workflow for XLSX coordinates.
+- `normalize_cafe_metadata.py`: converts noisy Gemini-style metadata JSON into cleaned JSON and app-ready TSV enrichment.
 
 ### `lib`
 - Place `sqlite-jdbc-<version>.jar` here to enable SQLite-backed persistence.
@@ -255,12 +261,14 @@ For each recommendation request, the system performs:
 - Dynamic visit context is weighted strongly enough to change the outcome when motive changes.
 - Intent mismatch penalties push down cafes that conflict with the current purpose.
 - Purpose-aware shortlist selection helps reduce overlap across work, hangout, date, and quick-coffee searches.
+- Cleaned enrichment metadata sharpens hangout, date, work, meeting, quick-coffee, privacy, and aesthetic differentiation for CSV cafes.
 - Users do not control weights from the UI; the backend uses generalized fixed weights for consistency.
 
 ### Explanation Generation
 Each recommendation is returned with:
 - `rankingReason`: compact reason such as `Ranked higher for: casual hangout + lively + evening`
 - `explanation`: longer natural-language reasoning based on the strongest matched signals
+- `insightSummary`, `occasionTags`, and suitability sub-scores exposed to the UI for easier testing and interpretation
 
 ---
 
@@ -371,6 +379,7 @@ Let:
 ### CSV Prototype
 - File: `data/cafes.csv`
 - Used by the current user-facing recommendation experience
+- If present, `data/cafes.enrichment.tsv` is loaded beside the CSV dataset and used during scoring and UI serialization
 
 ### XLSX Prototype
 - File: `data/micuppa cafe dataset.xlsx`
@@ -394,7 +403,7 @@ Base URL: `http://localhost:<port>`
 - `GET /api/health`
   - returns service status, supported sources, and database status
 - `GET /api/recommend`
-  - returns ranked recommendations, source, profile information, ranking reasons, explanations, and live status
+  - returns ranked recommendations, source, profile information, ranking reasons, explanations, occasion tags, suitability scores, insight summary, and live status
 
 ### Authentication and Admin APIs
 - `POST /api/auth/register`
@@ -434,6 +443,7 @@ Base URL: `http://localhost:<port>`
 ### Runtime Behavior
 - The app starts on the first available local port in the configured range.
 - Both dataset pipelines are prepared during startup.
+- The CSV pipeline automatically loads `data/cafes.enrichment.tsv` when available.
 - SQLite initializes `data/cafe_recommendation.db` automatically when the JDBC jar is present.
 - A seeded admin account is created if no admin exists.
 - User recommendation flow runs through the user dashboard and no longer exposes weight or dataset controls.
@@ -455,8 +465,9 @@ Base URL: `http://localhost:<port>`
 5. Resolve location by browser live location or address lookup.
 6. Submit the search request.
 7. Review ranked recommendation cards with ranking reasons, explanations, source badges, coordinates, and map actions.
-8. Inspect recommended cafes on the map with fitted bounds and marker focus.
-9. Optionally send live seat or table-sharing updates.
+8. Inspect occasion tags, suitability meters, insight summary, and `Best for / Weaker for` verdicts on each card.
+9. Inspect recommended cafes on the map with fitted bounds and marker focus.
+10. Optionally send live seat or table-sharing updates.
 
 ### Admin Flow
 1. Login through the shared auth page.

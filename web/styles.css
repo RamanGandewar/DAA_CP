@@ -265,6 +265,46 @@ input, select {
   padding: 2px 8px;
 }
 
+.tag-accent {
+  background: #e7efe8;
+  border-color: #a7c2ae;
+  color: #274636;
+}
+
+.summary {
+  margin-top: 8px;
+  padding: 8px 10px;
+  border-left: 3px solid var(--accent);
+  background: #efe6db;
+  color: #544a43;
+  font-size: 13px;
+  border-radius: 8px;
+}
+
+.fit-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.fit-pill {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  background: #f0dfd0;
+  color: #5f3f28;
+  border: 1px solid #d0b090;
+  border-radius: 999px;
+  padding: 4px 10px;
+}
+
+.fit-pill-muted {
+  background: #ece9e3;
+  color: #5a5854;
+  border-color: #c9c2b8;
+}
+
 .grid {
   display: grid;
   grid-template-columns: 1fr 1fr;

@@ -1,6 +1,8 @@
 package service;
 
+import data.CafeEnrichmentLoader;
 import model.Cafe;
+import model.CafeEnrichment;
 import model.CafeInsights;
 
 import java.util.ArrayList;
@@ -18,9 +20,10 @@ public class InsightsService {
     private static final List<String> SUNLIGHT = List.of("Golden Hour Friendly", "Shade Friendly", "Balanced Light");
     private static final List<String> ROASTERIES = List.of("Blue Tokai", "KC Roasters", "Third Wave Roasters", "Subko", "Local Micro Roaster");
 
-    public InsightsService(List<Cafe> cafes) {
+    public InsightsService(List<Cafe> cafes, String datasetPath) {
+        Map<String, CafeEnrichment> enrichments = new CafeEnrichmentLoader().loadForDataset(datasetPath);
         for (Cafe cafe : cafes) {
-            insightsByCafeId.put(cafe.getId(), generate(cafe));
+            insightsByCafeId.put(cafe.getId(), generate(cafe, enrichments.get(cafe.getId())));
         }
     }
 
@@ -63,10 +66,11 @@ public class InsightsService {
         return insights.getAcousticProfile().equalsIgnoreCase(acoustic);
     }
 
-    private CafeInsights generate(Cafe cafe) {
+    private CafeInsights generate(Cafe cafe, CafeEnrichment enrichment) {
         int seed = Math.abs((cafe.getId() + cafe.getName()).hashCode());
 
         Set<String> tags = new HashSet<>();
+        Set<String> occasionTags = new HashSet<>();
         String name = cafe.getName().toLowerCase(Locale.ROOT);
         if (name.contains("roast") || name.contains("brew")) {
             tags.add("#industrial");
@@ -78,6 +82,14 @@ public class InsightsService {
             String[] pool = {"#darkacademia", "#industrial", "#sunlightheavy", "#plantseverywhere", "#minimalist", "#vintagecorners"};
             tags.add(pool[seed % pool.length]);
             tags.add(pool[(seed / 7) % pool.length]);
+        }
+
+        if (name.contains("express") || name.contains("quick") || name.contains("grab")) {
+            occasionTags.add("quick_coffee");
+        }
+        if (name.contains("terrace") || name.contains("garden") || name.contains("lounge")) {
+            occasionTags.add("date");
+            occasionTags.add("hangout");
         }
 
         int wifi = 5 + seed % 6;
@@ -102,9 +114,46 @@ public class InsightsService {
         boolean bikeRack = (seed % 2 == 0);
         int parkingScore = 3 + (seed / 17) % 8;
         int walkability = 4 + (seed / 19) % 7;
+        int hangoutScore = clamp1to10(4 + (chairs / 2));
+        int dateScore = clamp1to10((tags.contains("#darkacademia") || tags.contains("#vintagecorners") ? 7 : 5));
+        int meetingScore = clamp1to10((wifi + chairs + outlets) / 3);
+        int quickServiceScore = clamp1to10((walkability + 4) / 2);
+        int privacyScore = clamp1to10(acoustic.equals("Library Quiet") ? 7 : acoustic.equals("Lo-fi Beats") ? 6 : 4);
+        int aestheticScore = clamp1to10((tags.contains("#darkacademia") || tags.contains("#vintagecorners")) ? 8 : 5);
+        String aiSummary = "";
 
-        return new CafeInsights(tags, wifi, outlets, chairs, acoustic, milks, roastery, sunlightLabel,
-                independent, menu, bikeRack, parkingScore, walkability);
+        if (enrichment != null) {
+            occasionTags.addAll(enrichment.getOccasionTags());
+            hangoutScore = enrichment.getHangoutScore();
+            dateScore = enrichment.getDateScore();
+            meetingScore = enrichment.getMeetingScore();
+            quickServiceScore = enrichment.getQuickServiceScore();
+            privacyScore = enrichment.getPrivacyScore();
+            aestheticScore = enrichment.getAestheticScore();
+            aiSummary = enrichment.getAiSummary();
+            wifi = Math.max(wifi, enrichment.getWorkScore());
+            outlets = Math.max(outlets, Math.max(4, enrichment.getWorkScore() - 1));
+        }
+
+        if (meetingScore >= 7) {
+            occasionTags.add("meeting");
+        }
+        if (hangoutScore >= 7) {
+            occasionTags.add("hangout");
+        }
+        if (dateScore >= 7) {
+            occasionTags.add("date");
+        }
+        if (((wifi + outlets) / 2) >= 7) {
+            occasionTags.add("work");
+        }
+        if (quickServiceScore >= 7) {
+            occasionTags.add("quick_coffee");
+        }
+
+        return new CafeInsights(tags, occasionTags, wifi, outlets, chairs, acoustic, milks, roastery, sunlightLabel,
+                independent, menu, bikeRack, parkingScore, walkability, hangoutScore, dateScore, meetingScore,
+                quickServiceScore, privacyScore, aestheticScore, aiSummary);
     }
 
     private boolean isChain(String name) {
@@ -132,5 +181,9 @@ public class InsightsService {
             }
         }
         return items;
+    }
+
+    private int clamp1to10(int value) {
+        return Math.max(1, Math.min(10, value));
     }
 }

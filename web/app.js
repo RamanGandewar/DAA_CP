@@ -467,6 +467,44 @@ function meter(label, value) {
   return `<div class="meta">${label}: <b>${value}/10</b></div>`;
 }
 
+function renderTagList(values, className) {
+  return (values || []).map(value => `<span class="${className}">${value}</span>`).join('');
+}
+
+function labelForUseCase(key) {
+  const labels = {
+    hangout: 'Hangout',
+    date: 'Date',
+    meeting: 'Meeting',
+    quickCoffee: 'Quick Coffee',
+    privacy: 'Privacy',
+    aesthetic: 'Aesthetic',
+    work: 'Work'
+  };
+  return labels[key] || key;
+}
+
+function deriveCafeFit(suitability, workability) {
+  const scores = {
+    hangout: suitability.hangout,
+    date: suitability.date,
+    work: workability.overall,
+    meeting: suitability.meeting,
+    quickCoffee: suitability.quickCoffee
+  };
+  const ordered = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+  const best = ordered[0];
+  const second = ordered[1];
+  const worst = ordered[ordered.length - 1];
+  const bestLabel = best && second && best[1] - second[1] <= 1 && best[1] >= 6 && second[1] >= 6
+    ? `${labelForUseCase(best[0])} / ${labelForUseCase(second[0])}`
+    : labelForUseCase(best[0]);
+  return {
+    best: bestLabel,
+    worst: labelForUseCase(worst[0])
+  };
+}
+
 async function voteSeat(cafeId, type) {
   const url = `/api/live/seat?cafeId=${encodeURIComponent(cafeId)}&status=${encodeURIComponent(type)}`;
   await fetch(url, { method: 'POST' });
@@ -494,10 +532,13 @@ function renderResults(data) {
 
     const card = document.createElement('div');
     card.className = 'card';
-    const tags = r.vibeTags.map(t => `<span class="tag">${t}</span>`).join('');
+    const vibeTags = renderTagList(r.vibeTags, 'tag');
+    const occasionTags = renderTagList(r.occasionTags, 'tag tag-accent');
     const milks = r.altMilks.join(', ') || 'N/A';
     const menuPreview = r.menuItems.slice(0, 4).join(', ');
     const seatTotal = r.liveStatus.easySeatVotes + r.liveStatus.standingVotes;
+    const summary = r.insightSummary ? `<div class="summary">${r.insightSummary}</div>` : '';
+    const fit = deriveCafeFit(r.suitability, r.workability);
 
     card.innerHTML = `
       <div class="card-top">
@@ -516,8 +557,14 @@ function renderResults(data) {
       <div class="meta"><b>${r.profileTag || 'General Profile'}</b></div>
       <div class="meta"><b>${r.rankingReason || ''}</b></div>
       <div class="meta">${r.explanation || ''}</div>
+      <div class="fit-strip">
+        <span class="fit-pill">Best for: ${fit.best}</span>
+        <span class="fit-pill fit-pill-muted">Weaker for: ${fit.worst}</span>
+      </div>
+      ${summary}
 
-      <div class="tag-row">${tags}</div>
+      <div class="tag-row">${occasionTags}</div>
+      <div class="tag-row">${vibeTags}</div>
       <div class="grid">
         <div>
           ${meter('Workability', r.workability.overall)}
@@ -526,9 +573,22 @@ function renderResults(data) {
           ${meter('Chairs', r.workability.chairs)}
         </div>
         <div>
+          ${meter('Hangout', r.suitability.hangout)}
+          ${meter('Date', r.suitability.date)}
+          ${meter('Meeting', r.suitability.meeting)}
+          ${meter('Quick Coffee', r.suitability.quickCoffee)}
+          ${meter('Privacy', r.suitability.privacy)}
+          ${meter('Aesthetic', r.suitability.aesthetic)}
+        </div>
+      </div>
+
+      <div class="grid">
+        <div>
           <div class="meta">Acoustic: <b>${r.acousticProfile}</b></div>
           <div class="meta">Sunlight: <b>${r.sunlightLabel}</b></div>
           <div class="meta">Roastery: <b>${r.roastery}</b></div>
+        </div>
+        <div>
           <div class="meta">Alt Milks: <b>${milks}</b></div>
           <div class="meta">Bike Rack: <b>${r.bikeRack ? 'Yes' : 'No'}</b></div>
           <div class="meta">Parking/Walkability: <b>${r.parkingScore}/10</b> , <b>${r.walkabilityScore}/10</b></div>
