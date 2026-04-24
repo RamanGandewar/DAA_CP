@@ -1,8 +1,11 @@
-# ESPRESSO YOURSELF
+# Personalized Cafe Recommendation System Based on User Food Profiles
+### *(ESPRESSO YOURSELF — A DAA-Based Explainable Recommendation Engine)*
 
-Production-grade academic project for location-aware cafe discovery, onboarding-driven personalization, and explainable ranking using Design and Analysis of Algorithms (DAA) techniques instead of machine learning.
+> A deterministic, explainable cafe recommendation system using DAA techniques
 
-## Executive Summary
+---
+
+## 📌 System Overview
 
 ESPRESSO YOURSELF recommends cafes by combining:
 - spatial search using a KD-tree
@@ -14,6 +17,38 @@ ESPRESSO YOURSELF recommends cafes by combining:
 - SQLite-backed user, onboarding, session, and history persistence
 
 The system is designed for local execution, modular extension, and academic evaluation where the core recommendation logic remains algorithmic and interpretable.
+
+---
+
+## 🚨 Problem Statement
+
+Users struggle to find cafes that match their **dietary preferences, budget, ambience, and current intent (study, hangout, quick visit)**.
+
+Existing platforms rely on:
+- generic ratings
+- non-personalized search
+- black-box machine learning recommendations
+
+This leads to:
+- irrelevant suggestions
+- no transparency in recommendations
+- inability to adapt to real-time user intent
+
+Therefore, there is a need for a **deterministic, explainable, and intent-aware recommendation system**.
+
+---
+
+## 💡 Solution
+
+This project presents a **DAA-driven personalized cafe recommendation system** that uses:
+
+- KD-tree for spatial search
+- deterministic constraint filtering
+- onboarding-based user profiling
+- intent-aware scoring
+- heap-based top-k ranking
+
+The system generates **fully explainable recommendations** without using machine learning.
 
 ---
 
@@ -76,6 +111,17 @@ This keeps the system interpretable, modular, and suitable for academic evaluati
 
 ---
 
+## 🚀 Unique Selling Points (USP)
+
+- Pure DAA-based system (No Machine Learning)
+- Fully explainable recommendations (no black-box logic)
+- Intent-aware personalization using dynamic context
+- KD-tree optimized spatial search
+- Hybrid multi-stage recommendation pipeline
+- Academic + production-grade architecture
+
+---
+
 ## 3. Architecture Overview
 
 ### Backend
@@ -112,6 +158,25 @@ This keeps the system interpretable, modular, and suitable for academic evaluati
 - End users do not choose the pipeline from the user dashboard.
 - User recommendation flow is currently fixed to the CSV-backed experience.
 - Dataset governance is treated as a controlled platform concern rather than a normal user option.
+
+### 🔀 Hybrid Recommendation Structure
+
+The system follows a **hybrid architecture** by combining multiple algorithmic stages:
+
+- **Spatial Layer** → KD-tree + Haversine distance
+- **Filtering Layer** → deterministic constraint filtering
+- **Scoring Layer** → weighted scoring model
+- **Intent Layer** → dynamic visit context adjustment
+
+This multi-stage pipeline ensures both **efficiency and personalization** without relying on machine learning.
+
+---
+
+## 🔄 System Flow
+
+```
+User Input → Location Detection → KD-Tree Search → Constraint Filtering → Intent Shortlist → Scoring → Top-K Selection → Explanation Generation → UI Display
+```
 
 ---
 
@@ -336,6 +401,20 @@ Let:
 
 ---
 
+## 📚 Academic Relevance
+
+This project applies key concepts from **Design and Analysis of Algorithms (DAA)**:
+
+- Spatial data structures (KD-tree)
+- Search space reduction using pruning
+- Deterministic filtering techniques
+- Optimization using heap-based top-k selection
+- Time complexity optimization in real-world systems
+
+The system demonstrates how classical algorithms can replace machine learning while maintaining performance and interpretability.
+
+---
+
 ## 8. Onboarding and Identity Model
 
 ### Permanent Profile
@@ -473,6 +552,17 @@ Base URL: `http://localhost:<port>`
 1. Login through the shared auth page.
 2. Open the admin dashboard.
 3. Review user count, login count, search count, onboarding completion, and user activity summaries.
+
+---
+
+## 📸 UI Preview
+
+- Landing Page
+- Login / Signup
+- User Dashboard
+- Cafe Recommendation Results
+- Map Integration View
+- Admin Dashboard
 
 ---
 
